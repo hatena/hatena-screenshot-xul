@@ -1,0 +1,10 @@
+content	hatenafotolife	chrome/content/
+overlay	chrome://browser/content/browser.xul	chrome://hatenafotolife/content/overlay.xul
+resource	hatenafotolife	resources/
+skin	hatenafotolife	classic/1.0	chrome/skin/classic/
+#style	chrome://browser/content/browser.xul chrome://hatenafotolife/skin/browser.osx.css os=Darwin
+#style	chrome://browser/content/browser.xul chrome://hatenafotolife/skin/toolbar.osx.css os=Darwin
+#style	chrome://global/content/customizeToolbar.xul chrome://hatenafotolife/skin/toolbar.css
+#style	chrome://global/content/customizeToolbar.xul chrome://hatenafotolife/skin/toolbar.osx.css os=Darwin
+#locale	hatenafotolife	en-US	chrome/locale/en-US/
+#locale	hatenafotolife	ja	chrome/locale/ja/

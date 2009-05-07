@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<overlay id="Fotolife-xulOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="application/x-javascript"
+	  src="chrome://fotolifexul/content/Fotolife-xul.js" />
+  <menupopup id="menu_ToolsPopup">
+    <menuitem label='fotolife-xul' oncommand='alert("hello. this is fotolife-xul")'/>
+  </menupopup>
+</overlay>
