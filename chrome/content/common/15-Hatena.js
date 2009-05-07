@@ -60,6 +60,15 @@ if (shared.has('User')) {
         get name() this._name,
         get rks() this.options.rks,
         get rkm() this.options.rkm,
+        get info() {
+            // XXX: キャッシュクリアをどうする？
+            if (!this._info) {
+                let res = net.get(this.infoAPI);
+                this._info = decodeJSON(res.responseText);
+            }
+            return this._info;
+        },
+        get infoAPI() 'http://f.hatena.ne.jp/' + this.name + '/api/info?mode=detail',
         get haikuAPI() 'http://f.hatena.ne.jp/' + this.name + '/haiku',
 
         getProfileIcon: function user_getProfileIcon(isLarge) {

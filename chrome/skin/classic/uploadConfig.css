@@ -1,4 +1,28 @@
 
-menuitem {
-    background-color: red !important;
+.optiontitle {
+    width: 80px;
+}
+
+.item-top {
+    padding-left: 20px;
+    background: no-repeat url(chrome://hatenafotolife/skin/images/folder-top.gif);
+    color: #000 !important;
+}
+
+.item-top-private {
+    padding-left: 20px;
+    background: no-repeat url(chrome://hatenafotolife/skin/images/folder-top-private.gif);
+    color: #000 !important;
+}
+
+.item-public {
+    padding-left: 20px;
+    background: no-repeat url(chrome://hatenafotolife/skin/images/folder.gif);
+    color: #000 !important;
+}
+
+.item-private {
+    padding-left: 20px;
+    background: no-repeat url(chrome://hatenafotolife/skin/images/folder-private.gif);
+    color: #000 !important;
 }

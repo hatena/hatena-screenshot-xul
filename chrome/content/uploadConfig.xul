@@ -3,51 +3,43 @@
 <?xml-stylesheet type="text/css" href="chrome://hatenafotolife/skin/uploadConfig.css"?>
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         id="hFotolifeUploadConfig"
-        title="アップロード設定"
+        title="アップロード"
         buttons="accept,cancel"
-        width="400"
-        height="400"
-        persist="width height screenX screenY"
+        width="250"
+        height="250"
+        persist="screenX screenY"
         onload="new hFotolife.UploadConfig(document.documentElement);"
         onunload="document.documentElement.manager.destroy();"
-        ondialogaccept="return document.documentElement.manager.onAccept(event);">
+        buttonlabelaccept="アップロード"
+        ondialogaccept="return document.documentElement.manager.onAccept(event);"
+        ondialogcancel="return document.documentElement.manager.onCancel(event);"
+        >
     <script type="application/javascript"
             src="chrome://hatenafotolife/content/autoloader.js"/>
 
     <vbox flex="1">
-        <description>アップロードオプション</description>
+         <label id="username" />
+         <groupbox>
+             <caption label="フォルダ" />
+             <menulist id="folder-menulist">
+               <menupopup id="folders">
+                 <menuitem label="トップ" value="" class="item-top" />
+               </menupopup>
+             </menulist>
+         </groupbox>
 
-  <menulist>
-    <menupopup id="folders">
-      <menuitem label="トップ" value=""/>
-      <!--
-      <menuitem label="option 1" value="1"/>
-      <menuitem label="option 2" value="2"/>
-      <menuitem label="option 3" value="3"/>
-      <menuitem label="option 4" value="4"/>
-      -->
-    </menupopup>
-  </menulist>
-
-
-        <tree id="tag-list"
-              seltype="single"
-              hidecolumnpicker="true"
-              flex="1">
-            <treecols>
-                <treecol id="tag-list-col-tag"
-                         label="hoge"
-                         sortActive="true"
-                         sortDirection="natural"
-                         persist="width sortActive sortDirection"
-                         flex="5"/>
-                <splitter class="tree-splitter"/>
-                <treecol id="tag-list-col-count"
-                         label="huga"
-                         persist="width sortActive sortDirection"
-                         flex="1"/>
-            </treecols>
-            <treechildren/>
-        </tree>
+         <groupbox>
+             <caption>
+                 <checkbox id="image-size-checkbox" label="画像サイズの指定" value="1000" onmouseup="document.documentElement.manager.checkboxHandler(event);" />
+             </caption>
+             <hbox align="center">
+                 <textbox id="image-size"
+                        type="number" min="1" increment="10" 
+                        style="width: 5em;"
+                 />
+                 <label value="ピクセル(長辺)" />
+             </hbox>
+             <description>指定した幅を最大の長辺とします</description>
+         </groupbox>
     </vbox>
 </dialog>

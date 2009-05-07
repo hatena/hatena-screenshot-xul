@@ -5,28 +5,69 @@ const EXPORT = ['UploadConfig'];
 function UploadConfig(dialog) {
     this.dialog = dialog;
     this.dialog.manager = this;
-    // this.tagList = new TagList(document.getElementById("tag-list"));
-    // this.tagList.treeBody.addEventListener(
-    //     "click", method(this, "onTagListClick"), false);
-    this.argument = window.arguments[0] || {};
+    this.folders = document.getElementById('folders');
+    this.folderMenuList = document.getElementById('folder-menulist');
+    this.imageSize = document.getElementById('image-size');
+    document.getElementById('username').value = sprintf(UIEncodeText('現在、%s でログインしています。'), User.user.name);
+
+    let info = User.user.info;
+    if (info.fotosize)
+        this.imageSize.value = info.fotosize;
+
+    this.setFolders(info.folder_list);
+    this.checkCheckbox();
+    this.config = window.arguments[0] || {};
 }
 
 extend(UploadConfig.prototype, {
+    setFolders: function(folderList) {
+        if (folderList && folderList.length) {
+            for (var i = 0;  i < folderList.length; i++) {
+                let folder = folderList[i];
+                let item = document.createElement('menuitem');
+                item.setAttribute('value', folder.folder);
+                item.setAttribute('label', folder.folder);
+                if (folder.status != 'public') {
+                    item.setAttribute('class', 'item-private');
+                } else {
+                    item.setAttribute('class', 'item-public');
+                }
+                this.folders.appendChild(item);
+            }
+        }
+    },
+
     destroy: function () {
         this.dialog.manager = null;
         this.dialog = null;
-        // this.tagList = null;
     },
 
     onAccept: function (event) {
-        // this.argument.tag = this.tagList.selectedTag;
+        this.config.folder = this.folderMenuList.selectedItem.value;
         return true;
     },
 
-    onTagListClick: function (event) {
-        if (event.button === 0 && event.detail === 2)
-            this.dialog.acceptDialog();
-    }
+    checkboxHandler: function(event) {
+        setTimeout(function(self) {
+            self.checkCheckbox();
+        }, 30, this);
+    },
+
+
+    checkCheckbox: function() {
+        let checkbox = document.getElementById('image-size-checkbox');
+
+        if (checkbox.checked) {
+            this.imageSize.removeAttribute('disabled');
+        } else {
+            this.imageSize.setAttribute('disabled', true);
+        }
+    },
+
+    onCancel: function(event) {
+        this.config.cancel = true;
+        return true;
+    },
 });
 
 
