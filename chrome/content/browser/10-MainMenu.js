@@ -6,7 +6,7 @@ var MainMenu = {};
 MainMenu.draw = function() {
 };
 
-MainMenu.Upload = {
+MainMenu.Base = {
     all: function() {
         this.capture('all');
     },
@@ -15,7 +15,11 @@ MainMenu.Upload = {
     },
     inner: function() {
         this.capture('inner');
-    },
+    }
+};
+
+MainMenu.Upload = extend({}, MainMenu.Base);
+extend(MainMenu.Upload, {
     capture: function(method) {
         p('upload capture: ' + method);
         // method: all, rect, inner
@@ -70,23 +74,22 @@ MainMenu.Upload = {
     errorback: function(res) {
         window.alert('フォトライフへののアップロードに失敗しました');
     },
-};
+});
 
-MainMenu.Copy = {
-    all: function() {
+MainMenu.Copy = extend({}, MainMenu.Base);
+extend(MainMenu.Copy, {
+    capture: function(method) {
+        p('copy capture: ' + method);
+        let data = Capture[method](false);
+        ExCanvas.prototype.dataURItoClipboard(data);
     },
-    rect: function() {
-    },
-    inner: function() {
-    },
-};
+});
 
-MainMenu.Copy = {
-    all: function() {
+MainMenu.Save = extend({}, MainMenu.Base);
+extend(MainMenu.Save, {
+    capture: function(method) {
     },
-    rect: function() {
-    },
-    inner: function() {
-    },
-};
+});
+
+
 

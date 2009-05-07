@@ -17,6 +17,9 @@ var Capture = {
              cutBase64: cutBase64
          });
     },
+
+    rect: function(cutBase64) {
+    },
 };
 
 // 
