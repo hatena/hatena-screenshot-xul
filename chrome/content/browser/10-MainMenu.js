@@ -88,6 +88,20 @@ extend(MainMenu.Copy, {
 MainMenu.Save = extend({}, MainMenu.Base);
 extend(MainMenu.Save, {
     capture: function(method) {
+        p('save capture: ' + method);
+        let data = Capture[method](false);
+
+        let uri = IOService.newURI(data, null, null);
+        let filePicker = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
+        filePicker.init(window, UIEncodeText('ファイルに保存'), filePicker.modeSave);
+        filePicker.appendFilters(filePicker.filterImages);
+        // filePicker.appendFilters(UIEncodeText('png 画像ファイル'), "*.png;");
+        filePicker.defaultString = (window.content.document.title || 'screenshot') + '.png';
+        if ((filePicker.show() == filePicker.returnCancel) || !filePicker.file) return;
+
+        let wbp = Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1']
+          .createInstance(Ci.nsIWebBrowserPersist);
+        wbp.saveURI(uri, null, null, null, null, filePicker.file);
     },
 });
 
