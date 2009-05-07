@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="chrome://global/skin/"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenafotolife/skin/uploadConfig.css"?>
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="hFotolifeUploadConfig"
+        title="アップロード設定"
+        buttons="accept,cancel"
+        width="400"
+        height="400"
+        persist="width height screenX screenY"
+        onload="new hFotolife.UploadConfig(document.documentElement);"
+        onunload="document.documentElement.manager.destroy();"
+        ondialogaccept="return document.documentElement.manager.onAccept(event);">
+    <script type="application/javascript"
+            src="chrome://hatenafotolife/content/autoloader.js"/>
+
+    <vbox flex="1">
+        <description>アップロードオプション</description>
+
+  <menulist>
+    <menupopup id="folders">
+      <menuitem label="トップ" value=""/>
+      <!--
+      <menuitem label="option 1" value="1"/>
+      <menuitem label="option 2" value="2"/>
+      <menuitem label="option 3" value="3"/>
+      <menuitem label="option 4" value="4"/>
+      -->
+    </menupopup>
+  </menulist>
+
+
+        <tree id="tag-list"
+              seltype="single"
+              hidecolumnpicker="true"
+              flex="1">
+            <treecols>
+                <treecol id="tag-list-col-tag"
+                         label="hoge"
+                         sortActive="true"
+                         sortDirection="natural"
+                         persist="width sortActive sortDirection"
+                         flex="5"/>
+                <splitter class="tree-splitter"/>
+                <treecol id="tag-list-col-count"
+                         label="huga"
+                         persist="width sortActive sortDirection"
+                         flex="1"/>
+            </treecols>
+            <treechildren/>
+        </tree>
+    </vbox>
+</dialog>

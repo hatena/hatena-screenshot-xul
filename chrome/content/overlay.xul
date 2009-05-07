@@ -1,11 +1,48 @@
 <?xml version="1.0" ?>
 <overlay id="Fotolife-xulOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/javascript" src="autoloader.js"></script>
-  <!--
   <menupopup id="menu_ToolsPopup">
-    <menuitem label='fotolife-xul' oncommand='alert("hello. this is fotolife-xul")'/>
+    <menu 
+        insertbefore="devToolsSeparator"
+        id="hFotolife-menu" label="Fotolife"
+    >
+        <menupopup id ="hFotolife-menu">
+            <menuitem id="hFotolife-menu-draw" label='絵を描く' oncommand='hFotolife.MainMenu.draw();'/>
+            <menuseparator />
+            <menu id="hFotolife-menu-upload" label="アップロード">
+                <menupopup>
+                    <menuitem label='全部' oncommand='hFotolife.MainMenu.Upload.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hFotolife.MainMenu.Upload.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hFotolife.MainMenu.Upload.rect();'/>
+                </menupopup>
+            </menu>
+            <menu id="hFotolife-menu-copy" label="クリップボードにコピー">
+                <menupopup>
+                    <menuitem label='全部' oncommand='hFotolife.MainMenu.Copy.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hFotolife.MainMenu.Copy.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hFotolife.MainMenu.Copy.rect();'/>
+                </menupopup>
+            </menu>
+            <menu id="hFotolife-menu-save" label="ファイルに保存">
+                <menupopup>
+                    <menuitem label='全部' oncommand='hFotolife.MainMenu.Save.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hFotolife.MainMenu.Save.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hFotolife.MainMenu.Save.rect();'/>
+                </menupopup>
+            </menu>
+        </menupopup>
+    </menu>
   </menupopup>
-  -->
+
+  <statusbar id="status-bar">
+    <statusbarpanel id="hFotolife-statusBarPanel"
+         collapsed="false"
+    >
+    <image src="chrome://hatenafotolife/skin/images/favicon.ico" onclick="hFotolife.MainMenu.Upload.all();" />
+    </statusbarpanel>
+  </statusbar>
+
+
     <script type="text/javascript; version=1.8" charset="utf-8">
     // <![CDATA[
     (function() {
