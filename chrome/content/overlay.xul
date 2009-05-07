@@ -1,8 +1,36 @@
 <?xml version="1.0" ?>
 <overlay id="Fotolife-xulOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <script type="application/x-javascript"
-	  src="chrome://fotolifexul/content/Fotolife-xul.js" />
+  <script type="application/javascript" src="autoloader.js"></script>
+  <!--
   <menupopup id="menu_ToolsPopup">
     <menuitem label='fotolife-xul' oncommand='alert("hello. this is fotolife-xul")'/>
   </menupopup>
+  -->
+    <script type="text/javascript; version=1.8" charset="utf-8">
+    // <![CDATA[
+    (function() {
+        with(hFotolife) {
+            if (hFotolife.nowDebug) {
+                Application.console.open();
+            }
+
+            EventService.dispatch('preload', window);
+
+            window.addEventListener('load', function(e) {
+                EventService.dispatch('load', window);
+
+                if (!shared.get('firstPreload')) {
+                    EventService.dispatch('firstPreload', window);
+                    shared.set('firstPreload', true);
+                }
+            }, false);
+
+            window.addEventListener('unload', function(e) {
+                EventService.dispatch('unload', window);
+            }, false);
+
+        }
+    })();
+    // ]]>
+    </script>
 </overlay>
