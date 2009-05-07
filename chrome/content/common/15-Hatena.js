@@ -68,8 +68,13 @@ if (shared.has('User')) {
             }
             return this._info;
         },
-        get infoAPI() 'http://f.hatena.ne.jp/' + this.name + '/api/info?mode=detail',
-        get haikuAPI() 'http://f.hatena.ne.jp/' + this.name + '/haiku',
+
+        get infoAPI() this.getPermalink('api/info?mode=detail'),
+        get haikuAPI() this.getPermalink('haiku'),
+
+        getPermalink: function(url) {
+            return 'http://f.hatena.ne.jp/' + this.name + '/' + (url || '');
+        },
 
         getProfileIcon: function user_getProfileIcon(isLarge) {
             return UserUtils.getProfileIcon(this.name, isLarge);

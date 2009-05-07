@@ -8,6 +8,42 @@ MainMenu.draw = function() {
 
 MainMenu.Upload = {
     all: function() {
+        this.capture('all');
+    },
+    rect: function() {
+        this.capture('rect');
+    },
+    inner: function() {
+        this.capture('inner');
+    },
+    capture: function(method) {
+        p('upload capture: ' + method);
+        // method: all, rect, inner
+        // XXX: ログインチェックを挟む
+        let config = this.configDialog();
+        if (config.accept) {
+            p('capture accept (config):' + uneval(config));
+            let data = Capture[method](true);
+            let user = User.user;
+
+            let options = {
+                callback: this.callback,
+                errorback: this.errorback,
+            };
+
+            if (config.folder) options.folder = config.folder;
+            if (config.fotosize) {
+                options.fotosize= config.fotosize;
+            } else {
+                options.fotosize= 100000;
+            }
+
+            // ロード画面とか出した方がよい？
+            user.uploadData(data, options);
+        }   
+    },
+
+    configDialog: function() {
         let config = {};
         window.openDialog(
             'chrome://hatenafotolife/content/uploadConfig.xul',
@@ -15,16 +51,24 @@ MainMenu.Upload = {
             'chrome,modal,resizable=no,centerscreen',
             config 
         ).focus();
+        return config;
+    },
 
-        p('config');
-        p.e(config);
-        // let dataURI = Capture.all(true);
+    callback: function(res) {
+        let m;
+        p('upload success: ' + res.responseText);
+        if (m = res.responseText.match(/:(\d{14})/)) {
+            let timestamp = m[1];
+            let permalink = User.user.getPermalink(timestamp);
+            setTimeout(function() {
+                // タイミングによって slave に反映されてないため、ちょっと間をおく
+                openUILinkIn(permalink, 'tab');
+            }, 500);
+        }
     },
-    rect: function() {
-        //let dataURI = Capture.rect();
-    },
-    inner: function() {
-        // let inner = Capture.rect();
+
+    errorback: function(res) {
+        window.alert('フォトライフへののアップロードに失敗しました');
     },
 };
 

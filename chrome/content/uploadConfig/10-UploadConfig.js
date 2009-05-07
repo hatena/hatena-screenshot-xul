@@ -7,6 +7,7 @@ function UploadConfig(dialog) {
     this.dialog.manager = this;
     this.folders = document.getElementById('folders');
     this.folderMenuList = document.getElementById('folder-menulist');
+    this.checkbox = document.getElementById('image-size-checkbox');
     this.imageSize = document.getElementById('image-size');
     document.getElementById('username').value = sprintf(UIEncodeText('現在、%s でログインしています。'), User.user.name);
 
@@ -43,7 +44,11 @@ extend(UploadConfig.prototype, {
     },
 
     onAccept: function (event) {
+        this.config.accept = true;
         this.config.folder = this.folderMenuList.selectedItem.value;
+        if (this.checkbox.checked) {
+            this.config.fotosize = parseInt(this.imageSize.value);
+        }
         return true;
     },
 
@@ -55,9 +60,8 @@ extend(UploadConfig.prototype, {
 
 
     checkCheckbox: function() {
-        let checkbox = document.getElementById('image-size-checkbox');
 
-        if (checkbox.checked) {
+        if (this.checkbox.checked) {
             this.imageSize.removeAttribute('disabled');
         } else {
             this.imageSize.setAttribute('disabled', true);
