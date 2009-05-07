@@ -46,6 +46,7 @@ if (shared.has('User')) {
             if (current) {
                 if (current.name == res.name) {
                     current.options.rks = res.rks;
+                    current.options.rkm = res.rkm;
                     return current;
                 }
             }
@@ -58,58 +59,30 @@ if (shared.has('User')) {
     User.prototype = {
         get name() this._name,
         get rks() this.options.rks,
-        get private() this.options.private == 1,
-        get public() !this.private,
-        get ignores() {
-            if (this.options.ignores_regex) {
-                if (typeof this._ignores == 'undefined') {
-                    try {
-                        this._ignores = new RegExp(this.options.ignores_regex);
-                    } catch(e) {
-                        this._ignores = null;
-                    }
-                }
-                return this._ignores;
-            }
-            return null;
-        },
-        get bCount() model('Bookmark').countAll(),
-        hasBookmark: function user_hasBookmark(url) {
-            let res = model('Bookmark').findByUrl(url);
-            return res && res[0] ? true : false;
-        },
-        get database() {
-            if (!this._db) {
-                let dir = this.configDir;
-                dir.append('bookmark.sqlite');
-                this._db = new Database(dir);
-                this._db.connection.executeSimpleSQL('PRAGMA case_sensitive_like = 1');
-            }
-            return this._db;
-        },
-        get dataURL() sprintf('http://b.hatena.ne.jp/%s/search.data', this.name),
-        get bookmarkHomepage() UserUtils.getHomepage(this.name, 'b'),
+        get rkm() this.options.rkm,
+        get haikuAPI() 'http://f.hatena.ne.jp/' + this.name + '/haiku',
+
         getProfileIcon: function user_getProfileIcon(isLarge) {
             return UserUtils.getProfileIcon(this.name, isLarge);
         },
 
         clear: function user_clear() {
-            if (this._db) {
-                this._db.connection.close();
-            }
         },
 
-        get configDir() {
-            let pd = DirectoryService.get("ProfD", Ci.nsIFile);
-            pd.append('hatenabookmark');
-            if (!pd.exists() || !pd.isDirectory()) {
-                pd.create(Ci.nsIFile.DIRECTORY_TYPE, 0755);
-            }
-            pd.append(this.name);
-            if (!pd.exists() || !pd.isDirectory()) {
-                pd.create(Ci.nsIFile.DIRECTORY_TYPE, 0755);
-            }
-            return pd;
+        uploadData: function(image, options) {
+            if (!options) options = {};
+
+            let params = {
+                 name: this.name,
+                 rkm: this.rkm,
+                 ext: 'png',
+                 model: 'oekaki', // XXX
+                 image: image,
+            };
+            if (options.fotosize) params.fotosize = options.fotosize;
+            if (options.folder) params.folder = options.folder; 
+
+            net.post(this.haikuAPI, options.callback, options.errorback, true, params);
         }
     };
 
