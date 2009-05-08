@@ -15,6 +15,7 @@ var SketchSwitch = function(win, canvasID) {
     this.sid = SketchSwitch.__sid__++;
     this._win = win || window;
     this.active = true;
+    this.brushOptions = {};
     this.init(canvasID || '__sketch_switch_canvas__');
     this.currentBrush = new SketchSwitch.Brushes.LineBase();
 };
@@ -37,7 +38,6 @@ SketchSwitch.prototype = {
         return this.canvas.ctx;
     },
     init: function(canvasID) {
-
         this.canvas = this.createCanvas(canvasID);
         SketchSwitch.Utils.initCanvas(this.canvas);
 
@@ -84,6 +84,7 @@ SketchSwitch.prototype = {
 
         var win = this.win;
 
+        brush.setOptions(this.brushOptions);
         brush.start(canvas, preview);
         brush.mouseDown(U.getPoint(event, win));
 
@@ -224,7 +225,7 @@ SketchSwitch.ToolMenu.prototype = {
             var button = new b(this);
             this.appendButton(button);
             if (i == 0) {
-                this.currentButton = button;
+                this.setCurrentButton(button);
             }
         }
         this.doc.body.appendChild(this.table);
@@ -234,37 +235,72 @@ SketchSwitch.ToolMenu.prototype = {
         var doc = this.doc;
         this.menu.push(button);
         var icon = E(doc, 'img', {src:button.icon, alt: button.name});
+        icon.button = button;
+        button.element = icon;
         with(icon.style) {
             cursor = 'pointer';
         }
+        var td;
         var tr = E(doc, 'tr', {}, 
-                     E(doc, 'td', {}, icon)
+                     td = E(doc, 'td', {}, icon)
         );
+        with (td.style) {
+            padding = '3px';
+            margin = '5px';
+            borderBottom = '1px solid #999';
+        }
+
         this.tbody.appendChild(tr);
+        var self = this;
+        icon.addEventListener('click', function(event) {
+            self.buttonClick(icon);
+        }, false);
+    },
+    buttonClick: function(icon) {
+        var button = icon.button;
+        this.setCurrentButton(button);
+    },
+    setCurrentButton: function(button) {
+        if (this._currentButton) {
+            this._currentButton.unselect();
+        }
+        this._currentButton = button;
+        button.select();
     },
 };
 
 
 /* Buttons */
 SketchSwitch.Buttons = {};
-SketchSwitch.Buttons.Base = function(sketch) { this.sketch = sketch };
-SketchSwitch.Buttons.Base.prototype = {
+SketchSwitch.Buttons.BaseProto = {
+    clearBackground: function() {
+        this.element.parentNode.style.backgroundColor = '';
+    },
+    setBackground: function() {
+        this.element.parentNode.style.backgroundColor = 'rgba(91,139,212,0.5)';
+    },
+    select: function() {},
+    unselect: function() {},
     icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAADoSURBVHjalJJNC0VAGIWZhkLKQln5AVZS8//LXjYWlLWNUj7yEdI93bm5wnU5ZWZq3mfmnHeISZIIT0TxaZp2s7ptWyI8FOWTLMuU0u3GPM/jOP4EUB0EwXaDMYbxyOwtsbewAL+78xz4KxFtRZdUVd1ZmqYJY1VVhmE4jiNJ0nmXuCXXdfM8R7XnecMwRFG0D71V13V93y/LYpqmZVloVxiGVwDsoWh11TQN93MOrEkURSmKwvf9uq4BANN1/Rv6+HBQlmVlWSJ0mqZIgjyEkA9w3Up4i+PYtm2cewvY/nyUT/cf7iXAAEwFdZak1p3gAAAAAElFTkSuQmCC',
 };
 
 SketchSwitch.Buttons.Pen = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Pen.prototype = SketchSwitch.Utils.extend({
     name: 'Pen',
-}, SketchSwitch.Buttons.Base.prototype);
+}, SketchSwitch.Buttons.BaseProto);
 
 SketchSwitch.Buttons.Eraser = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Eraser.prototype = SketchSwitch.Utils.extend({
     name: 'Eraser',
-}, SketchSwitch.Buttons.Base.prototype);
+}, SketchSwitch.Buttons.BaseProto);
 
 /* Brushes */
 SketchSwitch.Brushes = {};
-SketchSwitch.Brushes.Base = function(options) { this.options = options || {} };
+SketchSwitch.Brushes.BaseProto = {
+    setOptions: function(options) {
+        this.options = SketchSwitch.Utils.extend(options, this.options); 
+    },
+};
 
 SketchSwitch.Brushes.LineBase = function(options) { 
     this.options = SketchSwitch.Utils.extend({
@@ -273,7 +309,7 @@ SketchSwitch.Brushes.LineBase = function(options) {
     }, options); 
 };
 
-SketchSwitch.Brushes.LineBase.prototype = {
+SketchSwitch.Brushes.LineBase.prototype = SketchSwitch.Utils.extend({
     allowMoving: true,
     start: function(canvas, preview) {
         this.stack = [];
@@ -325,7 +361,7 @@ SketchSwitch.Brushes.LineBase.prototype = {
         ctx.lineTo(point.x, point.y);
         ctx.stroke();
     }
-};
+}, SketchSwitch.Brushes.BaseProto);
 
 
 /* */
