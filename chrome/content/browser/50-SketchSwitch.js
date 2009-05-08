@@ -27,7 +27,8 @@ SketchSwitch.prototype = {
         this.win.removeEventListener('keydown', this.keydowHandler, false);
         this.canvas = null;
         this._preview = null;
-        this.underLayer = null;
+        this.underCanvas = null;
+        this.undoCanvas = null;
         this._win = null;
     },
 
@@ -48,7 +49,8 @@ SketchSwitch.prototype = {
     },
     init: function(canvasID) {
         this.canvas = this.createCanvas(canvasID);
-        this.createUnderLayer();
+        this.createUnderCanvas();
+        // this.createUndoCanvas();
         SketchSwitch.Utils.initCanvas(this.canvas);
 
         var self = this;
@@ -78,7 +80,7 @@ SketchSwitch.prototype = {
         var d = (ctx.wrappedJSObject || ctx).getImageData(point.x, point.y, 1,1);
         var data = d.data;
 
-        var bctx = this.underLayer.ctx;
+        var bctx = this.underCanvas.ctx;
         var b = (bctx.wrappedJSObject || bctx).getImageData(point.x, point.y, 1,1);
         var bdata = b.data;
         if (data[3] == 0) {
@@ -89,11 +91,16 @@ SketchSwitch.prototype = {
         }
         this.toolMenu.setColor('rgb(' + [bdata.slice(0,3)].join(',') + ')');
     },
-    createUnderLayer: function() {
-        // underLayer は表示領域におかない
-        var underLayer = this.createCanvas(this.canvas.id + '_under__');
-        underLayer.ctx.drawWindow(this.win, 0, 0, this.width, this.height, 'rgb(255,255,255)');
-        this.underLayer = underLayer;
+    createUnderCanvas: function() {
+        // underCanvas は表示領域におかない
+        var underCanvas = this.createCanvas(this.canvas.id + '_under__');
+        underCanvas.ctx.drawWindow(this.win, 0, 0, this.width, this.height, 'rgb(255,255,255)');
+        this.underCanvas = underCanvas;
+    },
+    createUndoCanvas: function() {
+        var undoCanvas = this.createCanvas(this.canvas.id + '_undo__');
+        SketchSwitch.Utils.clearCanvas(undoCanvas);
+        this.undoCanvas = undoCanvas;
     },
     createCanvas: function(canvasID) {
         var canvas = this.doc.createElement('canvas');
@@ -118,6 +125,26 @@ SketchSwitch.prototype = {
         }
         return this._preview;
     },
+    addHistory: function(canvas) {
+        // this.copyCanvas(canvas, this.undoCanvas);
+    },
+    copyCanvas: function(from, to) {
+        var ctx = from.ctx;
+        var d = (ctx.wrappedJSObject || ctx).getImageData(0, 0, from.width, from.height);
+
+        SketchSwitch.Utils.clearCanvas(to);
+        var x = to.ctx;
+
+        (x.wrappedJSObject || x).putImageData(d, 0, 0);
+    },
+    undo: function() {
+        // ふつうにやるとメモリ食い過ぎるので 1 回のみ
+        // preview を利用してしまう
+        // それでも putImageData が重いので、現在は動かしていない
+        this.copyCanvas(this.canvas, this.preview);
+        this.copyCanvas(this.undoCanvas, this.canvas);
+        this.copyCanvas(this.preview, this.undoCanvas);
+    },
     mousedownHandler: function(event) {
         if (this.nowDrawing || !this.active) return;
         this.nowDrawing = true;
@@ -127,13 +154,14 @@ SketchSwitch.prototype = {
         var canvas = this.canvas;
 
         var preview = this.preview;
+        U.clearCanvas(preview);
         this.doc.body.appendChild(preview);
 
         var win = this.win;
 
         brush.sketch = this; // XXX 
         brush.setOptions(this.brushOptions);
-        brush.start(canvas, preview, this.underLayer);
+        brush.start(canvas, preview, this.underCanvas);
         brush.mouseDown(U.getPoint(event, win));
 
         var moveHandler;
@@ -152,12 +180,11 @@ SketchSwitch.prototype = {
         preview.addEventListener('mouseout', upHandler, false);
 
         var self = this;
-        var completeHandler = function(event) {
+        var completeHandler = function() {
             if (moveHandler)
                 preview.removeEventListener('mousemove', moveHandler, false);
             preview.removeEventListener('mouseup', upHandler, false);
             preview.removeEventListener('mouseout', upHandler, false);
-            U.clearCanvas(preview);
             if ( preview.parentNode ) preview.parentNode.removeChild(preview);
             brush.onComplete = function() {};
             self.nowDrawing = false;
@@ -266,6 +293,7 @@ SketchSwitch.ToolMenu.DEFAULT_BUTTONS = [
     'Pen4',
     'Eraser',
     'Pipet',
+    // 'Undo',
     'HidePipet',
     'Alpha'
 ];
@@ -542,6 +570,17 @@ SketchSwitch.Buttons.Clear.prototype = SketchSwitch.Utils.extend({
     },
 }, SketchSwitch.Buttons.BaseProto, false);
 
+SketchSwitch.Buttons.Undo = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.Undo.prototype = SketchSwitch.Utils.extend({
+    shortcut: 'g',
+    clickOnly: true,
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAQAAAAEABcxq3DAAAAO0lEQVRIx2P4TyYIBQMETS5gGLIOoBZgoJUPidU/eB0w4FFANwdQKzWTGzUD74DRNDBaEA3ZgmjY1IYAITF46q7bt7IAAAAASUVORK5CYII=',
+    name: 'Undo',
+    select: function() {
+        this.sketch.undo();
+    },
+}, SketchSwitch.Buttons.BaseProto, false);
+
 
 SketchSwitch.Buttons.Alpha = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Alpha.prototype = SketchSwitch.Utils.extend({
@@ -612,6 +651,7 @@ SketchSwitch.Brushes.Pen.prototype = SketchSwitch.Utils.extend({
     },
     mouseUp: function(point) {
         this.lastPoint = point;
+        this.sketch.addHistory(this.canvas); // XXX
         var ctx = this.ctx;
 
         var pPoint = this.stack.pop();
@@ -624,7 +664,7 @@ SketchSwitch.Brushes.Pen.prototype = SketchSwitch.Utils.extend({
 
         this.pctx = this.preview = null;
         this.ctx = this.canvas = null;
-        this.onComplete();
+        this.onComplete(true);
     },
     mouseDown: function(point) {
         this.lastPoint = point;
@@ -652,11 +692,12 @@ SketchSwitch.Brushes.Eraser.prototype = SketchSwitch.Utils.extend({
     start: function(canvas, preview) {
         this.canvas = canvas;
         this.ctx = canvas.ctx;
+        this.sketch.addHistory(this.canvas); // XXX
     },
     mouseUp: function(point) {
         this.erase(point);
         this.ctx = this.canvas = null;
-        this.onComplete();
+        this.onComplete(true);
     },
     mouseDown: function(point) {
         this.erase(point);
