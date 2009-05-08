@@ -154,7 +154,13 @@ SketchSwitch.Utils = {
 SketchSwitch.Brushes = {};
 SketchSwitch.Brushes.Base = function(options) { this.options = options || {} };
 
-SketchSwitch.Brushes.LineBase = function(options) { this.options = options || {} };
+SketchSwitch.Brushes.LineBase = function(options) { 
+    this.options = SketchSwitch.Utils.extend({
+        color: 'rgba(0,0,0,1)',
+        width: 5
+    }, options); 
+};
+
 SketchSwitch.Brushes.LineBase.prototype = {
     allowMoving: true,
     start: function(canvas, preview) {
@@ -174,9 +180,9 @@ SketchSwitch.Brushes.LineBase.prototype = {
         return this.stack[this.stack.length - 1];
     },
     setColor: function(ctx) {
-        ctx.strokeStyle = 'rgb(0,0,0)';
         ctx.lineJoin = 'round';
-        ctx.lineWidth = 5;
+        ctx.strokeStyle = this.options.color;
+        ctx.lineWidth = this.options.width;
     },
     mouseUp: function(point) {
         this.lastPoint = point;
@@ -210,5 +216,6 @@ SketchSwitch.Brushes.LineBase.prototype = {
 };
 
 
+/* */
 
 
