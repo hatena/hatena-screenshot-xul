@@ -212,7 +212,8 @@ SketchSwitch.ToolMenu.DEFAULT_BUTTONS = [
     'Pen3',
     'Pen4',
     'Eraser',
-    'Pipet'
+    'Pipet',
+    'Alpha'
 ];
 
 SketchSwitch.ToolMenu.DEFAULT_COLORS = [
@@ -261,6 +262,7 @@ SketchSwitch.ToolMenu.prototype = {
             zIndex = this.sketch.canvas.style.zIndex + 1;
             backgroundColor = 'rgba(255,255,255, 0.9)';
         }
+        this.table.style.borderColor = '#000000';
         this.setColor(this.table.style.borderColor);
 
         var buttons = SketchSwitch.ToolMenu.DEFAULT_BUTTONS;
@@ -448,6 +450,24 @@ SketchSwitch.Buttons.Clear.prototype = SketchSwitch.Utils.extend({
     },
 }, SketchSwitch.Buttons.BaseProto, false);
 
+
+SketchSwitch.Buttons.Alpha = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.Alpha.prototype = SketchSwitch.Utils.extend({
+    clickOnly: true,
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAQAAAAEABcxq3DAAAAL0lEQVRIx2P4P8CAYdQBg94BoWBAPk01B1wCA+LpUQeMOmD4OWDAsuFoSTjsHQAAJOJi4rb9Z5MAAAAASUVORK5CYII=',
+    name: 'Alpha',
+    select: function() {
+        var o = this.sketch.brushOptions;
+        if (o.alpha) {
+            delete o.alpha;
+            this.clearBackground();
+        } else {
+            o.alpha = '0.5';
+            this.setBackground();
+        }
+    },
+}, SketchSwitch.Buttons.BaseProto, false);
+
 /* Brushes */
 SketchSwitch.Brushes = {};
 SketchSwitch.Brushes.BaseProto = {
@@ -485,9 +505,16 @@ SketchSwitch.Brushes.Pen.prototype = SketchSwitch.Utils.extend({
     get lastPoint () {
         return this.stack[this.stack.length - 1];
     },
+
     setColor: function(ctx) {
         ctx.lineJoin = 'round';
-        ctx.strokeStyle = this.options.color;
+        var color = this.options.color;
+        if ((typeof this.options.alpha != 'undefined') || (this.options.alpha != null)) {
+            // rgb(); zentei
+            color = color.replace('rgb(', 'rgba(');
+            color = color.replace(')', ',' + this.options.alpha + ')');
+        }
+        ctx.strokeStyle = color;
         ctx.lineWidth = this.options.width;
     },
     mouseUp: function(point) {
