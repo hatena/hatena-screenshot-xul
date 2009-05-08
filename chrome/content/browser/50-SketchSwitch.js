@@ -60,7 +60,7 @@ SketchSwitch.prototype = {
 
         this.keydowHandler = function(event) {
             if (self.shownMenu) {
-                event.preventDefault();
+                // event.preventDefault();
                 self.toolMenu.callShortcut(event);
             }
         }
@@ -408,7 +408,7 @@ SketchSwitch.Buttons.BaseProto = {
         this.element.parentNode.style.backgroundColor = '';
     },
     setBackground: function() {
-        this.element.parentNode.style.backgroundColor = 'rgba(91,139,212,0.5)';
+        this.element.parentNode.style.backgroundColor = 'rgba(91,139,212,0.8)';
     },
     select: function() {},
     unselect: function() {},
