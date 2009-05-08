@@ -11,15 +11,15 @@ const EXPORT = ['SketchSwitch'];
  * require JSColor.js
  */
 
-var SketchSwitch = function(win, underLayer) {
+var SketchSwitch = function(win) {
     this.sid = SketchSwitch.__sid__++;
     this._win = win || window;
     this.active = true;
     this.brushOptions = {};
-    this.underLayer = underLayer;
     this.init('__sketch_switch_canvas__');
     this.currentBrush = new SketchSwitch.Brushes.Pen();
 };
+
 SketchSwitch.__sid__ = 1;
 
 SketchSwitch.prototype = {
@@ -47,6 +47,7 @@ SketchSwitch.prototype = {
     },
     init: function(canvasID) {
         this.canvas = this.createCanvas(canvasID);
+        this.createUnderLayer();
         SketchSwitch.Utils.initCanvas(this.canvas);
 
         var self = this;
@@ -55,6 +56,12 @@ SketchSwitch.prototype = {
         }, false);
 
         this.toolMenu = new SketchSwitch.ToolMenu(this);
+    },
+    createUnderLayer: function() {
+        // underLayer は表示領域におかない
+        var underLayer = this.createCanvas(this.canvas.id + '_under__');
+        underLayer.ctx.drawWindow(this.win, 0, 0, this.width, this.height, 'rgb(255,255,255)');
+        this.underLayer = underLayer;
     },
     createCanvas: function(canvasID) {
         var canvas = this.doc.createElement('canvas');
@@ -92,6 +99,7 @@ SketchSwitch.prototype = {
 
         var win = this.win;
 
+        brush.sketch = this; // XXX 
         brush.setOptions(this.brushOptions);
         brush.start(canvas, preview, this.underLayer);
         brush.mouseDown(U.getPoint(event, win));
@@ -319,6 +327,7 @@ SketchSwitch.ToolMenu.prototype = {
         }
     },
     setColor: function(color) {
+        p(color);
         this.sketch.brushOptions.color = color;
         this.table.style.borderColor = color;
     },
@@ -623,8 +632,15 @@ SketchSwitch.Brushes.Pipet.prototype = SketchSwitch.Utils.extend({
     },
     pipet: function(point) {
         var ctx = this.ctx;
-        // XXX: getImageData が null を返す。なんで？
-        var pp = ctx.getImageData(point.x, point.y, 1,1);
+        var data = ctx.wrappedJSObject.getImageData(point.x, point.y, 1,1).data;
+
+        var bctx = this.bctx;
+        var bdata = bctx.wrappedJSObject.getImageData(point.x, point.y, 1,1).data;
+        p(data);
+        p(bdata);
+        if (data[3] == 0) {
+            this.sketch.toolMenu.setColor('rgb(' + [bdata.slice(0,3)].join(',') + ')');
+        }
     }
 }, SketchSwitch.Brushes.BaseProto, false);
 
