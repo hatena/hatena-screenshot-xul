@@ -19,6 +19,14 @@ MainMenu.draw = function() {
     // var random = Math.random().toString().slice(2);
 };
 
+MainMenu.showPopup = function() {
+    let icon = document.getElementById('hFotolife-statusIcon');
+    let menu = document.getElementById('hFotolife-menu-popup');
+    menu = menu.cloneNode(true);
+    icon.parentNode.appendChild(menu);
+    menu.openPopup(icon, 'before_end', 0, 0, false, true);
+};
+
 MainMenu.Base = {
     all: function() {
         this.capture('all');
@@ -145,6 +153,5 @@ extend(MainMenu.Save, {
         });
     },
 });
-
 
 

@@ -6,7 +6,7 @@
         insertbefore="devToolsSeparator"
         id="hFotolife-menu" label="Fotolife"
     >
-        <menupopup id ="hFotolife-menu">
+        <menupopup id ="hFotolife-menu-popup">
             <menuitem id="hFotolife-menu-draw" label='絵を描く' oncommand='hFotolife.MainMenu.draw();'/>
             <menuseparator />
             <menu id="hFotolife-menu-upload" label="アップロード">
@@ -38,7 +38,11 @@
     <statusbarpanel id="hFotolife-statusBarPanel"
          collapsed="false"
     >
-    <image src="chrome://hatenafotolife/skin/images/favicon.ico" onclick="hFotolife.MainMenu.Upload.all();" />
+        <image 
+            id="hFotolife-statusIcon"
+            src="chrome://hatenafotolife/skin/images/favicon.ico" 
+            onclick="hFotolife.MainMenu.showPopup();" 
+        />
     </statusbarpanel>
   </statusbar>
 
