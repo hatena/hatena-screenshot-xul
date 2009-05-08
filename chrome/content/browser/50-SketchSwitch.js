@@ -193,6 +193,7 @@ SketchSwitch.ToolMenu = function(sketch) {
 }
 
 SketchSwitch.ToolMenu.DEFAULT_BUTTONS = [
+    'Close',
     'Pen',
     'Eraser',
     'Pipet'
@@ -226,7 +227,7 @@ SketchSwitch.ToolMenu.prototype = {
             var b = SketchSwitch.Buttons[buttons[i]];
             var button = new b(this.sketch);
             this.appendButton(button);
-            if (i == 0) {
+            if (i == 1) {
                 this.setCurrentButton(button);
             }
         }
@@ -313,12 +314,26 @@ SketchSwitch.Buttons.Pipet.prototype = SketchSwitch.Utils.extend({
     },
 }, SketchSwitch.Buttons.BaseProto, false);
 
+SketchSwitch.Buttons.Close = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.Close.prototype = SketchSwitch.Utils.extend({
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAABUSURBVHjaYvz//z8DJYCJgUIwCA3Ys2fPfxAmVhynC5AVY9MIA4zYYgGXBhcXF0aiXIBNITYx2sUCrkAkOhaQnY3sdJJiAVkjLv/jjIURlhcAAgwAI+Ax4b11fyQAAAAASUVORK5CYII=',
+    name: 'Close',
+    select: function() {
+        this.sketch.hide();
+
+    },
+}, SketchSwitch.Buttons.BaseProto, false);
+
 /* Brushes */
 SketchSwitch.Brushes = {};
 SketchSwitch.Brushes.BaseProto = {
     setOptions: function(options) {
         this.options = SketchSwitch.Utils.extend(options, this.options); 
     },
+    mouseDown: function() {},
+    mouseUp: function() {},
+    mouseMove: function() {},
+    start: function() {},
 };
 
 SketchSwitch.Brushes.Pen = function(options) { 
@@ -446,7 +461,6 @@ SketchSwitch.Brushes.Pipet.prototype = SketchSwitch.Utils.extend({
         var pp = ctx.getImageData(point.x, point.y, 1,1);
     }
 }, SketchSwitch.Brushes.BaseProto, false);
-
 
 
 
