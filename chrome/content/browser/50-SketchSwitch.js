@@ -11,13 +11,14 @@ const EXPORT = ['SketchSwitch'];
  * require JSColor.js
  */
 
-var SketchSwitch = function(win, canvasID) {
+var SketchSwitch = function(win, underLayer) {
     this.sid = SketchSwitch.__sid__++;
     this._win = win || window;
     this.active = true;
     this.brushOptions = {};
-    this.init(canvasID || '__sketch_switch_canvas__');
-    this.currentBrush = new SketchSwitch.Brushes.LineBase();
+    this.underLayer = underLayer;
+    this.init('__sketch_switch_canvas__');
+    this.currentBrush = new SketchSwitch.Brushes.Pen();
 };
 SketchSwitch.__sid__ = 1;
 
@@ -85,7 +86,7 @@ SketchSwitch.prototype = {
         var win = this.win;
 
         brush.setOptions(this.brushOptions);
-        brush.start(canvas, preview);
+        brush.start(canvas, preview, this.underLayer);
         brush.mouseDown(U.getPoint(event, win));
 
         var moveHandler;
@@ -193,9 +194,9 @@ SketchSwitch.ToolMenu = function(sketch) {
 
 SketchSwitch.ToolMenu.DEFAULT_BUTTONS = [
     'Pen',
-    'Eraser'
+    'Eraser',
+    'Pipet'
 ];
-
 
 SketchSwitch.ToolMenu.prototype = {
     get win () {
@@ -211,18 +212,19 @@ SketchSwitch.ToolMenu.prototype = {
         }, this.tbody = E(doc, 'tbody'));
 
         with (this.table.style) {
-            position = 'absolute';
+            position = 'fixed';
             top      = '0';
             left     = '0';
+            border = '3px solid #0377DD';
             zIndex = this.sketch.canvas.style.zIndex + 1;
-            backgroundColor = 'rgba(255,255,255, 0.7)';
+            backgroundColor = 'rgba(255,255,255, 0.9)';
         }
 
         var buttons = SketchSwitch.ToolMenu.DEFAULT_BUTTONS;
         for (var i = 0;  i < buttons.length; i++) {
 
             var b = SketchSwitch.Buttons[buttons[i]];
-            var button = new b(this);
+            var button = new b(this.sketch);
             this.appendButton(button);
             if (i == 0) {
                 this.setCurrentButton(button);
@@ -234,7 +236,7 @@ SketchSwitch.ToolMenu.prototype = {
         var E = SketchSwitch.Utils.createElement;
         var doc = this.doc;
         this.menu.push(button);
-        var icon = E(doc, 'img', {src:button.icon, alt: button.name});
+        var icon = E(doc, 'img', {src:button.icon, title: button.name, alt: button.name});
         icon.button = button;
         button.element = icon;
         with(icon.style) {
@@ -286,13 +288,30 @@ SketchSwitch.Buttons.BaseProto = {
 
 SketchSwitch.Buttons.Pen = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Pen.prototype = SketchSwitch.Utils.extend({
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACvSURBVHjaYvz//z8DJYCJHE35U9f8B2EwB+QCUnDelNX/kdlMpNo8MTuEEUWQHJuR+RRpJsoAfJoJGkBIMwgzYksH8CgCAlVpMYacADtGrAGILRAnrz8It2X76ev/QbZisxmrF5A143M2Moangx1nbvy//fQVw91nb0hK2/AwgPkb5GcQAPl7yoZD/0E0XgNATsQmAQs8olwAsgnkfJhGTzMtBmUpEUaSvEAuAAgwAEW4iBMk5GV5AAAAAElFTkSuQmCC',
     name: 'Pen',
-}, SketchSwitch.Buttons.BaseProto);
+    select: function() {
+        this.sketch.currentBrush = new SketchSwitch.Brushes.Pen();
+    },
+}, SketchSwitch.Buttons.BaseProto, false);
 
 SketchSwitch.Buttons.Eraser = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Eraser.prototype = SketchSwitch.Utils.extend({
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACESURBVHjanJMNCoAwCIU3z9gtgjpLUKeoOxoGxjaeqBOE8fRzP05i5uL5dt4sjmJUHNuvh9FajaKwpVEGRjHKwmNOlYfIwq11BbJwd4UZ+FiXSmXSBP5PILuLoGIU/goojIIebLbRKoJ0EhE94JhsnqwdGDRE3qCZQAQWN39itCOvAAMA87rRSihWbbsAAAAASUVORK5CYII=',
     name: 'Eraser',
-}, SketchSwitch.Buttons.BaseProto);
+    select: function() {
+        this.sketch.currentBrush = new SketchSwitch.Brushes.Eraser();
+    },
+}, SketchSwitch.Buttons.BaseProto, false);
+
+SketchSwitch.Buttons.Pipet = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.Pipet.prototype = SketchSwitch.Utils.extend({
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAB+SURBVHjaYvr//z8DqThvyur/IAxiM4IIUkD+1DUoGggaANMwMTuEEV0zCDCRazPMUCYGMgFIM0EXgGwFKYQpRteM1wCYZmyakL1DthdggIWUQET3Ck4DYIqRnYpNMxhgS2XINCFMkWYUA8jRDDeAXM1gAyjRjOECcjBAgAEA7BN6BCKFNf0AAAAASUVORK5CYII=',
+    name: 'Pipet',
+    select: function() {
+        this.sketch.currentBrush = new SketchSwitch.Brushes.Pipet();
+    },
+}, SketchSwitch.Buttons.BaseProto, false);
 
 /* Brushes */
 SketchSwitch.Brushes = {};
@@ -302,14 +321,14 @@ SketchSwitch.Brushes.BaseProto = {
     },
 };
 
-SketchSwitch.Brushes.LineBase = function(options) { 
+SketchSwitch.Brushes.Pen = function(options) { 
     this.options = SketchSwitch.Utils.extend({
         color: 'rgba(0,0,0,1)',
         width: 5
     }, options); 
 };
 
-SketchSwitch.Brushes.LineBase.prototype = SketchSwitch.Utils.extend({
+SketchSwitch.Brushes.Pen.prototype = SketchSwitch.Utils.extend({
     allowMoving: true,
     start: function(canvas, preview) {
         this.stack = [];
@@ -361,9 +380,73 @@ SketchSwitch.Brushes.LineBase.prototype = SketchSwitch.Utils.extend({
         ctx.lineTo(point.x, point.y);
         ctx.stroke();
     }
-}, SketchSwitch.Brushes.BaseProto);
+}, SketchSwitch.Brushes.BaseProto, false);
+
+SketchSwitch.Brushes.Eraser = function(options) { 
+    this.options = SketchSwitch.Utils.extend({
+        width: 5
+    }, options); 
+};
+
+SketchSwitch.Brushes.Eraser.prototype = SketchSwitch.Utils.extend({
+    allowMoving: true,
+    start: function(canvas, preview) {
+        this.canvas = canvas;
+        this.ctx = canvas.ctx;
+    },
+    mouseUp: function(point) {
+        this.erase(point);
+        this.ctx = this.canvas = null;
+        this.onComplete();
+    },
+    mouseDown: function(point) {
+        this.erase(point);
+    },
+    mouseMove: function(point) {
+        this.erase(point);
+    },
+    erase: function(point) {
+        var ctx = this.ctx;
+        var w = Math.max(this.options.width || 10);
+
+        ctx.clearRect(point.x - (w), point.y - (w), w * 2, w * 2);
+    }
+}, SketchSwitch.Brushes.BaseProto, false);
+
+SketchSwitch.Brushes.Pipet = function(options) { 
+    this.options = SketchSwitch.Utils.extend({
+        width: 5
+    }, options); 
+};
+
+SketchSwitch.Brushes.Pipet.prototype = SketchSwitch.Utils.extend({
+    allowMoving: false,
+    start: function(canvas, preview, baseLayer) {
+        this.canvas = canvas;
+        this.ctx = canvas.ctx;
+        if (baseLayer) {
+            this.base = baseLayer;
+            this.bctx = baseLayer.ctx;
+        }
+    },
+    mouseUp: function(point) {
+        this.pipet(point);
+        this.ctx = this.canvas = null;
+        if (this.base) {
+            this.bctx = this.base = null;
+        }
+        this.onComplete();
+    },
+    mouseDown: function(point) {
+        this.pipet(point);
+    },
+    pipet: function(point) {
+        var ctx = this.ctx;
+        // XXX: getImageData が null を返す。なんで？
+        var pp = ctx.getImageData(point.x, point.y, 1,1);
+    }
+}, SketchSwitch.Brushes.BaseProto, false);
 
 
-/* */
 
 
