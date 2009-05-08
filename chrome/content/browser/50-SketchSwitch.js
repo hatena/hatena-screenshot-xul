@@ -2,16 +2,17 @@
 const EXPORT = ['SketchSwitch'];
 
 /*
+ * SketchSwitch / - / X
  * Canvas Drawing Tool (overlay window) for Firefox.
  *
  * License: MIT
- * author: Yuichi Tateno
+ * author: Yuichi Tateno 
  *
  * require JSColor.js
  */
 
 var SketchSwitch = function(win, canvasID) {
-    this.id = SketchSwitch.__sid__++;
+    this.sid = SketchSwitch.__sid__++;
     this._win = win || window;
     this.active = true;
     this.init(canvasID || '__sketch_switch_canvas__');
@@ -38,7 +39,7 @@ SketchSwitch.prototype = {
     init: function(canvasID) {
 
         this.canvas = this.createCanvas(canvasID);
-        SketchSwitch.Utils.clearCanvas(this.canvas);
+        SketchSwitch.Utils.initCanvas(this.canvas);
 
         var self = this;
         this.canvas.addEventListener('mousedown', function(event) {
@@ -60,6 +61,14 @@ SketchSwitch.prototype = {
         canvas.ctx = ctx;
         return canvas;
     },
+    get preview() {
+        if (!this._preview) {
+            var preview = this.createCanvas(this.canvas.canvasID + '_preview__');
+            preview.style.zIndex = parseInt(this.canvas.style.zIndex) + 3;
+            this._preview = preview;
+        }
+        return this._preview;
+    },
     mousedownHandler: function(event) {
         if (this.nowDrawing || !this.active) return;
         this.nowDrawing = true;
@@ -68,9 +77,7 @@ SketchSwitch.prototype = {
         var brush = this.currentBrush;
         var canvas = this.canvas;
 
-        var preview = this.createCanvas(canvas.canvasID + 'preview');
-        U.clearCanvas(canvas);
-        preview.style.zIndex = parseInt(canvas.style.zIndex) + 1;
+        var preview = this.preview;
         this.doc.body.appendChild(preview);
 
         var win = this.win;
@@ -114,6 +121,11 @@ SketchSwitch.prototype = {
 };
 
 SketchSwitch.Utils = {
+    initCanvas: function(canvas) {
+        canvas.ctx.fillStyle = 'rgba(255,255,255,0)';
+        canvas.ctx.fillRect(0, 0, canvas.width, canvas.height); 
+    },
+
     clearCanvas: function(canvas) {
         canvas.ctx.fillStyle = 'rgba(255,255,255,0)';
         canvas.ctx.fillRect(0, 0, canvas.width, canvas.height); 

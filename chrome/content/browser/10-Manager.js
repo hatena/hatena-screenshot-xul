@@ -8,7 +8,7 @@ Manager.sketch = {
     hasSketch: function(sketch) {
         let sketches = this.sketches;
         for (let key in sketches) {
-            if (sketches[key].id == sketch.id) {
+            if (key.__sketch_switch_sid__ == sketch.sid) {
                 return key;
             }
         }
@@ -25,16 +25,28 @@ Manager.sketch = {
     },
     addSketch: function(sketch) {
         this.sketches[sketch.win] = sketch;
-    }
+        sketch.win.__sketch_switch_sid__ = sketch.sid;
+    },
+    getSketckById: function(sid) {
+        if (!sid) return;
+        for (let key in sketches) {
+            if (key.__sketch_switch_sid__ == sid) {
+                return sketch[key];
+            }
+        }
+        return;
+    },
 };
 
 Manager.draw = function() {
-    let win = window.content;
-    if (!win) return;
+    let win = getTopWin().content;
+    if (!win || !win.document) return;
 
+    p('draw!: sid: '  + win.__sketch_switch_sid__);
     let eventType = 'ShowSketch';
     let sketch;
-    if (sketch = Manager.sketch.sketches[win]) {
+    if (sketch = Manager.sketch.getSketckById(win.__sketch_switch_sid__)) {
+        p('has sketch!');
         //
     } else {
         sketch = new SketchSwitch(win);
