@@ -73,10 +73,9 @@
                     shared.set('firstPreload', true);
                 }
 
-                //setTimeout(Manager.draw(), 1000);
-                window.setTimeout(function() { 
-                    Manager.draw();
-                }, 1000);
+                // window.setTimeout(function() { 
+                //     Manager.draw();
+                // }, 1000);
             }, false);
 
             window.addEventListener('unload', function(e) {
