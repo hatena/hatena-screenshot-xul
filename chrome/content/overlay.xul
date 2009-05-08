@@ -7,27 +7,27 @@
         id="hFotolife-menu" label="Fotolife"
     >
         <menupopup id ="hFotolife-menu-popup">
-            <menuitem id="hFotolife-menu-draw" label='絵を描く' oncommand='hFotolife.MainMenu.draw();'/>
+            <menuitem id="hFotolife-menu-draw" label='絵を描く' oncommand='hFotolife.Manager.draw();'/>
             <menuseparator />
             <menu id="hFotolife-menu-upload" label="アップロード">
                 <menupopup>
-                    <menuitem label='全部' oncommand='hFotolife.MainMenu.Upload.all();'/>
-                    <menuitem label='表示部分のみ' oncommand='hFotolife.MainMenu.Upload.inner();'/>
-                    <menuitem label='一部のみ' oncommand='hFotolife.MainMenu.Upload.rect();'/>
+                    <menuitem label='全部' oncommand='hFotolife.Manager.Upload.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Upload.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Upload.rect();'/>
                 </menupopup>
             </menu>
             <menu id="hFotolife-menu-copy" label="クリップボードにコピー">
                 <menupopup>
-                    <menuitem label='全部' oncommand='hFotolife.MainMenu.Copy.all();'/>
-                    <menuitem label='表示部分のみ' oncommand='hFotolife.MainMenu.Copy.inner();'/>
-                    <menuitem label='一部のみ' oncommand='hFotolife.MainMenu.Copy.rect();'/>
+                    <menuitem label='全部' oncommand='hFotolife.Manager.Copy.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Copy.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Copy.rect();'/>
                 </menupopup>
             </menu>
             <menu id="hFotolife-menu-save" label="ファイルに保存">
                 <menupopup>
-                    <menuitem label='全部' oncommand='hFotolife.MainMenu.Save.all();'/>
-                    <menuitem label='表示部分のみ' oncommand='hFotolife.MainMenu.Save.inner();'/>
-                    <menuitem label='一部のみ' oncommand='hFotolife.MainMenu.Save.rect();'/>
+                    <menuitem label='全部' oncommand='hFotolife.Manager.Save.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Save.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Save.rect();'/>
                 </menupopup>
             </menu>
         </menupopup>
@@ -41,7 +41,7 @@
         <image 
             id="hFotolife-statusIcon"
             src="chrome://hatenafotolife/skin/images/favicon.ico" 
-            onclick="hFotolife.MainMenu.showPopup();" 
+            onclick="hFotolife.Manager.showPopup();" 
         />
     </statusbarpanel>
   </statusbar>
@@ -65,9 +65,9 @@
                     shared.set('firstPreload', true);
                 }
 
-                //setTimeout(MainMenu.draw(), 1000);
+                //setTimeout(Manager.draw(), 1000);
                 window.setTimeout(function() { 
-                    MainMenu.draw();
+                    Manager.draw();
                 }, 1000);
             }, false);
 

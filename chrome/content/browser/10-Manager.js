@@ -1,9 +1,9 @@
 
-const EXPORT = ['MainMenu'];
+const EXPORT = ['Manager'];
 
-var MainMenu = {};
+var Manager = {};
 
-MainMenu.sketch = {
+Manager.sketch = {
     sketches: {},
     hasSketch: function(sketch) {
         let sketches = this.sketches;
@@ -28,19 +28,19 @@ MainMenu.sketch = {
     }
 };
 
-MainMenu.draw = function() {
+Manager.draw = function() {
     let win = window.content;
     if (!win) return;
 
     let eventType = 'ShowSketch';
     let sketch;
-    if (sketch = MainMenu.sketch.sketches[win]) {
+    if (sketch = Manager.sketch.sketches[win]) {
         //
     } else {
         sketch = new SketchSwitch(win);
-        MainMenu.sketch.addSketch(sketch);
+        Manager.sketch.addSketch(sketch);
         var unloader = function(event) {
-            p('remove sketch obj: ' + MainMenu.sketch.removeSketch(sketch));
+            p('remove sketch obj: ' + Manager.sketch.removeSketch(sketch));
             win.removeEventListener('unload', unloader, false);
         };
         win.addEventListener('unload', unloader, false);
@@ -49,7 +49,7 @@ MainMenu.draw = function() {
     // var random = Math.random().toString().slice(2);
 };
 
-MainMenu.showPopup = function() {
+Manager.showPopup = function() {
     let icon = document.getElementById('hFotolife-statusIcon');
     let menu = document.getElementById('hFotolife-menu-popup');
     menu = menu.cloneNode(true);
@@ -57,7 +57,7 @@ MainMenu.showPopup = function() {
     menu.openPopup(icon, 'before_end', 0, 0, false, true);
 };
 
-MainMenu.Base = {
+Manager.Base = {
     all: function() {
         this.capture('all');
     },
@@ -69,8 +69,8 @@ MainMenu.Base = {
     }
 };
 
-MainMenu.Upload = extend({}, MainMenu.Base);
-extend(MainMenu.Upload, {
+Manager.Upload = extend({}, Manager.Base);
+extend(Manager.Upload, {
     capture: function(method) {
         p('upload capture: ' + method);
         // method: all, rect, inner
@@ -151,8 +151,8 @@ extend(MainMenu.Upload, {
     },
 });
 
-MainMenu.Copy = extend({}, MainMenu.Base);
-extend(MainMenu.Copy, {
+Manager.Copy = extend({}, Manager.Base);
+extend(Manager.Copy, {
     capture: function(method) {
         p('copy capture: ' + method);
         Capture[method](false, function(data) {
@@ -162,8 +162,8 @@ extend(MainMenu.Copy, {
     },
 });
 
-MainMenu.Save = extend({}, MainMenu.Base);
-extend(MainMenu.Save, {
+Manager.Save = extend({}, Manager.Base);
+extend(Manager.Save, {
     capture: function(method) {
         p('save capture: ' + method);
         Capture[method](false, function(data) {
