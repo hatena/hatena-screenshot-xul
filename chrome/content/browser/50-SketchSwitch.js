@@ -12,7 +12,8 @@ const EXPORT = ['SketchSwitch'];
 
 var SketchSwitch = function(win, canvasID) {
     this._win = win || window;
-    this.createCanvas(canvasID || '__sketch_switch_canvas__');
+    this.active = true;
+    this.init(canvasID || '__sketch_switch_canvas__');
     this.currentBrush = new SketchSwitch.Brushes.LineBase();
 };
 
@@ -23,17 +24,24 @@ SketchSwitch.prototype = {
     get doc() {
         return this.win.document;
     },
-    get canvas() {
-        return this._canvas;
-    },
-    get ctx() {
-        return this._ctx;
-    },
     get width() {
         return this.canvas.width;
     },
     get height() {
         return this.canvas.height;
+    },
+    get ctx() {
+        return this.canvas.ctx;
+    },
+    init: function(canvasID) {
+
+        this.canvas = this.createCanvas(canvasID);
+        this.clearCanvas();
+
+        var self = this;
+        this.canvas.addEventListener('mousedown', function(event) {
+            self.mousedownHandler(event);
+        }, false);
     },
     createCanvas: function(canvasID) {
         var canvas = this.doc.createElement('canvas');
@@ -47,25 +55,25 @@ SketchSwitch.prototype = {
             zIndex   = '99990';
         };
         var ctx = canvas.getContext('2d');
-        this._canvas = canvas;
-        canvas.ctx = this._ctx = ctx;
-
-        this.clearCanvas();
-        var self = this;
-        canvas.addEventListener('mousedown', function(event) {
-            self.mousedownHandler(event);
-        }, false);
+        canvas.ctx = ctx;
+        return canvas;
     },
     mousedownHandler: function(event) {
-        if (this.nowDrawing) return;
+        if (this.nowDrawing || !this.active) return;
         this.nowDrawing = true;
 
         var U = SketchSwitch.Utils;
         var brush = this.currentBrush;
         var canvas = this.canvas;
+
+        var preview = this.createCanvas(canvas.canvasID + 'preview');
+        this.clearCanvas(preview.ctx);
+        preview.style.zIndex = parseInt(canvas.style.zIndex) + 1;
+        this.doc.body.appendChild(preview);
+
         var win = this.win;
 
-        brush.start(canvas);
+        brush.start(canvas, preview);
         brush.mouseDown(U.getPoint(event, win));
 
         var moveHandler;
@@ -73,30 +81,32 @@ SketchSwitch.prototype = {
             moveHandler = function(event) {
                 brush.mouseMove(U.getPoint(event, win));
             };
-            canvas.addEventListener('mousemove', moveHandler, false);
+            preview.addEventListener('mousemove', moveHandler, false);
         }
 
         var upHandler = function(event) {
             brush.mouseUp(U.getPoint(event, win));
         };
 
-        canvas.addEventListener('mouseup',  upHandler, false);
-        canvas.addEventListener('mouseout', upHandler, false);
+        preview.addEventListener('mouseup',  upHandler, false);
+        preview.addEventListener('mouseout', upHandler, false);
 
         var self = this;
         var completeHandler = function(event) {
             if (moveHandler)
-                canvas.removeEventListener('mousemove', moveHandler, false);
-            canvas.removeEventListener('mouseup', upHandler, false);
-            canvas.removeEventListener('mouseout', upHandler, false);
+                preview.removeEventListener('mousemove', moveHandler, false);
+            preview.removeEventListener('mouseup', upHandler, false);
+            preview.removeEventListener('mouseout', upHandler, false);
+            if ( preview.parentNode ) preview.parentNode.removeChild(preview);
             brush.onComplete = function() {};
             self.nowDrawing = false;
         }
         brush.onComplete = completeHandler;
     },
     clearCanvas: function(ctx) {
-        this.ctx.fillStyle = 'rgba(255,255,255,0)';
-        this.ctx.fill(0, 0, this.width, this.height); 
+        if (!ctx) ctx = this.ctx;
+        ctx.fillStyle = 'rgba(255,255,255,0)';
+        ctx.fillRect(0, 0, this.width, this.height); 
     },
     show: function() {
         this.doc.body.appendChild(this.canvas);
@@ -147,21 +157,22 @@ SketchSwitch.Brushes.Base = function(options) { this.options = options || {} };
 SketchSwitch.Brushes.LineBase = function(options) { this.options = options || {} };
 SketchSwitch.Brushes.LineBase.prototype = {
     allowMoving: true,
-    start: function(canvas) {
+    start: function(canvas, preview) {
         this.canvas = canvas;
+        this.preview = preview;
         this.ctx = canvas.ctx;
-        p(this.ctx);
-        this.setColor();
+        this.pctx = preview.ctx;
+        this.setColor(this.ctx);
+        this.setColor(this.pctx);
     },
-    setColor: function() {
-        var ctx = this.ctx;
+    setColor: function(ctx) {
         ctx.strokeStyle = 'rgb(0,0,0)';
         ctx.lineJoin = 'round';
         ctx.lineWidth = 5;
     },
     mouseUp: function(point) {
-        p('up');
         this.drawLine(point);
+        this.pctx = this.preview = null;
         this.ctx = this.canvas = null;
         this.onComplete();
     },
@@ -173,7 +184,7 @@ SketchSwitch.Brushes.LineBase.prototype = {
         this.lastPoint = point;
     },
     drawLine: function(point) {
-        var ctx = this.ctx;
+        var ctx = this.pctx;
         ctx.beginPath();
         ctx.moveTo(this.lastPoint.x, this.lastPoint.y);
         ctx.lineTo(point.x, point.y);
