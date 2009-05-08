@@ -292,6 +292,7 @@ SketchSwitch.ToolMenu.DEFAULT_BUTTONS = [
     'Pen3',
     'Pen4',
     'Rect',
+    'RectEraser',
     'Eraser',
     'Pipet',
     // 'Undo',
@@ -302,18 +303,15 @@ SketchSwitch.ToolMenu.DEFAULT_BUTTONS = [
 SketchSwitch.ToolMenu.DEFAULT_COLORS = [
     '#000000',
     '#FFFFFF',
-    '#DCDDDD',
     '#9ea1a3',
     // R
     '#D9333F',
-    '#762f07',
     '#F5B199', //*
     '#FFDB4F',
     // G
     '#7EBEAB',
     '#2F5D50',
     // B
-    '#89C3EB',
     '#706CAA'
 ];
 
@@ -424,7 +422,7 @@ SketchSwitch.ToolMenu.prototype = {
             );
 
             with (td.style) {
-                padding = '4px';
+                padding = '2px 4px 1px 4px';
                 borderBottom = '1px solid #CCC';
             }
 
@@ -521,6 +519,16 @@ SketchSwitch.Buttons.Eraser.prototype = SketchSwitch.Utils.extend({
     name: 'Eraser',
     select: function() {
         this.sketch.currentBrush = new SketchSwitch.Brushes.Eraser();
+    },
+}, SketchSwitch.Buttons.BaseProto, false);
+
+SketchSwitch.Buttons.RectEraser = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.RectEraser.prototype = SketchSwitch.Utils.extend({
+    shortcut: 'e',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACESURBVHjanJMNCoAwCIU3z9gtgjpLUKeoOxoGxjaeqBOE8fRzP05i5uL5dt4sjmJUHNuvh9FajaKwpVEGRjHKwmNOlYfIwq11BbJwd4UZ+FiXSmXSBP5PILuLoGIU/goojIIebLbRKoJ0EhE94JhsnqwdGDRE3qCZQAQWN39itCOvAAMA87rRSihWbbsAAAAASUVORK5CYII=',
+    name: 'RectEraser',
+    select: function() {
+        this.sketch.currentBrush = new SketchSwitch.Brushes.RectEraser();
     },
 }, SketchSwitch.Buttons.BaseProto, false);
 
@@ -705,7 +713,6 @@ SketchSwitch.Brushes.Rect = function(options) {
 SketchSwitch.Brushes.Rect.prototype = SketchSwitch.Utils.extend({
     allowMoving: true,
     start: function(canvas, preview) {
-
         this.canvas = canvas;
         this.preview = preview;
     },
@@ -725,8 +732,48 @@ SketchSwitch.Brushes.Rect.prototype = SketchSwitch.Utils.extend({
     },
     drawRect: function(canvas, point) {
         var ctx = canvas.ctx;
+        var color = this.color;
         ctx.fillStyle = this.color;
         ctx.fillRect.apply(ctx, SketchSwitch.Utils.getRectByPoint(this.startPoint, point)); 
+    }
+}, SketchSwitch.Brushes.BaseProto, false);
+
+SketchSwitch.Brushes.RectEraser = function(options) { 
+    this.options = SketchSwitch.Utils.extend({
+        color: 'rgba(0,0,0,1)',
+        width: 5
+    }, options); 
+};
+
+SketchSwitch.Brushes.RectEraser.prototype = SketchSwitch.Utils.extend({
+    allowMoving: true,
+    start: function(canvas, preview) {
+        this.canvas = canvas;
+        this.preview = preview;
+    },
+
+    mouseUp: function(point) {
+        this.sketch.addHistory(this.canvas); // XXX
+        this.drawRect(this.canvas, point);
+        this.preview = this.canvas = null;
+        this.onComplete(true);
+    },
+    mouseDown: function(point) {
+        this.startPoint = point;
+    },
+    mouseMove: function(point) {
+        SketchSwitch.Utils.clearCanvas(this.preview);
+        this.drawRect(this.preview, point, true);
+    },
+    drawRect: function(canvas, point, isPreview) {
+        var ctx = canvas.ctx;
+        var color = this.color;
+        if (isPreview) {
+            ctx.fillStyle = 'rgba(255,0,0, 0.7)';
+            ctx.fillRect.apply(ctx, SketchSwitch.Utils.getRectByPoint(this.startPoint, point)); 
+        } else {
+            ctx.clearRect.apply(ctx, SketchSwitch.Utils.getRectByPoint(this.startPoint, point)); 
+        }
     }
 }, SketchSwitch.Brushes.BaseProto, false);
 
