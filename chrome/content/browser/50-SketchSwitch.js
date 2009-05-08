@@ -74,7 +74,20 @@ SketchSwitch.prototype = {
         this.lastPoint = SketchSwitch.Utils.getPoint(event, this.win);
     },
     copyColor: function(point) {
-        p('copy col');
+        var ctx = this.ctx;
+        var d = (ctx.wrappedJSObject || ctx).getImageData(point.x, point.y, 1,1);
+        var data = d.data;
+
+        var bctx = this.underLayer.ctx;
+        var b = (bctx.wrappedJSObject || bctx).getImageData(point.x, point.y, 1,1);
+        var bdata = b.data;
+        if (data[3] == 0) {
+            //
+        } else {
+            // 本当はスクリーン乗算のアルファブレンディングすべき
+            bdata = data;
+        }
+        this.toolMenu.setColor('rgb(' + [bdata.slice(0,3)].join(',') + ')');
     },
     createUnderLayer: function() {
         // underLayer は表示領域におかない
@@ -499,7 +512,7 @@ SketchSwitch.Buttons.HidePipet.prototype = SketchSwitch.Utils.extend({
     name: 'HidePipet',
     select: function() {
         if (this.sketch.lastPoint)
-            this.sketch.copyColor(this.lastPoint);
+            this.sketch.copyColor(this.sketch.lastPoint);
     },
 }, SketchSwitch.Buttons.BaseProto, false);
 
@@ -668,39 +681,16 @@ SketchSwitch.Brushes.Pipet = function(options) {
 SketchSwitch.Brushes.Pipet.prototype = SketchSwitch.Utils.extend({
     allowMoving: false,
     start: function(canvas, preview, baseLayer) {
-        this.canvas = canvas;
-        this.ctx = canvas.ctx;
-        if (baseLayer) {
-            this.base = baseLayer;
-            this.bctx = baseLayer.ctx;
-        }
     },
     mouseUp: function(point) {
         this.pipet(point);
-        this.ctx = this.canvas = null;
-        if (this.base) {
-            this.bctx = this.base = null;
-        }
         this.onComplete();
     },
     mouseDown: function(point) {
         this.pipet(point);
     },
     pipet: function(point) {
-        var ctx = this.ctx;
-        var d = (ctx.wrappedJSObject || ctx).getImageData(point.x, point.y, 1,1);
-        var data = d.data;
-
-        var bctx = this.bctx;
-        var b = (bctx.wrappedJSObject || bctx).getImageData(point.x, point.y, 1,1);
-        var bdata = b.data;
-        if (data[3] == 0) {
-            //
-        } else {
-            // 本当はスクリーン乗算のアルファブレンディングすべき
-            bdata = data;
-        }
-        this.sketch.toolMenu.setColor('rgb(' + [bdata.slice(0,3)].join(',') + ')');
+        this.sketch.copyColor(point);
     }
 }, SketchSwitch.Brushes.BaseProto, false);
 
