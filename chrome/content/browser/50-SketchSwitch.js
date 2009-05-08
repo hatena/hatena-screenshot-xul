@@ -327,7 +327,6 @@ SketchSwitch.ToolMenu.prototype = {
         }
     },
     setColor: function(color) {
-        p(color);
         this.sketch.brushOptions.color = color;
         this.table.style.borderColor = color;
     },
@@ -632,15 +631,19 @@ SketchSwitch.Brushes.Pipet.prototype = SketchSwitch.Utils.extend({
     },
     pipet: function(point) {
         var ctx = this.ctx;
-        var data = ctx.wrappedJSObject.getImageData(point.x, point.y, 1,1).data;
+        var d = ctx.wrappedJSObject.getImageData(point.x, point.y, 1,1);
+        var data = d.data;
 
         var bctx = this.bctx;
-        var bdata = bctx.wrappedJSObject.getImageData(point.x, point.y, 1,1).data;
-        p(data);
-        p(bdata);
+        var b = bctx.wrappedJSObject.getImageData(point.x, point.y, 1,1);
+        var bdata = b.data;
         if (data[3] == 0) {
-            this.sketch.toolMenu.setColor('rgb(' + [bdata.slice(0,3)].join(',') + ')');
+            //
+        } else {
+            // 本当はスクリーン乗算のアルファブレンディングすべき
+            bdata = data;
         }
+        this.sketch.toolMenu.setColor('rgb(' + [bdata.slice(0,3)].join(',') + ')');
     }
 }, SketchSwitch.Brushes.BaseProto, false);
 
