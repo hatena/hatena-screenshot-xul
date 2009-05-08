@@ -170,7 +170,7 @@ extend(Manager.Upload, {
     },
 });
 
-Manager.Copy = extend({}, Manager.Base);
+Manager.Copy = extend({}, Manager.Base, false);
 extend(Manager.Copy, {
     capture: function(method) {
         p('copy capture: ' + method);

@@ -46,6 +46,7 @@ var Capture = {
         let clear = function() {
             // ctx.fillStyle = 'rgba(141, 161, 191, 0.7)';
             // alpha で塗りつぶすと、どんどん濃くなるため
+            // clearRect して塗りつぶせばおｋ
             ctx.fillStyle = 'rgb(141, 161, 191)';
             ctx.fillRect(0, 0, width, height);
         };
@@ -74,8 +75,8 @@ var Capture = {
                 let nowPoint = getPoint(event);
 
                 clear();
-                ctx.fillStyle = 'rgb(255,255,255)';
-                ctx.fillRect.apply(ctx, getRectByPoint(nowPoint, point));
+                // ctx.fillStyle = 'rgb(255,255,255)';
+                ctx.clearRect.apply(ctx, getRectByPoint(nowPoint, point));
             }, false);
 
             canvas.addEventListener('mouseup', function(event) {

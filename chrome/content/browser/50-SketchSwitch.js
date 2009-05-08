@@ -127,6 +127,18 @@ SketchSwitch.prototype = {
     clear: function() {
         SketchSwitch.Utils.clearCanvas(this.canvas);
     },
+    get shown() {
+        return !!this.canvas.parentNode;
+    },
+    get shownMenu() {
+        return this.toolMenu.shown;
+    },
+    hideMenu: function() {
+        this.toolMenu.hide();
+    },
+    showMenu: function() {
+        this.toolMenu.show();
+    },
     show: function() {
         this.doc.body.appendChild(this.canvas);
         this.toolMenu.show();
@@ -241,6 +253,9 @@ SketchSwitch.ToolMenu.prototype = {
     show: function() {
         this.doc.body.appendChild(this.table);
     },
+    get shown() {
+        return !!this.table.parentNode;
+    },
     get win () {
         return this.sketch.win;
     },
@@ -271,7 +286,7 @@ SketchSwitch.ToolMenu.prototype = {
             var b = SketchSwitch.Buttons[buttons[i]];
             var button = new b(this.sketch);
             this.appendButton(button);
-            if (i == 2) {
+            if (i == 3) { // XXX
                 this.setCurrentButton(button);
             }
         }
