@@ -63,7 +63,7 @@
 
                 //setTimeout(MainMenu.draw(), 1000);
                 window.setTimeout(function() { 
-                //     MainMenu.Copy.rect();
+                    MainMenu.draw();
                 }, 1000);
             }, false);
 

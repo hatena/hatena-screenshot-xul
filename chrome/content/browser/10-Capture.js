@@ -38,7 +38,7 @@ var Capture = {
             position = 'absolute';
             top      = '0';
             left     = '0';
-            zIndex   = '10000';
+            zIndex   = '99995';
             opacity  = '0.7';
         };
 
