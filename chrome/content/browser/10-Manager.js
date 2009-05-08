@@ -145,7 +145,8 @@ extend(Manager.Upload, {
                 options.fotosize= 100000;
             }
 
-            // ロード画面とか出した方がよい？
+            document.getElementById('hFotolife-statusIcon').setAttribute('loading', 'true');
+
             if (!data) {
                 Capture[method](true, function(data) {
                     user.uploadData(data, options);
@@ -175,6 +176,7 @@ extend(Manager.Upload, {
     callback: function(res) {
         let m;
         p('upload success: ' + res.responseText);
+        document.getElementById('hFotolife-statusIcon').removeAttribute('loading');
         if (m = res.responseText.match(/:(\d{14})/)) {
             let timestamp = m[1];
             let permalink = User.user.getPermalink(timestamp);
@@ -188,6 +190,7 @@ extend(Manager.Upload, {
     },
 
     errorback: function(res) {
+        document.getElementById('hFotolife-statusIcon').removeAttribute('loading');
         window.alert('フォトライフへののアップロードに失敗しました');
     },
 });

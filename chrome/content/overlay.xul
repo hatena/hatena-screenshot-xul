@@ -1,4 +1,5 @@
 <?xml version="1.0" ?>
+<?xml-stylesheet type="text/css" href="chrome://hatenafotolife/skin/browser.css"?>
 <overlay id="Fotolife-xulOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/javascript" src="autoloader.js"></script>
   <menupopup id="menu_ToolsPopup">
@@ -45,9 +46,8 @@
     <statusbarpanel id="hFotolife-statusBarPanel"
          collapsed="false"
     >
-        <image 
+        <image
             id="hFotolife-statusIcon"
-            src="chrome://hatenafotolife/skin/images/FotoIcon.png" 
             onclick="hFotolife.Manager.showPopup(event);" 
             ondblclick="hFotolife.Manager.draw();" 
         />
