@@ -77,39 +77,57 @@ Manager.showPopup = function(event) {
 };
 
 Manager.Base = {
+    createFinish: function() {
+        let sketch;
+        if (window.content && 
+            (sketch = Manager.sketch.getSketckById(window.content.__sketch_switch_sid__))) {
+            if (sketch.shownMenu) {
+                sketch.hideMenu();
+
+                return function() {
+                    sketch.showMenu();
+                    p('capture finish (show menu)');
+                }
+            }
+        }
+        return function() {
+            p('capture finish');
+        };
+    },
     all: function() {
-        this.capture('all');
+        this.capture('all', this.createFinish());
     },
     rect: function() {
-        this.capture('rect');
+        this.capture('rect', this.createFinish());
     },
     inner: function() {
-        this.capture('inner');
+        this.capture('inner', this.createFinish());
     }
 };
 
 Manager.Upload = extend({}, Manager.Base);
 extend(Manager.Upload, {
-    capture: function(method) {
+    capture: function(method, finish) {
         p('upload capture: ' + method);
         // method: all, rect, inner
         // XXX: ログインチェックを挟む
         if (!User.user) {
             window.config('フォトライフへのログインが必要です。');
+            finish();
             return;
         }
 
         if (method == 'rect') {
             let self = this;
             Capture.rect(true, function(data) {
-                self._capture(method, data);
+                self._capture(method, data, finish);
             });
         } else {
-            this._capture(method);
+            this._capture(method, null, finish);
         }
     },
 
-    _capture: function(method, data) {
+    _capture: function(method, data, finish) {
         let config = this.configDialog();
         if (config.accept) {
             p('capture accept (config):' + uneval(config));
@@ -131,12 +149,16 @@ extend(Manager.Upload, {
             if (!data) {
                 Capture[method](true, function(data) {
                     user.uploadData(data, options);
+                    finish();
                 });
             } else {
                 // rect
                 user.uploadData(data, options);
+                finish();
             }
-        }   
+        } else {
+            finish();
+        }
     },
 
     configDialog: function() {
@@ -172,33 +194,36 @@ extend(Manager.Upload, {
 
 Manager.Copy = extend({}, Manager.Base, false);
 extend(Manager.Copy, {
-    capture: function(method) {
+    capture: function(method, finish) {
         p('copy capture: ' + method);
         Capture[method](false, function(data) {
-            if (!data) return;
-            ExCanvas.prototype.dataURItoClipboard(data);
+            if (data) {
+                ExCanvas.prototype.dataURItoClipboard(data);
+            }
+            finish();
         });
     },
 });
 
 Manager.Save = extend({}, Manager.Base);
 extend(Manager.Save, {
-    capture: function(method) {
+    capture: function(method, finish) {
         p('save capture: ' + method);
         Capture[method](false, function(data) {
-            if (!data) return;
+            if (data) {
+                let uri = IOService.newURI(data, null, null);
+                let filePicker = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
+                filePicker.init(window, UIEncodeText('ファイルに保存'), filePicker.modeSave);
+                filePicker.appendFilters(filePicker.filterImages);
+                // filePicker.appendFilters(UIEncodeText('png 画像ファイル'), "*.png;");
+                filePicker.defaultString = (window.content.document.title || 'screenshot') + '.png';
+                if ((filePicker.show() == filePicker.returnCancel) || !filePicker.file) return;
 
-            let uri = IOService.newURI(data, null, null);
-            let filePicker = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
-            filePicker.init(window, UIEncodeText('ファイルに保存'), filePicker.modeSave);
-            filePicker.appendFilters(filePicker.filterImages);
-            // filePicker.appendFilters(UIEncodeText('png 画像ファイル'), "*.png;");
-            filePicker.defaultString = (window.content.document.title || 'screenshot') + '.png';
-            if ((filePicker.show() == filePicker.returnCancel) || !filePicker.file) return;
-
-            let wbp = Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1']
-              .createInstance(Ci.nsIWebBrowserPersist);
-            wbp.saveURI(uri, null, null, null, null, filePicker.file);
+                let wbp = Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1']
+                  .createInstance(Ci.nsIWebBrowserPersist);
+                wbp.saveURI(uri, null, null, null, null, filePicker.file);
+            }
+            finish();
         });
     },
 });
