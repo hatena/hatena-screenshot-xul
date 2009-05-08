@@ -60,6 +60,11 @@
                     EventService.dispatch('firstPreload', window);
                     shared.set('firstPreload', true);
                 }
+
+                //setTimeout(MainMenu.draw(), 1000);
+                window.setTimeout(function() { 
+                //     MainMenu.Copy.rect();
+                }, 1000);
             }, false);
 
             window.addEventListener('unload', function(e) {

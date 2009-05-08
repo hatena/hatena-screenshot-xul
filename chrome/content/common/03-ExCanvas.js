@@ -18,6 +18,7 @@ ExCanvas.prototype = {
     capture: function(win, pos, dim, scale, ext) {
         let canvas = this.canvas;
         let ctx = canvas.getContext('2d');
+        p('capture pos, dim:' + uneval([pos, dim]));
         canvas.width = dim.width;
         canvas.height = dim.height;
         
@@ -49,7 +50,9 @@ ExCanvas.prototype = {
 
         if (options.all) {
             let html = content.document.getElementsByTagName('html')[0];
-            [pos, dim] = this.elementRect(html, content);
+            dim.width = Math.max(content.document.documentElement.scrollWidth, content.innerWidth);
+            dim.height= Math.max(content.document.documentElement.scrollHeight, content.innerHeight);
+            pos = {x: 0, y:0};
         } else {
             [pos, dim] = this.getInlineContentPos(content);
         }
@@ -108,83 +111,4 @@ ExCanvas.prototype = {
         return [pos, dim];
     },
 };
-
-/*
-        capture: function capture(win, pos, dim, ext, scale) {
-            // based on Tombloo/01_utility.js
-            let canvas = document.createElementNS('http://www.w3.org/1999/xhtml', 'canvas');
-            let ctx = canvas.getContext('2d');
-            canvas.width = dim.w;
-            canvas.height = dim.h;
-            
-            if (scale){
-                scale   = scale.w? scale.w/dim.w : 
-                    scale.h? scale.h/dim.h : scale;
-                
-                canvas.width = dim.w * scale;
-                canvas.height = dim.h * scale;
-                ctx.scale(scale, scale);
-            }
-            
-            ctx.drawWindow(win, pos.x, pos.y, dim.w, dim.h, '#FFF');
-            ctx.restore();
-            return canvas.toDataURL('image/' + (ext || 'png'), ext == 'jpeg' ? 'quality=95' : '');
-        },
-
-        dataURItoClipboard: function dataURItoClipboard(uri) {
-            let img = new content.Image();
-            img.addEventListener('load', function() {
-                document.popupNode = img;
-                goDoCommand('cmd_copyImage');
-                if (img.parentNode) img.parentNode.removeChild(img);
-            }, false);
-            img.setAttribute('style', 'display: none');
-            let body = content.document.body.appendChild(img);
-            img.setAttribute('src', uri);
-        },
-        elementRect: function elementRect(el) {
-            let rect = el.getBoundingClientRect();
-            if (rect.wrappedJSObject) rect = rect.wrappedJSObject;
-
-            let pos = {x: parseInt(content.scrollX + rect.left), y: parseInt(content.scrollY + rect.top)};
-            let dim = {w: parseInt(rect.right - rect.left), h: parseInt(rect.bottom - rect.top)};
-            return [pos, dim];
-        },
-
-        execute: function execute(args, bang) {
-            let pos = {
-                x: content.scrollX,
-                y: content.scrollY,
-            };
-
-            let dim = {
-                w: content.innerWidth,
-                h: content.innerHeight,
-            };
-
-            if (args['-xpath']) {
-                let res = ScreenCapture.xpathPosition(args['-xpath']);
-                if (res) {
-                    [pos, dim] = res;
-                } else {
-                    throw 'xpath: ' + args['-xpath'] + ' not fount.';
-                }
-            } else if (args['-all']) {
-                [pos, dim] = ScreenCapture.elementRect(content.document.getElementsByTagName('html')[0]);
-            }
-
-            let ext = 'png';
-            if (args['-ext']) ext = args['-ext'];
-
-            let scale;
-            if (args['-scale']) {
-                scale = parseFloat(args['-scale']);
-            }
-
-            let dataURI = ScreenCapture.capture(content, pos, dim, ext, scale);
-            ScreenCapture.dataURItoClipboard(dataURI);
-            liberator.echo('capture success: ' + [pos.x, pos.y, dim.w, dim.h].join(', '));
-        }
-*/
-
 

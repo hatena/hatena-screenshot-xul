@@ -4,6 +4,19 @@ const EXPORT = ['MainMenu'];
 var MainMenu = {};
 
 MainMenu.draw = function() {
+    let win = window.content;
+    if (!win) return;
+
+    let eventType = 'ShowSketch';
+    if (win.__sketch_switch__) {
+        var ev = document.createEvent('UIEvents');
+        ev.initUIEvent('', true, false, window, null);
+        win.dispatchEvent(ev);
+    } else {
+        let sketch = new SketchSwitch(win);
+        sketch.show();
+    }
+    // var random = Math.random().toString().slice(2);
 };
 
 MainMenu.Base = {
@@ -24,10 +37,25 @@ extend(MainMenu.Upload, {
         p('upload capture: ' + method);
         // method: all, rect, inner
         // XXX: ログインチェックを挟む
+        if (!User.user) {
+            window.config('フォトライフへのログインが必要です。');
+            return;
+        }
+
+        if (method == 'rect') {
+            let self = this;
+            Capture.rect(true, function(data) {
+                self._capture(method, data);
+            });
+        } else {
+            this._capture(method);
+        }
+    },
+
+    _capture: function(method, data) {
         let config = this.configDialog();
         if (config.accept) {
             p('capture accept (config):' + uneval(config));
-            let data = Capture[method](true);
             let user = User.user;
 
             let options = {
@@ -43,7 +71,14 @@ extend(MainMenu.Upload, {
             }
 
             // ロード画面とか出した方がよい？
-            user.uploadData(data, options);
+            if (!data) {
+                Capture[method](true, function(data) {
+                    user.uploadData(data, options);
+                });
+            } else {
+                // rect
+                user.uploadData(data, options);
+            }
         }   
     },
 
@@ -65,9 +100,11 @@ extend(MainMenu.Upload, {
             let timestamp = m[1];
             let permalink = User.user.getPermalink(timestamp);
             setTimeout(function() {
-                // タイミングによって slave に反映されてないため、ちょっと間をおく
+                // タイミングによって fotolife の slave に反映されてないため、ちょっと間をおく
+                // XXX: 1000 ms でも反映されない場合が…
+                p('open link: ' + permalink);
                 openUILinkIn(permalink, 'tab');
-            }, 500);
+            }, 1000);
         }
     },
 
@@ -80,8 +117,10 @@ MainMenu.Copy = extend({}, MainMenu.Base);
 extend(MainMenu.Copy, {
     capture: function(method) {
         p('copy capture: ' + method);
-        let data = Capture[method](false);
-        ExCanvas.prototype.dataURItoClipboard(data);
+        Capture[method](false, function(data) {
+            if (!data) return;
+            ExCanvas.prototype.dataURItoClipboard(data);
+        });
     },
 });
 
@@ -89,19 +128,21 @@ MainMenu.Save = extend({}, MainMenu.Base);
 extend(MainMenu.Save, {
     capture: function(method) {
         p('save capture: ' + method);
-        let data = Capture[method](false);
+        Capture[method](false, function(data) {
+            if (!data) return;
 
-        let uri = IOService.newURI(data, null, null);
-        let filePicker = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
-        filePicker.init(window, UIEncodeText('ファイルに保存'), filePicker.modeSave);
-        filePicker.appendFilters(filePicker.filterImages);
-        // filePicker.appendFilters(UIEncodeText('png 画像ファイル'), "*.png;");
-        filePicker.defaultString = (window.content.document.title || 'screenshot') + '.png';
-        if ((filePicker.show() == filePicker.returnCancel) || !filePicker.file) return;
+            let uri = IOService.newURI(data, null, null);
+            let filePicker = Cc['@mozilla.org/filepicker;1'].createInstance(Ci.nsIFilePicker);
+            filePicker.init(window, UIEncodeText('ファイルに保存'), filePicker.modeSave);
+            filePicker.appendFilters(filePicker.filterImages);
+            // filePicker.appendFilters(UIEncodeText('png 画像ファイル'), "*.png;");
+            filePicker.defaultString = (window.content.document.title || 'screenshot') + '.png';
+            if ((filePicker.show() == filePicker.returnCancel) || !filePicker.file) return;
 
-        let wbp = Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1']
-          .createInstance(Ci.nsIWebBrowserPersist);
-        wbp.saveURI(uri, null, null, null, null, filePicker.file);
+            let wbp = Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1']
+              .createInstance(Ci.nsIWebBrowserPersist);
+            wbp.saveURI(uri, null, null, null, null, filePicker.file);
+        });
     },
 });
 
