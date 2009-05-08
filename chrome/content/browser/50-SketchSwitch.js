@@ -65,7 +65,7 @@ SketchSwitch.prototype = {
         var canvas = this.canvas;
         var win = this.win;
 
-        brush.start(this.canvas);
+        brush.start(canvas);
         brush.mouseDown(U.getPoint(event, win));
 
         var moveHandler;
@@ -85,9 +85,10 @@ SketchSwitch.prototype = {
 
         var self = this;
         var completeHandler = function(event) {
-            if (self.brush.allowMoving) canvas.removeEventListener('mousemove', moveHandler);
-            canvas.removeEventListener('mouseup', upHandler);
-            canvas.removeEventListener('mouseout', upHandler);
+            if (moveHandler)
+                canvas.removeEventListener('mousemove', moveHandler, false);
+            canvas.removeEventListener('mouseup', upHandler, false);
+            canvas.removeEventListener('mouseout', upHandler, false);
             brush.onComplete = function() {};
             self.nowDrawing = false;
         }
@@ -147,16 +148,36 @@ SketchSwitch.Brushes.LineBase = function(options) { this.options = options || {}
 SketchSwitch.Brushes.LineBase.prototype = {
     allowMoving: true,
     start: function(canvas) {
-        this.canvas;
-        this.ctx = this.ctx;
+        this.canvas = canvas;
+        this.ctx = canvas.ctx;
+        p(this.ctx);
+        this.setColor();
+    },
+    setColor: function() {
+        var ctx = this.ctx;
+        ctx.strokeStyle = 'rgb(0,0,0)';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = 5;
     },
     mouseUp: function(point) {
+        p('up');
+        this.drawLine(point);
         this.ctx = this.canvas = null;
+        this.onComplete();
     },
     mouseDown: function(point) {
         this.lastPoint = point;
     },
     mouseMove: function(point) {
+        this.drawLine(point);
+        this.lastPoint = point;
+    },
+    drawLine: function(point) {
+        var ctx = this.ctx;
+        ctx.beginPath();
+        ctx.moveTo(this.lastPoint.x, this.lastPoint.y);
+        ctx.lineTo(point.x, point.y);
+        ctx.stroke();
     }
 };
 
