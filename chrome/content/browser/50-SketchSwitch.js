@@ -291,6 +291,7 @@ SketchSwitch.ToolMenu.DEFAULT_BUTTONS = [
     'Pen2',
     'Pen3',
     'Pen4',
+    'Rect',
     'Eraser',
     'Pipet',
     // 'Undo',
@@ -523,6 +524,16 @@ SketchSwitch.Buttons.Eraser.prototype = SketchSwitch.Utils.extend({
     },
 }, SketchSwitch.Buttons.BaseProto, false);
 
+SketchSwitch.Buttons.Rect = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.Rect.prototype = SketchSwitch.Utils.extend({
+    shortcut: 'r',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACESURBVHjanJMNCoAwCIU3z9gtgjpLUKeoOxoGxjaeqBOE8fRzP05i5uL5dt4sjmJUHNuvh9FajaKwpVEGRjHKwmNOlYfIwq11BbJwd4UZ+FiXSmXSBP5PILuLoGIU/goojIIebLbRKoJ0EhE94JhsnqwdGDRE3qCZQAQWN39itCOvAAMA87rRSihWbbsAAAAASUVORK5CYII=',
+    name: 'Rect',
+    select: function() {
+        this.sketch.currentBrush = new SketchSwitch.Brushes.Rect();
+    },
+}, SketchSwitch.Buttons.BaseProto, false);
+
 SketchSwitch.Buttons.Pipet = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Pipet.prototype = SketchSwitch.Utils.extend({
     icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAB+SURBVHjaYvr//z8DqThvyur/IAxiM4IIUkD+1DUoGggaANMwMTuEEV0zCDCRazPMUCYGMgFIM0EXgGwFKYQpRteM1wCYZmyakL1DthdggIWUQET3Ck4DYIqRnYpNMxhgS2XINCFMkWYUA8jRDDeAXM1gAyjRjOECcjBAgAEA7BN6BCKFNf0AAAAASUVORK5CYII=',
@@ -606,6 +617,15 @@ SketchSwitch.Brushes.BaseProto = {
     setOptions: function(options) {
         this.options = SketchSwitch.Utils.extend(this.options, options); 
     },
+    get color() {
+        var color = this.options.color;
+        if ((typeof this.options.alpha != 'undefined') || (this.options.alpha != null)) {
+            // rgb(); zentei
+            color = color.replace('rgb(', 'rgba(');
+            color = color.replace(')', ',' + this.options.alpha + ')');
+        }
+        return color;
+    },
     mouseDown: function() {},
     mouseUp: function() {},
     mouseMove: function() {},
@@ -640,13 +660,7 @@ SketchSwitch.Brushes.Pen.prototype = SketchSwitch.Utils.extend({
 
     setColor: function(ctx) {
         ctx.lineJoin = 'round';
-        var color = this.options.color;
-        if ((typeof this.options.alpha != 'undefined') || (this.options.alpha != null)) {
-            // rgb(); zentei
-            color = color.replace('rgb(', 'rgba(');
-            color = color.replace(')', ',' + this.options.alpha + ')');
-        }
-        ctx.strokeStyle = color;
+        ctx.strokeStyle = this.color;
         ctx.lineWidth = this.options.width;
     },
     mouseUp: function(point) {
@@ -678,6 +692,41 @@ SketchSwitch.Brushes.Pen.prototype = SketchSwitch.Utils.extend({
         ctx.moveTo(lastPoint.x, lastPoint.y);
         ctx.lineTo(point.x, point.y);
         ctx.stroke();
+    }
+}, SketchSwitch.Brushes.BaseProto, false);
+
+SketchSwitch.Brushes.Rect = function(options) { 
+    this.options = SketchSwitch.Utils.extend({
+        color: 'rgba(0,0,0,1)',
+        width: 5
+    }, options); 
+};
+
+SketchSwitch.Brushes.Rect.prototype = SketchSwitch.Utils.extend({
+    allowMoving: true,
+    start: function(canvas, preview) {
+
+        this.canvas = canvas;
+        this.preview = preview;
+    },
+
+    mouseUp: function(point) {
+        this.sketch.addHistory(this.canvas); // XXX
+        this.drawRect(this.canvas, point);
+        this.preview = this.canvas = null;
+        this.onComplete(true);
+    },
+    mouseDown: function(point) {
+        this.startPoint = point;
+    },
+    mouseMove: function(point) {
+        SketchSwitch.Utils.clearCanvas(this.preview);
+        this.drawRect(this.preview, point);
+    },
+    drawRect: function(canvas, point) {
+        var ctx = canvas.ctx;
+        ctx.fillStyle = this.color;
+        ctx.fillRect.apply(ctx, SketchSwitch.Utils.getRectByPoint(this.startPoint, point)); 
     }
 }, SketchSwitch.Brushes.BaseProto, false);
 
