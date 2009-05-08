@@ -158,6 +158,7 @@ SketchSwitch.Brushes.LineBase = function(options) { this.options = options || {}
 SketchSwitch.Brushes.LineBase.prototype = {
     allowMoving: true,
     start: function(canvas, preview) {
+        this.stack = [];
         this.canvas = canvas;
         this.preview = preview;
         this.ctx = canvas.ctx;
@@ -165,13 +166,29 @@ SketchSwitch.Brushes.LineBase.prototype = {
         this.setColor(this.ctx);
         this.setColor(this.pctx);
     },
+    set lastPoint (point) {
+        this.stack.push(point);
+    },
+    get lastPoint () {
+        return this.stack[this.stack.length - 1];
+    },
     setColor: function(ctx) {
         ctx.strokeStyle = 'rgb(0,0,0)';
         ctx.lineJoin = 'round';
         ctx.lineWidth = 5;
     },
     mouseUp: function(point) {
-        this.drawLine(point);
+        this.lastPoint = point;
+        var ctx = this.ctx;
+
+        var pPoint = this.stack.pop();
+        ctx.beginPath();
+        ctx.moveTo(pPoint.x, pPoint.y);
+        while (point = this.stack.pop()) {
+            ctx.lineTo(point.x, point.y);
+        };
+        ctx.stroke();
+
         this.pctx = this.preview = null;
         this.ctx = this.canvas = null;
         this.onComplete();
@@ -180,13 +197,12 @@ SketchSwitch.Brushes.LineBase.prototype = {
         this.lastPoint = point;
     },
     mouseMove: function(point) {
-        this.drawLine(point);
+        this.drawLine(this.pctx, this.lastPoint, point);
         this.lastPoint = point;
     },
-    drawLine: function(point) {
-        var ctx = this.pctx;
+    drawLine: function(ctx, lastPoint, point) {
         ctx.beginPath();
-        ctx.moveTo(this.lastPoint.x, this.lastPoint.y);
+        ctx.moveTo(lastPoint.x, lastPoint.y);
         ctx.lineTo(point.x, point.y);
         ctx.stroke();
     }
