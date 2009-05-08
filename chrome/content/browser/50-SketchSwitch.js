@@ -56,6 +56,10 @@ SketchSwitch.prototype = {
             self.mousedownHandler(event);
         }, false);
 
+        this.canvas.addEventListener('mousemove', function(event) {
+            self.mousemoveHandler(event);
+        }, false);
+
         this.toolMenu = new SketchSwitch.ToolMenu(this);
 
         this.keydowHandler = function(event) {
@@ -65,6 +69,12 @@ SketchSwitch.prototype = {
             }
         }
         this.win.addEventListener('keydown', this.keydowHandler, false);
+    },
+    mousemoveHandler: function(event) {
+        this.lastPoint = SketchSwitch.Utils.getPoint(event, this.win);
+    },
+    copyColor: function(point) {
+        p('copy col');
     },
     createUnderLayer: function() {
         // underLayer は表示領域におかない
@@ -243,6 +253,7 @@ SketchSwitch.ToolMenu.DEFAULT_BUTTONS = [
     'Pen4',
     'Eraser',
     'Pipet',
+    'HidePipet',
     'Alpha'
 ];
 
@@ -358,27 +369,29 @@ SketchSwitch.ToolMenu.prototype = {
         if (button.shortcut) {
             this.shortcuts[button.shortcut] = button;
         }
-        var icon = E(doc, 'img', {src:button.icon, title: button.name, alt: button.name});
-        icon.button = button;
-        button.element = icon;
-        with(icon.style) {
-            cursor = 'pointer';
-        }
-        var td;
-        var tr = E(doc, 'tr', {}, 
-                     td = E(doc, 'td', {}, icon)
-        );
+        if (button.icon) {
+            var icon = E(doc, 'img', {src:button.icon, title: button.name, alt: button.name});
+            icon.button = button;
+            button.element = icon;
+            with(icon.style) {
+                cursor = 'pointer';
+            }
+            var td;
+            var tr = E(doc, 'tr', {}, 
+                         td = E(doc, 'td', {}, icon)
+            );
 
-        with (td.style) {
-            padding = '4px';
-            borderBottom = '1px solid #CCC';
-        }
+            with (td.style) {
+                padding = '4px';
+                borderBottom = '1px solid #CCC';
+            }
 
-        this.tbody.appendChild(tr);
-        var self = this;
-        icon.addEventListener('click', function(event) {
-            self.buttonClick(icon);
-        }, false);
+            this.tbody.appendChild(tr);
+            var self = this;
+            icon.addEventListener('click', function(event) {
+                self.buttonClick(icon);
+            }, false);
+        };
     },
     buttonClick: function(icon) {
         var button = icon.button;
@@ -471,11 +484,22 @@ SketchSwitch.Buttons.Eraser.prototype = SketchSwitch.Utils.extend({
 
 SketchSwitch.Buttons.Pipet = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Pipet.prototype = SketchSwitch.Utils.extend({
-    shortcut: 'ctrlKey',
     icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAB+SURBVHjaYvr//z8DqThvyur/IAxiM4IIUkD+1DUoGggaANMwMTuEEV0zCDCRazPMUCYGMgFIM0EXgGwFKYQpRteM1wCYZmyakL1DthdggIWUQET3Ck4DYIqRnYpNMxhgS2XINCFMkWYUA8jRDDeAXM1gAyjRjOECcjBAgAEA7BN6BCKFNf0AAAAASUVORK5CYII=',
     name: 'Pipet',
     select: function() {
         this.sketch.currentBrush = new SketchSwitch.Brushes.Pipet();
+    },
+}, SketchSwitch.Buttons.BaseProto, false);
+
+SketchSwitch.Buttons.HidePipet = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.HidePipet.prototype = SketchSwitch.Utils.extend({
+    clickOnly: true,
+    shortcut: 'ctrlKey',
+    icon: null,
+    name: 'HidePipet',
+    select: function() {
+        if (this.sketch.lastPoint)
+            this.sketch.copyColor(this.lastPoint);
     },
 }, SketchSwitch.Buttons.BaseProto, false);
 
