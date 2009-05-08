@@ -4,37 +4,39 @@ const EXPORT = ['Manager'];
 var Manager = {};
 
 Manager.sketch = {
-    sketches: {},
-    hasSketch: function(sketch) {
+    sketches: [],
+    hasSketch: function(sid) {
+        if (!sid) return false;
         let sketches = this.sketches;
-        for (let key in sketches) {
-            if (key.__sketch_switch_sid__ == sketch.sid) {
-                return key;
+        for (let i = 0;  i < sketches.length; i++) {
+            if (sketches[i].sid == sid) {
+                return sketches[i];
             }
         }
         return false;
     },
-    removeSketch: function(sketch) {
-        let key = this.hasSketch(sketch);
-        if (key) {
-            delete this.sketches[key];
+    removeSketch: function(sid) {
+        if (!sid) return false;
+        let sketches = this.sketches;
+        for (let i = 0;  i < sketches.length; i++) {
+            if (sketches[i].sid == sid) {
+                sketches.splice(i, 1); 
+                return true;
+            }
+        }
+        return false;
+    },
+    addSketch: function(sketch) {
+        if (!this.hasSketch(sketch.sid)) {
+            this.sketches.push(sketch);
             return true;
         } else {
             return false;
         }
     },
-    addSketch: function(sketch) {
-        this.sketches[sketch.win] = sketch;
-        sketch.win.__sketch_switch_sid__ = sketch.sid;
-    },
     getSketckById: function(sid) {
         if (!sid) return;
-        for (let key in sketches) {
-            if (key.__sketch_switch_sid__ == sid) {
-                return sketch[key];
-            }
-        }
-        return;
+        return this.hasSketch(sid);
     },
 };
 
@@ -51,17 +53,23 @@ Manager.draw = function() {
     } else {
         sketch = new SketchSwitch(win);
         Manager.sketch.addSketch(sketch);
+        win.__sketch_switch_sid__ = sketch.sid;
         var unloader = function(event) {
-            p('remove sketch obj: ' + Manager.sketch.removeSketch(sketch));
+            p('remove sketch obj: ' + Manager.sketch.removeSketch(win.__sketch_switch_sid__));
+            sketch.destroy();
             win.removeEventListener('unload', unloader, false);
         };
         win.addEventListener('unload', unloader, false);
+        p(win.__sketch_switch_sid__);
     }
     sketch.show();
     // var random = Math.random().toString().slice(2);
 };
 
-Manager.showPopup = function() {
+Manager.showPopup = function(event) {
+    if (event.ctrlKey) {
+        return Manager.draw();
+    }
     let icon = document.getElementById('hFotolife-statusIcon');
     let menu = document.getElementById('hFotolife-menu-popup');
     menu = menu.cloneNode(true);

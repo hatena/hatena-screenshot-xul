@@ -23,6 +23,13 @@ var SketchSwitch = function(win, underLayer) {
 SketchSwitch.__sid__ = 1;
 
 SketchSwitch.prototype = {
+    destroy: function() {
+        this.canvas = null;
+        this._preview = null;
+        this.underLayer = null;
+        this._win = null;
+    },
+
     get win() {
         return this._win;
     },
@@ -119,9 +126,11 @@ SketchSwitch.prototype = {
     },
     show: function() {
         this.doc.body.appendChild(this.canvas);
+        this.toolMenu.show();
     },
     hide: function() {
         if (this.canvas.parentNode) this.canvas.parentNode.removeChild(this.canvas);
+        this.toolMenu.hide();
     }
 };
 
@@ -200,6 +209,12 @@ SketchSwitch.ToolMenu.DEFAULT_BUTTONS = [
 ];
 
 SketchSwitch.ToolMenu.prototype = {
+    hide: function() {
+        if (this.table.parentNode) this.table.parentNode.removeChild(this.table);
+    },
+    show: function() {
+        this.doc.body.appendChild(this.table);
+    },
     get win () {
         return this.sketch.win;
     },
@@ -231,7 +246,6 @@ SketchSwitch.ToolMenu.prototype = {
                 this.setCurrentButton(button);
             }
         }
-        this.doc.body.appendChild(this.table);
     },
     appendButton: function(button) {
         var E = SketchSwitch.Utils.createElement;
