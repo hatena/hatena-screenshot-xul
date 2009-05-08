@@ -36,7 +36,7 @@ SketchSwitch.prototype = {
     init: function(canvasID) {
 
         this.canvas = this.createCanvas(canvasID);
-        this.clearCanvas();
+        SketchSwitch.Utils.clearCanvas(this.canvas);
 
         var self = this;
         this.canvas.addEventListener('mousedown', function(event) {
@@ -67,7 +67,7 @@ SketchSwitch.prototype = {
         var canvas = this.canvas;
 
         var preview = this.createCanvas(canvas.canvasID + 'preview');
-        this.clearCanvas(preview.ctx);
+        U.clearCanvas(canvas);
         preview.style.zIndex = parseInt(canvas.style.zIndex) + 1;
         this.doc.body.appendChild(preview);
 
@@ -103,11 +103,6 @@ SketchSwitch.prototype = {
         }
         brush.onComplete = completeHandler;
     },
-    clearCanvas: function(ctx) {
-        if (!ctx) ctx = this.ctx;
-        ctx.fillStyle = 'rgba(255,255,255,0)';
-        ctx.fillRect(0, 0, this.width, this.height); 
-    },
     show: function() {
         this.doc.body.appendChild(this.canvas);
     },
@@ -117,6 +112,11 @@ SketchSwitch.prototype = {
 };
 
 SketchSwitch.Utils = {
+    clearCanvas: function(canvas) {
+        canvas.ctx.fillStyle = 'rgba(255,255,255,0)';
+        canvas.ctx.fillRect(0, 0, canvas.width, canvas.height); 
+    },
+
     getPoint: function(event, win) {
         return { x: event.clientX - win.pageXOffset, y:event.clientY + win.pageYOffset};
     },
@@ -169,6 +169,7 @@ SketchSwitch.Brushes.LineBase.prototype = {
     set lastPoint (point) {
         this.stack.push(point);
     },
+
     get lastPoint () {
         return this.stack[this.stack.length - 1];
     },
