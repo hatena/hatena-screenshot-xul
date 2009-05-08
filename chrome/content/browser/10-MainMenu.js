@@ -3,19 +3,49 @@ const EXPORT = ['MainMenu'];
 
 var MainMenu = {};
 
+MainMenu.sketch = {
+    sketches: {},
+    hasSketch: function(sketch) {
+        let sketches = this.sketches;
+        for (let key in sketches) {
+            if (sketches[key].id == sketch.id) {
+                return key;
+            }
+        }
+        return false;
+    },
+    removeSketch: function(sketch) {
+        let key = this.hasSketch(sketch);
+        if (key) {
+            delete this.sketches[key];
+            return true;
+        } else {
+            return false;
+        }
+    },
+    addSketch: function(sketch) {
+        this.sketches[sketch.win] = sketch;
+    }
+};
+
 MainMenu.draw = function() {
     let win = window.content;
     if (!win) return;
 
     let eventType = 'ShowSketch';
-    if (win.__sketch_switch__) {
-        var ev = document.createEvent('UIEvents');
-        ev.initUIEvent('', true, false, window, null);
-        win.dispatchEvent(ev);
+    let sketch;
+    if (sketch = MainMenu.sketch.sketches[win]) {
+        //
     } else {
-        let sketch = new SketchSwitch(win);
-        sketch.show();
+        sketch = new SketchSwitch(win);
+        MainMenu.sketch.addSketch(sketch);
+        var unloader = function(event) {
+            p('remove sketch obj: ' + MainMenu.sketch.removeSketch(sketch));
+            win.removeEventListener('unload', unloader, false);
+        };
+        win.addEventListener('unload', unloader, false);
     }
+    sketch.show();
     // var random = Math.random().toString().slice(2);
 };
 

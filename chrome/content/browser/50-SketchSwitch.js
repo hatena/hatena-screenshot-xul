@@ -11,11 +11,13 @@ const EXPORT = ['SketchSwitch'];
  */
 
 var SketchSwitch = function(win, canvasID) {
+    this.id = SketchSwitch.__sid__++;
     this._win = win || window;
     this.active = true;
     this.init(canvasID || '__sketch_switch_canvas__');
     this.currentBrush = new SketchSwitch.Brushes.LineBase();
 };
+SketchSwitch.__sid__ = 1;
 
 SketchSwitch.prototype = {
     get win() {
