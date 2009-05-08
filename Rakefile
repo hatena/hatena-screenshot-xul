@@ -6,7 +6,7 @@ require 'pathname'
 include REXML
 include FileUtils::Verbose
 
-EXTENSION_NAME="hatenabookmark"
+EXTENSION_NAME="hatenafotolife"
 BUILD_DIR="build/#{EXTENSION_NAME}"
 UPDATE_LINK="" # URL for updated xpi
 
