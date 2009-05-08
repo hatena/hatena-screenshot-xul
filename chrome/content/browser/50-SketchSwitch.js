@@ -203,9 +203,30 @@ SketchSwitch.ToolMenu = function(sketch) {
 
 SketchSwitch.ToolMenu.DEFAULT_BUTTONS = [
     'Close',
-    'Pen',
+    'Pen1',
+    'Pen2',
+    'Pen3',
+    'Pen4',
     'Eraser',
     'Pipet'
+];
+
+SketchSwitch.ToolMenu.DEFAULT_COLORS = [
+    '#FFFFFF',
+    '#DCDDDD',
+    '#9ea1a3',
+    '#2B2B2B',
+    // R
+    '#D9333F',
+    '#762f07',
+    '#F5B199', //*
+    '#FFDB4F',
+    // G
+    '#7EBEAB',
+    '#2F5D50',
+    // B
+    '#89C3EB',
+    '#706CAA'
 ];
 
 SketchSwitch.ToolMenu.prototype = {
@@ -242,9 +263,40 @@ SketchSwitch.ToolMenu.prototype = {
             var b = SketchSwitch.Buttons[buttons[i]];
             var button = new b(this.sketch);
             this.appendButton(button);
-            if (i == 1) {
+            if (i == 2) {
                 this.setCurrentButton(button);
             }
+        }
+        this.createColorPalette();
+    },
+    createColorPalette: function() {
+        var E = SketchSwitch.Utils.createElement;
+        var doc = this.doc;
+        var tbody;
+        var tdHead;
+        var tdColors;
+        var table = E(doc, 'table', {
+        }, tbody = E(doc, 'tbody'),
+            E(doc, 'tr', {}, tdHead = E(doc, 'td')),
+            E(doc, 'tr', {}, tdColors = E(doc, 'td'))
+        );
+        this.table.appendChild(
+            E(doc, 'tr', {}, E(doc, 'td', {}, table))
+        );
+
+        var colors = SketchSwitch.ToolMenu.DEFAULT_COLORS;
+        for (var i = 0;  i < colors.length; i++) {
+            var color = colors[i];
+            var td;
+            tbody.appendChild(E(doc, 'tr', {}, td = E(doc, 'td', {})));
+            td.style.cursor = 'pointer';
+            td.style.backgroundColor = color;
+            td.width = '12px';
+            td.height = '8px';
+            var self = this;
+            td.addEventListener('click', function(event) {
+                self.table.style.borderColor = event.target.style.backgroundColor;
+            }, false);
         }
     },
     appendButton: function(button) {
@@ -262,9 +314,8 @@ SketchSwitch.ToolMenu.prototype = {
                      td = E(doc, 'td', {}, icon)
         );
         with (td.style) {
-            padding = '3px';
-            margin = '5px';
-            borderBottom = '1px solid #999';
+            padding = '2px';
+            borderBottom = '1px solid #CCC';
         }
 
         this.tbody.appendChild(tr);
@@ -280,8 +331,10 @@ SketchSwitch.ToolMenu.prototype = {
     setCurrentButton: function(button) {
         if (this._currentButton) {
             this._currentButton.unselect();
+            this._currentButton.clearBackground();
         }
         this._currentButton = button;
+        button.setBackground();
         button.select();
     },
 };
@@ -301,12 +354,43 @@ SketchSwitch.Buttons.BaseProto = {
     icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAADoSURBVHjalJJNC0VAGIWZhkLKQln5AVZS8//LXjYWlLWNUj7yEdI93bm5wnU5ZWZq3mfmnHeISZIIT0TxaZp2s7ptWyI8FOWTLMuU0u3GPM/jOP4EUB0EwXaDMYbxyOwtsbewAL+78xz4KxFtRZdUVd1ZmqYJY1VVhmE4jiNJ0nmXuCXXdfM8R7XnecMwRFG0D71V13V93y/LYpqmZVloVxiGVwDsoWh11TQN93MOrEkURSmKwvf9uq4BANN1/Rv6+HBQlmVlWSJ0mqZIgjyEkA9w3Up4i+PYtm2cewvY/nyUT/cf7iXAAEwFdZak1p3gAAAAAElFTkSuQmCC',
 };
 
-SketchSwitch.Buttons.Pen = function(sketch) { this.sketch = sketch };
-SketchSwitch.Buttons.Pen.prototype = SketchSwitch.Utils.extend({
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACvSURBVHjaYvz//z8DJYCJHE35U9f8B2EwB+QCUnDelNX/kdlMpNo8MTuEEUWQHJuR+RRpJsoAfJoJGkBIMwgzYksH8CgCAlVpMYacADtGrAGILRAnrz8It2X76ev/QbZisxmrF5A143M2Moangx1nbvy//fQVw91nb0hK2/AwgPkb5GcQAPl7yoZD/0E0XgNATsQmAQs8olwAsgnkfJhGTzMtBmUpEUaSvEAuAAgwAEW4iBMk5GV5AAAAAElFTkSuQmCC',
+SketchSwitch.Buttons.Pen1 = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.Pen1.prototype = SketchSwitch.Utils.extend({
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAQAAAAEABcxq3DAAAAJUlEQVRIx2P4P8CAYdQBow4YdQCcAQb0o0ejYNQBow4YdQAMAADfFKS+zzforwAAAABJRU5ErkJggg==',
     name: 'Pen',
     select: function() {
         this.sketch.currentBrush = new SketchSwitch.Brushes.Pen();
+        this.sketch.brushOptions.width = 1;
+    },
+}, SketchSwitch.Buttons.BaseProto, false);
+
+SketchSwitch.Buttons.Pen2 = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.Pen2.prototype = SketchSwitch.Utils.extend({
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAQAAAAEABcxq3DAAAAJklEQVRIx2P4P8CAYdQBow4YNA4IBQP60aMOGE2Eow4YdcCgcQAAFDhREu/qhckAAAAASUVORK5CYII=',
+    name: 'Pen',
+    select: function() {
+        this.sketch.currentBrush = new SketchSwitch.Brushes.Pen();
+        this.sketch.brushOptions.width = 5;
+    },
+}, SketchSwitch.Buttons.BaseProto, false);
+
+SketchSwitch.Buttons.Pen3 = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.Pen3.prototype = SketchSwitch.Utils.extend({
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAQAAAAEABcxq3DAAAAJklEQVRIx2P4P8CAYdQBg8YBoWBAP3rUAaMOGHXAaEE06oBB4wAATHVx41cZkq0AAAAASUVORK5CYII=',
+    name: 'Pen',
+    select: function() {
+        this.sketch.currentBrush = new SketchSwitch.Brushes.Pen();
+        this.sketch.brushOptions.width = 10;
+    },
+}, SketchSwitch.Buttons.BaseProto, false);
+
+SketchSwitch.Buttons.Pen4 = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.Pen4.prototype = SketchSwitch.Utils.extend({
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAQAAAAEABcxq3DAAAAJ0lEQVRIx2P4P8CAYdA4IBQM6EePOmDUAaMOGHXAqAMGX10wYh0AAISykrTatvf9AAAAAElFTkSuQmCC',
+    name: 'Pen',
+    select: function() {
+        this.sketch.currentBrush = new SketchSwitch.Brushes.Pen();
+        this.sketch.brushOptions.width = 30;
     },
 }, SketchSwitch.Buttons.BaseProto, false);
 
@@ -342,7 +426,7 @@ SketchSwitch.Buttons.Close.prototype = SketchSwitch.Utils.extend({
 SketchSwitch.Brushes = {};
 SketchSwitch.Brushes.BaseProto = {
     setOptions: function(options) {
-        this.options = SketchSwitch.Utils.extend(options, this.options); 
+        this.options = SketchSwitch.Utils.extend(this.options, options); 
     },
     mouseDown: function() {},
     mouseUp: function() {},
@@ -436,7 +520,7 @@ SketchSwitch.Brushes.Eraser.prototype = SketchSwitch.Utils.extend({
     },
     erase: function(point) {
         var ctx = this.ctx;
-        var w = Math.max(this.options.width || 10);
+        var w =  10;
 
         ctx.clearRect(point.x - (w), point.y - (w), w * 2, w * 2);
     }
