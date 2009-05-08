@@ -45,6 +45,8 @@ SketchSwitch.prototype = {
         this.canvas.addEventListener('mousedown', function(event) {
             self.mousedownHandler(event);
         }, false);
+
+        this.toolMenu = new SketchSwitch.ToolMenu(this);
     },
     createCanvas: function(canvasID) {
         var canvas = this.doc.createElement('canvas');
@@ -106,6 +108,7 @@ SketchSwitch.prototype = {
                 preview.removeEventListener('mousemove', moveHandler, false);
             preview.removeEventListener('mouseup', upHandler, false);
             preview.removeEventListener('mouseout', upHandler, false);
+            U.clearCanvas(preview);
             if ( preview.parentNode ) preview.parentNode.removeChild(preview);
             brush.onComplete = function() {};
             self.nowDrawing = false;
@@ -127,8 +130,7 @@ SketchSwitch.Utils = {
     },
 
     clearCanvas: function(canvas) {
-        canvas.ctx.fillStyle = 'rgba(255,255,255,0)';
-        canvas.ctx.fillRect(0, 0, canvas.width, canvas.height); 
+        canvas.ctx.clearRect(0, 0, canvas.width, canvas.height);
     },
 
     getPoint: function(event, win) {
@@ -163,8 +165,104 @@ SketchSwitch.Utils = {
         }
         return target;
     },
+    createElement: function(doc, tagName, attributes) {
+        var elem = doc.createElement(tagName);
+        for (var a in attributes) {
+            elem[a] = attributes[a];
+        }
+        var children = Array.prototype.slice.call(arguments, 3);
+        for (var i = 0; i < children.length; i++) {
+            var child = children[i];
+            if (typeof child == 'string')
+                child = doc.createTextNode(child);
+            if (!child)
+                continue;
+            elem.appendChild(child);
+        }
+        return elem;
+    },
 };
 
+/* ToolMenu */
+SketchSwitch.ToolMenu = function(sketch) {
+    this.menu = [];
+    this.sketch = sketch;
+    this.init();
+}
+
+SketchSwitch.ToolMenu.DEFAULT_BUTTONS = [
+    'Pen',
+    'Eraser'
+];
+
+
+SketchSwitch.ToolMenu.prototype = {
+    get win () {
+        return this.sketch.win;
+    },
+    get doc () {
+        return this.sketch.doc;
+    },
+    init: function() {
+        var E = SketchSwitch.Utils.createElement;
+        var doc = this.doc;
+        this.table = E(doc, 'table', {
+        }, this.tbody = E(doc, 'tbody'));
+
+        with (this.table.style) {
+            position = 'absolute';
+            top      = '0';
+            left     = '0';
+            zIndex = this.sketch.canvas.style.zIndex + 1;
+            backgroundColor = 'rgba(255,255,255, 0.7)';
+        }
+
+        var buttons = SketchSwitch.ToolMenu.DEFAULT_BUTTONS;
+        for (var i = 0;  i < buttons.length; i++) {
+
+            var b = SketchSwitch.Buttons[buttons[i]];
+            var button = new b(this);
+            this.appendButton(button);
+            if (i == 0) {
+                this.currentButton = button;
+            }
+        }
+        this.doc.body.appendChild(this.table);
+    },
+    appendButton: function(button) {
+        var E = SketchSwitch.Utils.createElement;
+        var doc = this.doc;
+        this.menu.push(button);
+        var icon = E(doc, 'img', {src:button.icon, alt: button.name});
+        with(icon.style) {
+            cursor = 'pointer';
+        }
+        var tr = E(doc, 'tr', {}, 
+                     E(doc, 'td', {}, icon)
+        );
+        this.tbody.appendChild(tr);
+    },
+};
+
+
+/* Buttons */
+SketchSwitch.Buttons = {};
+SketchSwitch.Buttons.Base = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.Base.prototype = {
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAADoSURBVHjalJJNC0VAGIWZhkLKQln5AVZS8//LXjYWlLWNUj7yEdI93bm5wnU5ZWZq3mfmnHeISZIIT0TxaZp2s7ptWyI8FOWTLMuU0u3GPM/jOP4EUB0EwXaDMYbxyOwtsbewAL+78xz4KxFtRZdUVd1ZmqYJY1VVhmE4jiNJ0nmXuCXXdfM8R7XnecMwRFG0D71V13V93y/LYpqmZVloVxiGVwDsoWh11TQN93MOrEkURSmKwvf9uq4BANN1/Rv6+HBQlmVlWSJ0mqZIgjyEkA9w3Up4i+PYtm2cewvY/nyUT/cf7iXAAEwFdZak1p3gAAAAAElFTkSuQmCC',
+};
+
+SketchSwitch.Buttons.Pen = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.Pen.prototype = SketchSwitch.Utils.extend({
+    name: 'Pen',
+}, SketchSwitch.Buttons.Base.prototype);
+
+SketchSwitch.Buttons.Eraser = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.Eraser.prototype = SketchSwitch.Utils.extend({
+    name: 'Eraser',
+}, SketchSwitch.Buttons.Base.prototype);
+
+/* Brushes */
 SketchSwitch.Brushes = {};
 SketchSwitch.Brushes.Base = function(options) { this.options = options || {} };
 
