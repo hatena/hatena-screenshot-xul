@@ -60,7 +60,6 @@ Manager.draw = function() {
             win.removeEventListener('unload', unloader, false);
         };
         win.addEventListener('unload', unloader, false);
-        p(win.__sketch_switch_sid__);
     }
     sketch.show();
     // var random = Math.random().toString().slice(2);

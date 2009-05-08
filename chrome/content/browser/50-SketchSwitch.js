@@ -124,6 +124,9 @@ SketchSwitch.prototype = {
         }
         brush.onComplete = completeHandler;
     },
+    clear: function() {
+        SketchSwitch.Utils.clearCanvas(this.canvas);
+    },
     show: function() {
         this.doc.body.appendChild(this.canvas);
         this.toolMenu.show();
@@ -203,6 +206,7 @@ SketchSwitch.ToolMenu = function(sketch) {
 
 SketchSwitch.ToolMenu.DEFAULT_BUTTONS = [
     'Close',
+    'Clear',
     'Pen1',
     'Pen2',
     'Pen3',
@@ -212,10 +216,10 @@ SketchSwitch.ToolMenu.DEFAULT_BUTTONS = [
 ];
 
 SketchSwitch.ToolMenu.DEFAULT_COLORS = [
+    '#000000',
     '#FFFFFF',
     '#DCDDDD',
     '#9ea1a3',
-    '#2B2B2B',
     // R
     '#D9333F',
     '#762f07',
@@ -248,14 +252,16 @@ SketchSwitch.ToolMenu.prototype = {
         this.table = E(doc, 'table', {
         }, this.tbody = E(doc, 'tbody'));
 
+        this.table.style.borderCollapse = 'collapse';
         with (this.table.style) {
             position = 'fixed';
-            top      = '0';
-            left     = '0';
-            border = '3px solid #0377DD';
+            top      = '2px';
+            left     = '2px';
+            border = '3px solid #000000';
             zIndex = this.sketch.canvas.style.zIndex + 1;
             backgroundColor = 'rgba(255,255,255, 0.9)';
         }
+        this.setColor(this.table.style.borderColor);
 
         var buttons = SketchSwitch.ToolMenu.DEFAULT_BUTTONS;
         for (var i = 0;  i < buttons.length; i++) {
@@ -273,17 +279,13 @@ SketchSwitch.ToolMenu.prototype = {
         var E = SketchSwitch.Utils.createElement;
         var doc = this.doc;
         var tbody;
-        var tdHead;
-        var tdColors;
         var table = E(doc, 'table', {
-        }, tbody = E(doc, 'tbody'),
-            E(doc, 'tr', {}, tdHead = E(doc, 'td')),
-            E(doc, 'tr', {}, tdColors = E(doc, 'td'))
+        }, tbody = E(doc, 'tbody')
         );
+        table.style.borderCollapse = 'collapse';
         this.table.appendChild(
             E(doc, 'tr', {}, E(doc, 'td', {}, table))
         );
-
         var colors = SketchSwitch.ToolMenu.DEFAULT_COLORS;
         for (var i = 0;  i < colors.length; i++) {
             var color = colors[i];
@@ -291,13 +293,17 @@ SketchSwitch.ToolMenu.prototype = {
             tbody.appendChild(E(doc, 'tr', {}, td = E(doc, 'td', {})));
             td.style.cursor = 'pointer';
             td.style.backgroundColor = color;
-            td.width = '12px';
-            td.height = '8px';
+            td.width = '20px';
+            td.height = '12px';
             var self = this;
             td.addEventListener('click', function(event) {
-                self.table.style.borderColor = event.target.style.backgroundColor;
+                self.setColor(event.target.style.backgroundColor);
             }, false);
         }
+    },
+    setColor: function(color) {
+        this.sketch.brushOptions.color = color;
+        this.table.style.borderColor = color;
     },
     appendButton: function(button) {
         var E = SketchSwitch.Utils.createElement;
@@ -313,8 +319,9 @@ SketchSwitch.ToolMenu.prototype = {
         var tr = E(doc, 'tr', {}, 
                      td = E(doc, 'td', {}, icon)
         );
+
         with (td.style) {
-            padding = '2px';
+            padding = '4px';
             borderBottom = '1px solid #CCC';
         }
 
@@ -329,13 +336,17 @@ SketchSwitch.ToolMenu.prototype = {
         this.setCurrentButton(button);
     },
     setCurrentButton: function(button) {
-        if (this._currentButton) {
-            this._currentButton.unselect();
-            this._currentButton.clearBackground();
+        if (button.clickOnly) {
+            button.select();
+        } else {
+            if (this._currentButton) {
+                this._currentButton.unselect();
+                this._currentButton.clearBackground();
+            }
+            this._currentButton = button;
+            button.setBackground();
+            button.select();
         }
-        this._currentButton = button;
-        button.setBackground();
-        button.select();
     },
 };
 
@@ -343,6 +354,7 @@ SketchSwitch.ToolMenu.prototype = {
 /* Buttons */
 SketchSwitch.Buttons = {};
 SketchSwitch.Buttons.BaseProto = {
+    clickOnly: false,
     clearBackground: function() {
         this.element.parentNode.style.backgroundColor = '';
     },
@@ -414,11 +426,25 @@ SketchSwitch.Buttons.Pipet.prototype = SketchSwitch.Utils.extend({
 
 SketchSwitch.Buttons.Close = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Close.prototype = SketchSwitch.Utils.extend({
+    clickOnly: true,
     icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAABUSURBVHjaYvz//z8DJYCJgUIwCA3Ys2fPfxAmVhynC5AVY9MIA4zYYgGXBhcXF0aiXIBNITYx2sUCrkAkOhaQnY3sdJJiAVkjLv/jjIURlhcAAgwAI+Ax4b11fyQAAAAASUVORK5CYII=',
     name: 'Close',
     select: function() {
         this.sketch.hide();
 
+    },
+}, SketchSwitch.Buttons.BaseProto, false);
+
+SketchSwitch.Buttons.Clear = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.Clear.prototype = SketchSwitch.Utils.extend({
+    clickOnly: true,
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAQAAAAEABcxq3DAAAAO0lEQVRIx2P4TyYIBQMETS5gGLIOoBZgoJUPidU/eB0w4FFANwdQKzWTGzUD74DRNDBaEA3ZgmjY1IYAITF46q7bt7IAAAAASUVORK5CYII=',
+    name: 'Clear',
+    confirmText: decodeURIComponent(escape('クリアします。よろしいですか? ')),
+    select: function() {
+        if (this.sketch.win.confirm(this.confirmText)) {
+            this.sketch.clear();
+        }
     },
 }, SketchSwitch.Buttons.BaseProto, false);
 
