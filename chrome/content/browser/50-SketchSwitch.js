@@ -631,11 +631,11 @@ SketchSwitch.Brushes.Pipet.prototype = SketchSwitch.Utils.extend({
     },
     pipet: function(point) {
         var ctx = this.ctx;
-        var d = ctx.wrappedJSObject.getImageData(point.x, point.y, 1,1);
+        var d = (ctx.wrappedJSObject || ctx).getImageData(point.x, point.y, 1,1);
         var data = d.data;
 
         var bctx = this.bctx;
-        var b = bctx.wrappedJSObject.getImageData(point.x, point.y, 1,1);
+        var b = (bctx.wrappedJSObject || bctx).getImageData(point.x, point.y, 1,1);
         var bdata = b.data;
         if (data[3] == 0) {
             //

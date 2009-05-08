@@ -30,6 +30,13 @@
                     <menuitem label='一部のみ' oncommand='hFotolife.Manager.Save.rect();'/>
                 </menupopup>
             </menu>
+            <menu id="hFotolife-menu-base64" label="URLで開く(base64)">
+                <menupopup>
+                    <menuitem label='全部' oncommand='hFotolife.Manager.Base64.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Base64.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Base64.rect();'/>
+                </menupopup>
+            </menu>
         </menupopup>
     </menu>
   </menupopup>

@@ -205,6 +205,19 @@ extend(Manager.Copy, {
     },
 });
 
+Manager.Base64 = extend({}, Manager.Base, false);
+extend(Manager.Base64, {
+    capture: function(method, finish) {
+        p('copy capture: ' + method);
+        Capture[method](false, function(data) {
+            if (data) {
+                openUILinkIn(data, 'tab');
+            }
+            finish();
+        });
+    },
+});
+
 Manager.Save = extend({}, Manager.Base);
 extend(Manager.Save, {
     capture: function(method, finish) {
