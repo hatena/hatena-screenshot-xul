@@ -471,7 +471,7 @@ SketchSwitch.Buttons.BaseProto = {
 SketchSwitch.Buttons.Pen1 = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Pen1.prototype = SketchSwitch.Utils.extend({
     shortcut: '1',
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAQAAAAEABcxq3DAAAAJUlEQVRIx2P4P8CAYdQBow4YdQCcAQb0o0ejYNQBow4YdQAMAADfFKS+zzforwAAAABJRU5ErkJggg==',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMA/wD/AP83WBt9AAAACXBIWXMAAABPAAAATwFjiv3XAAAAIklEQVR4nGP8//8/AymAiSTVI1UDA0nB+v//f8bReBgUGgCX8AwR4wRoAAAAAABJRU5ErkJggg==',
     name: 'Pen',
     select: function() {
         this.sketch.currentBrush = new SketchSwitch.Brushes.Pen();
@@ -482,7 +482,7 @@ SketchSwitch.Buttons.Pen1.prototype = SketchSwitch.Utils.extend({
 SketchSwitch.Buttons.Pen2 = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Pen2.prototype = SketchSwitch.Utils.extend({
     shortcut: '2',
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAQAAAAEABcxq3DAAAAJklEQVRIx2P4P8CAYdQBow4YNA4IBQP60aMOGE2Eow4YdcCgcQAAFDhREu/qhckAAAAASUVORK5CYII=',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMA/wD/AP83WBt9AAAACXBIWXMAAABPAAAATwFjiv3XAAAAK0lEQVR4nGP8//8/AymAiSTVw0QDCwMDQ1hYGJGqV61aRXsnMY5GHC00AACuxgkbYMtTbgAAAABJRU5ErkJggg==',
     name: 'Pen',
     select: function() {
         this.sketch.currentBrush = new SketchSwitch.Brushes.Pen();
@@ -493,7 +493,7 @@ SketchSwitch.Buttons.Pen2.prototype = SketchSwitch.Utils.extend({
 SketchSwitch.Buttons.Pen3 = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Pen3.prototype = SketchSwitch.Utils.extend({
     shortcut: '3',
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAQAAAAEABcxq3DAAAAJklEQVRIx2P4P8CAYdQBg8YBoWBAP3rUAaMOGHXAaEE06oBB4wAATHVx41cZkq0AAAAASUVORK5CYII=',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMA/wD/AP83WBt9AAAACXBIWXMAAABPAAAATwFjiv3XAAAALklEQVR4nGP8//8/AymAiSTVdNHAwsDAEBYWRqTqVatWDUI/DEINjMMgaZCsAQCxEgkbtLzZQwAAAABJRU5ErkJggg==',
     name: 'Pen',
     select: function() {
         this.sketch.currentBrush = new SketchSwitch.Brushes.Pen();
@@ -504,7 +504,7 @@ SketchSwitch.Buttons.Pen3.prototype = SketchSwitch.Utils.extend({
 SketchSwitch.Buttons.Pen4 = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Pen4.prototype = SketchSwitch.Utils.extend({
     shortcut: '4',
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAQAAAAEABcxq3DAAAAJ0lEQVRIx2P4P8CAYdA4IBQM6EePOmDUAaMOGHXAqAMGX10wYh0AAISykrTatvf9AAAAAElFTkSuQmCC',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMA/wD/AP83WBt9AAAACXBIWXMAAABPAAAATwFjiv3XAAAAMElEQVR4nGP8//8/AymAiSTVDAwMLAwMDGFhYUSqXrVqFck2jGoYohoYaZ74SNYAALNeCRvHkwpuAAAAAElFTkSuQmCC',
     name: 'Pen',
     select: function() {
         this.sketch.currentBrush = new SketchSwitch.Brushes.Pen();
@@ -524,8 +524,8 @@ SketchSwitch.Buttons.Eraser.prototype = SketchSwitch.Utils.extend({
 
 SketchSwitch.Buttons.RectEraser = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.RectEraser.prototype = SketchSwitch.Utils.extend({
-    shortcut: 'e',
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACESURBVHjanJMNCoAwCIU3z9gtgjpLUKeoOxoGxjaeqBOE8fRzP05i5uL5dt4sjmJUHNuvh9FajaKwpVEGRjHKwmNOlYfIwq11BbJwd4UZ+FiXSmXSBP5PILuLoGIU/goojIIebLbRKoJ0EhE94JhsnqwdGDRE3qCZQAQWN39itCOvAAMA87rRSihWbbsAAAAASUVORK5CYII=',
+    shortcut: 't',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMA/wD/AP83WBt9AAAACXBIWXMAAABPAAAATwFjiv3XAAAAbUlEQVR4nM2P0Q2AIBBDixs4x81zXcGZWIF9mIMR6geJYqIE+LJfzaW5vBckYSbb1BoAJElyd3dvy9cxVCSSKe+dv7SSUgIQbgc7eiQ5PhxI9smvwbT0KtJ4/uuwgkQryJFWamk7rbwhjWVa+gQz21JL3EoTIwAAAABJRU5ErkJggg==',
     name: 'RectEraser',
     select: function() {
         this.sketch.currentBrush = new SketchSwitch.Brushes.RectEraser();
@@ -535,7 +535,7 @@ SketchSwitch.Buttons.RectEraser.prototype = SketchSwitch.Utils.extend({
 SketchSwitch.Buttons.Rect = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Rect.prototype = SketchSwitch.Utils.extend({
     shortcut: 'r',
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACESURBVHjanJMNCoAwCIU3z9gtgjpLUKeoOxoGxjaeqBOE8fRzP05i5uL5dt4sjmJUHNuvh9FajaKwpVEGRjHKwmNOlYfIwq11BbJwd4UZ+FiXSmXSBP5PILuLoGIU/goojIIebLbRKoJ0EhE94JhsnqwdGDRE3qCZQAQWN39itCOvAAMA87rRSihWbbsAAAAASUVORK5CYII=',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMA/wD/AP83WBt9AAAACXBIWXMAAABPAAAATwFjiv3XAAAAQElEQVR4nGP8//8/AymAiSTVDAwMLBAqLCyMoNJVq1YhNDAwMFhYWOBRfeLECTKdNKphcGhAxDQ8LvEDRpqnVgB5Hg53GZh6LAAAAABJRU5ErkJggg==',
     name: 'Rect',
     select: function() {
         this.sketch.currentBrush = new SketchSwitch.Brushes.Rect();
@@ -579,7 +579,7 @@ SketchSwitch.Buttons.Clear = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Clear.prototype = SketchSwitch.Utils.extend({
     shortcut: 'c',
     clickOnly: true,
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAQAAAAEABcxq3DAAAAO0lEQVRIx2P4TyYIBQMETS5gGLIOoBZgoJUPidU/eB0w4FFANwdQKzWTGzUD74DRNDBaEA3ZgmjY1IYAITF46q7bt7IAAAAASUVORK5CYII=',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMA/wD/AP83WBt9AAAACXBIWXMAAABPAAAATwFjiv3XAAAASklEQVR4nGP8//8/AwYICwtjYGBYtWoVphQTphB+wIjVBjwAYUNYWBjEJWgATZyeTiLWhtDQUAYcIYgGID4ZhH6gQAN9I46aqRUAWy0hG+NU+d8AAAAASUVORK5CYII=',
     name: 'Clear',
     confirmText: decodeURIComponent(escape('クリアします。よろしいですか? ')),
     select: function() {
@@ -605,7 +605,7 @@ SketchSwitch.Buttons.Alpha = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Alpha.prototype = SketchSwitch.Utils.extend({
     shortcut: 'a',
     clickOnly: true,
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAQAAAAEABcxq3DAAAAL0lEQVRIx2P4P8CAYdQBg94BoWBAPk01B1wCA+LpUQeMOmD4OWDAsuFoSTjsHQAAJOJi4rb9Z5MAAAAASUVORK5CYII=',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMA/wD/AP83WBt9AAAACXBIWXMAAABPAAAATwFjiv3XAAAAQ0lEQVR4nGP8//8/AymAiSTV5GhggdKNjdjl6+upZQMSOLcKYWrsJYT41bVk2TAcNDBiJg3tYOxKyQwlLDbgB7T3NACVahHBciwasQAAAABJRU5ErkJggg==',
     name: 'Alpha',
     select: function() {
         var o = this.sketch.brushOptions;
@@ -623,6 +623,7 @@ SketchSwitch.Buttons.Alpha.prototype = SketchSwitch.Utils.extend({
 SketchSwitch.Brushes = {};
 SketchSwitch.Brushes.BaseProto = {
     setOptions: function(options) {
+        if (!options.alpha) delete this.options.alpha;
         this.options = SketchSwitch.Utils.extend(this.options, options); 
     },
     get color() {

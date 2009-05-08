@@ -47,8 +47,9 @@
     >
         <image 
             id="hFotolife-statusIcon"
-            src="chrome://hatenafotolife/skin/images/favicon.ico" 
+            src="chrome://hatenafotolife/skin/images/FotoIcon.png" 
             onclick="hFotolife.Manager.showPopup(event);" 
+            ondblclick="hFotolife.Manager.draw();" 
         />
     </statusbarpanel>
   </statusbar>
