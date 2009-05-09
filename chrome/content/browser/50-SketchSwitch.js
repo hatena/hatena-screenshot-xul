@@ -8,7 +8,6 @@ const EXPORT = ['SketchSwitch'];
  * License: MIT
  * author: Yuichi Tateno 
  *
- * require JSColor.js
  */
 
 var SketchSwitch = function(win) {
@@ -227,7 +226,7 @@ SketchSwitch.Utils = {
     },
 
     getPoint: function(event, win) {
-        return { x: event.clientX - win.pageXOffset, y:event.clientY + win.pageYOffset};
+        return { x: event.clientX + win.pageXOffset, y:event.clientY + win.pageYOffset};
     },
 
     getRectByPoint: function(point1, point2) {
@@ -669,6 +668,7 @@ SketchSwitch.Brushes.Pen.prototype = SketchSwitch.Utils.extend({
 
     setColor: function(ctx) {
         ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
         ctx.strokeStyle = this.color;
         ctx.lineWidth = this.options.width;
     },

@@ -24,10 +24,13 @@ var Capture = {
         if (!window.content) return onFinish();
 
         let [win, doc] = [window.content, window.content.document];
+        let origOverflow = doc.body.style.overflow;
+        doc.body.style.overflow = 'hidden';
         let width = Math.max(doc.documentElement.scrollWidth, win.innerWidth);
         let height= Math.max(doc.documentElement.scrollHeight, win.innerHeight);
+        doc.body.style.overflow = origOverflow;
 
-        p.e([width, height]);
+        p.e('rect size:' + [width, height].join);
         let canvas = document.createElementNS(XHTML_NS, 'canvas');
 
         canvas.width = width;
@@ -54,7 +57,7 @@ var Capture = {
         clear();
 
         let getPoint = function(event) {
-            return { x: event.clientX - win.pageXOffset, y:event.clientY + win.pageYOffset};
+            return { x: event.clientX + win.pageXOffset, y:event.clientY + win.pageYOffset};
         }
 
         let getRectByPoint = function(point1, point2) {

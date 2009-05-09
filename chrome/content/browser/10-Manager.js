@@ -167,7 +167,7 @@ extend(Manager.Upload, {
         window.openDialog(
             'chrome://hatenafotolife/content/uploadConfig.xul',
             'アップロードの設定',
-            'chrome,modal,resizable=no,centerscreen',
+            'chrome,modal,resizable=yes,centerscreen',
             config 
         ).focus();
         return config;

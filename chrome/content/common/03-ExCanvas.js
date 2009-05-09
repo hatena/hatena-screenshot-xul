@@ -22,9 +22,7 @@ ExCanvas.prototype = {
         canvas.width = dim.width;
         canvas.height = dim.height;
         
-        if (scale){
-            scale = scale.width ? scale.width / dim.width : 
-                scale.height ? scale.height /dim.height : scale;
+        if (scale) {
             canvas.width = dim.width * scale;
             canvas.height = dim.height * scale;
             ctx.scale(scale, scale);
@@ -32,6 +30,7 @@ ExCanvas.prototype = {
         
         ctx.drawWindow(win, pos.x, pos.y, dim.width, dim.height, 'rgb(255,255,255)');
         ctx.restore();
+
         return canvas.toDataURL('image/' + (ext || 'png'), ext == 'jpeg' ? 'quality=95' : '');
     },
 
@@ -50,8 +49,14 @@ ExCanvas.prototype = {
 
         if (options.all) {
             let html = content.document.getElementsByTagName('html')[0];
-            dim.width = Math.max(content.document.documentElement.scrollWidth, content.innerWidth);
-            dim.height= Math.max(content.document.documentElement.scrollHeight, content.innerHeight);
+            let win = content;
+            let doc = win.document;
+            let origOverflow = doc.body.style.overflow;
+            doc.body.style.overflow = 'hidden';
+            dim.width = Math.max(doc.documentElement.scrollWidth, win.innerWidth);
+            dim.height= Math.max(doc.documentElement.scrollHeight, win.innerHeight);
+            doc.body.style.overflow = origOverflow;
+
             pos = {x: 0, y:0};
         } else {
             [pos, dim] = this.getInlineContentPos(content);
