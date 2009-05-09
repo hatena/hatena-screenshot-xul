@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+<?xml-stylesheet href="chrome://mozapps/content/preferences/preferences.css"?>
+<?xml-stylesheet href="chrome://browser/skin/preferences/preferences.css"?>
+<?xml-stylesheet href="chrome://hatenafotolife/skin/config.css"?>
+
+<prefwindow id="hBookmark-config"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    title="フォトライフ設定"
+    >
+
+<prefpane 
+    image="chrome://hatenafotolife/skin/images/fotolife.ico"
+    id="prefpane-global" label="設定" flex="1">
+    <preferences>
+        <preference 
+            id="extensions.hatenafotolife.statusbar"
+            name="extensions.hatenafotolife.statusbar"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenafotolife.hideMenuMoving"
+            name="extensions.hatenafotolife.hideMenuMoving"
+            type="bool"/>
+    </preferences>
+
+    <vbox>
+        <groupbox orient="vertical">
+            <caption label="ステータスバーアイコン" />
+            <checkbox id="extensions.hatenafotolife.contextmenu.enabled-check" flex="1"
+                label="表示する"
+                preference="extensions.hatenafotolife.statusbar"/>
+        </groupbox>
+
+        <groupbox orient="vertical">
+            <caption label="絵を描く" />
+            <checkbox id="extensions.hatenafotolife.contextmenu.enabled-check2" flex="1"
+                label="線を引くときパレットを自動的に隠す"
+                preference="extensions.hatenafotolife.hideMenuMoving"/>
+        </groupbox>
+
+        <spacer height="50px" />
+    </vbox>
+</prefpane>
+
+<script type="application/x-javascript" src="chrome://browser/content/utilityOverlay.js"></script>
+<script type="application/javascript; version=1.8" charset="utf-8" src="chrome://hatenafotolife/content/autoloader.js" />
+</prefwindow>
+

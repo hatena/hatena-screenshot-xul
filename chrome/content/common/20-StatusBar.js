@@ -1,7 +1,7 @@
 
 var checkStatusBar = function() {
     var v = Prefs.fotolife.get('statusbar');
-    var s = document.getElementById('hFotolife-statusBarPanel');
+    var s = getTopWin().document.getElementById('hFotolife-statusBarPanel');
     if (v) {
         s.removeAttribute('hidden');
     } else {

@@ -6,7 +6,9 @@
         <em:name>Hatena Fotolife</em:name>
         <em:version>0.0.1</em:version>
         <em:type>2</em:type>
-        <em:description>Fotolife Addon</em:description>
+        <em:optionsURL>chrome://hatenafotolife/content/config.xul</em:optionsURL>
+        <em:iconURL>chrome://hatenafotolife/skin/images/FotoIcon.png</em:iconURL>
+        <em:description>ブラウザのサムネイルをはてなフォトライフに簡単にアップロード</em:description>
         <em:creator>Hatena</em:creator>
         <em:targetApplication>
             <Description>
