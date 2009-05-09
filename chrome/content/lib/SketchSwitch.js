@@ -521,7 +521,7 @@ SketchSwitch.Buttons.Pen4.prototype = SketchSwitch.Utils.extend({
 SketchSwitch.Buttons.Eraser = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Eraser.prototype = SketchSwitch.Utils.extend({
     shortcut: 'e',
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAACESURBVHjanJMNCoAwCIU3z9gtgjpLUKeoOxoGxjaeqBOE8fRzP05i5uL5dt4sjmJUHNuvh9FajaKwpVEGRjHKwmNOlYfIwq11BbJwd4UZ+FiXSmXSBP5PILuLoGIU/goojIIebLbRKoJ0EhE94JhsnqwdGDRE3qCZQAQWN39itCOvAAMA87rRSihWbbsAAAAASUVORK5CYII=',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMAKgBSAP+n7SVnAAAACXBIWXMAAABPAAAATwFjiv3XAAAAYUlEQVR4nGPUCvrPQApgIkk1ORpYkq374Jzi4mLCGhgYGIqKiuAaLl26hEe1np4e6U56+/YtMl9XVxe/BtJD6fbt26RpINUGFjR+X18fVnXk28AYGhoK56xevZqwhsGX+ACovxXZBusToAAAAABJRU5ErkJggg==',
     name: 'Eraser',
     select: function() {
         this.sketch.currentBrush = new SketchSwitch.Brushes.Eraser();
@@ -541,7 +541,7 @@ SketchSwitch.Buttons.RectEraser.prototype = SketchSwitch.Utils.extend({
 SketchSwitch.Buttons.Rect = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Rect.prototype = SketchSwitch.Utils.extend({
     shortcut: 'r',
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMA/wD/AP83WBt9AAAACXBIWXMAAABPAAAATwFjiv3XAAAAQElEQVR4nGP8//8/AymAiSTVDAwMLBAqLCyMoNJVq1YhNDAwMFhYWOBRfeLECTKdNKphcGhAxDQ8LvEDRpqnVgB5Hg53GZh6LAAAAABJRU5ErkJggg==',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMA/wDUAOCOSL+JAAAACXBIWXMAAABPAAAATwFjiv3XAAAAQElEQVR4nGP8f+UBAymAiSTVDAwMLBAqrLGUoNJV9d0IDQwMDKtWrcKjOiwsjEwnjWoYHBoQMQ2PS/yAkeapFQD4PgyNNZBnSAAAAABJRU5ErkJggg==',
     name: 'Rect',
     select: function() {
         this.sketch.currentBrush = new SketchSwitch.Brushes.Rect();
@@ -550,7 +550,7 @@ SketchSwitch.Buttons.Rect.prototype = SketchSwitch.Utils.extend({
 
 SketchSwitch.Buttons.Pipet = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Pipet.prototype = SketchSwitch.Utils.extend({
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAB+SURBVHjaYvr//z8DqThvyur/IAxiM4IIUkD+1DUoGggaANMwMTuEEV0zCDCRazPMUCYGMgFIM0EXgGwFKYQpRteM1wCYZmyakL1DthdggIWUQET3Ck4DYIqRnYpNMxhgS2XINCFMkWYUA8jRDDeAXM1gAyjRjOECcjBAgAEA7BN6BCKFNf0AAAAASUVORK5CYII=',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMA/wCqAMIFR7s3AAAACXBIWXMAAABPAAAATwFjiv3XAAAAhElEQVR4nJWS0Q2DMAxEL6grckugzoCYwWIJe4vu0Ck6RPlwFZIKk8RfjvOe5JOcvvrCSE1DNIDH/TdNvNH52RZooqq/nnQnXKmky7rL8P5cDBuh3cn7IMpAk3XXbaE/M30tZLrkwpVoAob0v+A0NKQroYc+hU4aQMrHR5MmXQmdNXytB0dcPSkyH/LgAAAAAElFTkSuQmCC',
     name: 'Pipet',
     select: function() {
         this.sketch.currentBrush = new SketchSwitch.Brushes.Pipet();
@@ -585,9 +585,9 @@ SketchSwitch.Buttons.Clear = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Clear.prototype = SketchSwitch.Utils.extend({
     shortcut: 'c',
     clickOnly: true,
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMA/wD/AP83WBt9AAAACXBIWXMAAABPAAAATwFjiv3XAAAASklEQVR4nGP8//8/AwYICwtjYGBYtWoVphQTphB+wIjVBjwAYUNYWBjEJWgATZyeTiLWhtDQUAYcIYgGID4ZhH6gQAN9I46aqRUAWy0hG+NU+d8AAAAASUVORK5CYII=',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMA/wD/AP83WBt9AAAACXBIWXMAAABPAAAATwFjiv3XAAAAUElEQVR4nM2QQQoAMQgD7f4x+f9PZg8Lbi8tKBTqKcREEgcQlXlK6ogIAJAkaQYr8jewnRSMZgfbe10KyqW7kcqGCzt0In2U7dwlns+df+sLRcNm1T1PtyAAAAAASUVORK5CYII=',
     name: 'Clear',
-    confirmText: decodeURIComponent(escape('クリアします。よろしいですか? ')),
+    confirmText: decodeURIComponent(escape('絵をクリアします。よろしいですか? ')),
     select: function() {
         if (this.sketch.win.confirm(this.confirmText)) {
             this.sketch.clear();
@@ -838,5 +838,6 @@ SketchSwitch.Brushes.Pipet.prototype = SketchSwitch.Utils.extend({
         this.sketch.copyColor(point);
     }
 }, SketchSwitch.Brushes.BaseProto, false);
+
 
 
