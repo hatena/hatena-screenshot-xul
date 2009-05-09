@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <?xml-stylesheet type="text/css" href="chrome://hatenafotolife/skin/browser.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenafotolife/skin/toolbar.css"?>
 <overlay id="Fotolife-xulOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/javascript" src="autoloader.js"></script>
   <menupopup id="menu_ToolsPopup">
@@ -41,6 +42,53 @@
         </menupopup>
     </menu>
   </menupopup>
+
+    <toolbarpalette id="BrowserToolbarPalette">
+
+      <toolbarbutton
+          id="hFotolife-toolbar-button"
+          label="はてなフォトライフ"
+          tooltiptext="はてなフォトライフ"
+          class="chromeclass-toolbar-additional"
+          type="menu-button"
+          oncommand="hFotolife.Manager.draw();"
+          onclick="hFotolife.Manager.draw();">
+          <menupopup oncommand="event.stopPropagation();"
+                     onclick="event.stopPropagation();">
+            <menuitem id="hFotolife-menu-draw" label='絵を描く' oncommand='hFotolife.Manager.draw();'/>
+            <menuseparator />
+            <menu id="hFotolife-menu-upload" label="アップロード">
+                <menupopup>
+                    <menuitem label='全部' oncommand='hFotolife.Manager.Upload.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Upload.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Upload.rect();'/>
+                </menupopup>
+            </menu>
+            <menu id="hFotolife-menu-copy" label="クリップボードにコピー">
+                <menupopup>
+                    <menuitem label='全部' oncommand='hFotolife.Manager.Copy.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Copy.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Copy.rect();'/>
+                </menupopup>
+            </menu>
+            <menu id="hFotolife-menu-save" label="ファイルに保存">
+                <menupopup>
+                    <menuitem label='全部' oncommand='hFotolife.Manager.Save.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Save.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Save.rect();'/>
+                </menupopup>
+            </menu>
+            <menu id="hFotolife-menu-base64" label="URLで開く(base64)">
+                <menupopup>
+                    <menuitem label='全部' oncommand='hFotolife.Manager.Base64.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Base64.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Base64.rect();'/>
+                </menupopup>
+            </menu>
+          </menupopup>
+      </toolbarbutton>
+    </toolbarpalette>
+
 
   <statusbar id="status-bar">
     <statusbarpanel id="hFotolife-statusBarPanel"

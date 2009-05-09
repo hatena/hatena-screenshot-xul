@@ -1,0 +1,17 @@
+
+#hFotolife-toolbar-button {
+  list-style-image: url("chrome://hatenafotolife/skin/images/FotoIcon.png");
+}
+
+toolbar[iconsize="small"] #hFotolife-toolbar-button {
+  list-style-image: url("chrome://hatenafotolife/skin/images/FotoIcon.png");
+}
+
+#hfotolife-toolbar-button > .toolbarbutton-menubutton-button > .toolbarbutton-icon {
+  margin: 0px 6px !important;
+}
+
+#hfotolife-toolbar-button > .toolbarbutton-menubutton-button {
+  padding: 0px !important;
+}
+
