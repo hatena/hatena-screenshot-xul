@@ -30,13 +30,12 @@ var Capture = {
         let height= Math.max(doc.documentElement.scrollHeight, win.innerHeight);
         doc.body.style.overflow = origOverflow;
 
-        p.e('rect size:' + [width, height].join);
+        p.e('rect size:' + [width, height].join(','));
         let canvas = document.createElementNS(XHTML_NS, 'canvas');
 
         canvas.width = width;
         canvas.height = height;
 
-        p('rect2');
         with (canvas.style) {
             position = 'absolute';
             top      = '0';
