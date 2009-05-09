@@ -104,8 +104,13 @@ SketchSwitch.prototype = {
     createCanvas: function(canvasID) {
         var canvas = this.doc.createElement('canvas');
         canvas.id = canvasID;
+
+        var origOverflow = this.doc.body.style.overflow;
+        this.doc.body.style.overflow = 'hidden';
         canvas.width = Math.max(this.doc.documentElement.scrollWidth, this.win.innerWidth);
         canvas.height = Math.max(this.doc.documentElement.scrollHeight, this.win.innerHeight);
+        this.doc.body.style.overflow = origOverflow;
+
         with (canvas.style) {
             position = 'absolute';
             top      = '0';
