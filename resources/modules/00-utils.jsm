@@ -69,7 +69,7 @@ const XMLNS_NS = "http://www.w3.org/2000/xmlns/";
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 
 /* utility functions */
-var nowDebug = !!Application.prefs.get('extensions.hatenafotolife.debug.log').value;
+var nowDebug = !!Application.prefs.get('extensions.hatenascreenshot.debug.log').value;
 
 /*
  * p は一時デバッグ用
@@ -115,8 +115,8 @@ var log = {
 p.observe = function Prefs_observe (aSubject, aTopic, aData) {
      if (aTopic != "nsPref:changed") return;
 
-     if (aData == 'extensions.hatenafotolife.debug.log') {
-         nowDebug = !!Application.prefs.get('extensions.hatenafotolife.debug.log').value;
+     if (aData == 'extensions.hatenascreenshot.debug.log') {
+         nowDebug = !!Application.prefs.get('extensions.hatenascreenshot.debug.log').value;
      }
 }
 
@@ -270,7 +270,7 @@ function getFaviconURI (url) {
 // 特定のウィンドウに属さない辞書用オブジェクトの作成
 function DictionaryObject() ({ __proto__: null });
 
-const _MODULE_BASE_URI = "resource://hatenafotolife/modules/"
+const _MODULE_BASE_URI = "resource://hatenascreenshot/modules/"
 
 function loadModules() {
     var uris = _getModuleURIs();

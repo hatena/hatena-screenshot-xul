@@ -70,8 +70,8 @@ Manager.showPopup = function(event) {
     if (event.ctrlKey) {
         return Manager.draw();
     }
-    let icon = document.getElementById('hFotolife-statusIcon');
-    let menu = document.getElementById('hFotolife-menu-popup');
+    let icon = document.getElementById('hScreenshot-statusIcon');
+    let menu = document.getElementById('hScreenshot-menu-popup');
     menu = menu.cloneNode(true);
     icon.parentNode.appendChild(menu);
     menu.openPopup(icon, 'before_end', 0, 0, false, true);
@@ -146,7 +146,7 @@ extend(Manager.Upload, {
                 options.fotosize= 100000;
             }
 
-            document.getElementById('hFotolife-statusIcon').setAttribute('loading', 'true');
+            document.getElementById('hScreenshot-statusIcon').setAttribute('loading', 'true');
 
             if (!data) {
                 Capture[method](true, function(data) {
@@ -166,7 +166,7 @@ extend(Manager.Upload, {
     configDialog: function() {
         let config = {};
         window.openDialog(
-            'chrome://hatenafotolife/content/uploadConfig.xul',
+            'chrome://hatenascreenshot/content/uploadConfig.xul',
             'アップロードの設定',
             'chrome,modal,resizable=yes,centerscreen',
             config 
@@ -177,7 +177,7 @@ extend(Manager.Upload, {
     callback: function(res) {
         let m;
         p('upload success: ' + res.responseText);
-        document.getElementById('hFotolife-statusIcon').removeAttribute('loading');
+        document.getElementById('hScreenshot-statusIcon').removeAttribute('loading');
         if (m = res.responseText.match(/:(\d{14})/)) {
             let timestamp = m[1];
             let permalink = User.user.getPermalink(timestamp);
@@ -191,7 +191,7 @@ extend(Manager.Upload, {
     },
 
     errorback: function(res) {
-        document.getElementById('hFotolife-statusIcon').removeAttribute('loading');
+        document.getElementById('hScreenshot-statusIcon').removeAttribute('loading');
         window.alert('フォトライフへののアップロードに失敗しました');
     },
 });

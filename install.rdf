@@ -6,8 +6,8 @@
         <em:name>はてなスクリーンショット拡張</em:name>
         <em:version>0.0.2</em:version>
         <em:type>2</em:type>
-        <em:optionsURL>chrome://hatenafotolife/content/config.xul</em:optionsURL>
-        <em:iconURL>chrome://hatenafotolife/skin/images/FotoIcon.png</em:iconURL>
+        <em:optionsURL>chrome://hatenascreenshot/content/config.xul</em:optionsURL>
+        <em:iconURL>chrome://hatenascreenshot/skin/images/FotoIcon.png</em:iconURL>
         <em:description>ブラウザのスクリーンショットを作成 - はてなフォトライフにアップロード</em:description>
         <em:creator>Hatena</em:creator>
         <em:targetApplication>

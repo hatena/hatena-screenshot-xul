@@ -1,42 +1,42 @@
 <?xml version="1.0" ?>
-<?xml-stylesheet type="text/css" href="chrome://hatenafotolife/skin/browser.css"?>
-<?xml-stylesheet type="text/css" href="chrome://hatenafotolife/skin/toolbar.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenascreenshot/skin/browser.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenascreenshot/skin/toolbar.css"?>
 <overlay id="Fotolife-xulOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/javascript" src="autoloader.js"></script>
   <menupopup id="menu_ToolsPopup">
     <menu 
         insertbefore="devToolsSeparator"
-        id="hFotolife-menu" label="Fotolife"
+        id="hScreenshot-menu" label="Fotolife"
     >
-        <menupopup id ="hFotolife-menu-popup">
-            <menuitem id="hFotolife-menu-draw" label='絵を描く' oncommand='hFotolife.Manager.draw();'/>
+        <menupopup id ="hScreenshot-menu-popup">
+            <menuitem id="hScreenshot-menu-draw" label='絵を描く' oncommand='hFotolife.Manager.draw();'/>
             <menuseparator />
-            <menu id="hFotolife-menu-upload" label="アップロード">
+            <menu id="hScreenshot-menu-upload" label="アップロード">
                 <menupopup>
-                    <menuitem label='全部' oncommand='hFotolife.Manager.Upload.all();'/>
-                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Upload.inner();'/>
-                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Upload.rect();'/>
+                    <menuitem label='全部' oncommand='hScreenshot.Manager.Upload.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Upload.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hScreenshot.Manager.Upload.rect();'/>
                 </menupopup>
             </menu>
-            <menu id="hFotolife-menu-copy" label="クリップボードにコピー">
+            <menu id="hScreenshot-menu-copy" label="クリップボードにコピー">
                 <menupopup>
-                    <menuitem label='全部' oncommand='hFotolife.Manager.Copy.all();'/>
-                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Copy.inner();'/>
-                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Copy.rect();'/>
+                    <menuitem label='全部' oncommand='hScreenshot.Manager.Copy.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Copy.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hScreenshot.Manager.Copy.rect();'/>
                 </menupopup>
             </menu>
-            <menu id="hFotolife-menu-save" label="ファイルに保存">
+            <menu id="hScreenshot-menu-save" label="ファイルに保存">
                 <menupopup>
-                    <menuitem label='全部' oncommand='hFotolife.Manager.Save.all();'/>
-                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Save.inner();'/>
-                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Save.rect();'/>
+                    <menuitem label='全部' oncommand='hScreenshot.Manager.Save.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Save.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hScreenshot.Manager.Save.rect();'/>
                 </menupopup>
             </menu>
-            <menu id="hFotolife-menu-base64" label="URLで開く(base64)">
+            <menu id="hScreenshot-menu-base64" label="URLで開く(base64)">
                 <menupopup>
-                    <menuitem label='全部' oncommand='hFotolife.Manager.Base64.all();'/>
-                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Base64.inner();'/>
-                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Base64.rect();'/>
+                    <menuitem label='全部' oncommand='hScreenshot.Manager.Base64.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Base64.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hScreenshot.Manager.Base64.rect();'/>
                 </menupopup>
             </menu>
         </menupopup>
@@ -46,43 +46,43 @@
     <toolbarpalette id="BrowserToolbarPalette">
 
       <toolbarbutton
-          id="hFotolife-toolbar-button"
+          id="hScreenshot-toolbar-button"
           label="はてなフォトライフ"
           tooltiptext="はてなフォトライフ"
           class="chromeclass-toolbar-additional"
           type="menu-button"
-          oncommand="hFotolife.Manager.draw();"
-          onclick="hFotolife.Manager.draw();">
+          oncommand="hScreenshot.Manager.draw();"
+          onclick="hScreenshot.Manager.draw();">
           <menupopup oncommand="event.stopPropagation();"
                      onclick="event.stopPropagation();">
-            <menuitem id="hFotolife-menu-draw" label='絵を描く' oncommand='hFotolife.Manager.draw();'/>
+            <menuitem id="hScreenshot-menu-draw" label='絵を描く' oncommand='hFotolife.Manager.draw();'/>
             <menuseparator />
-            <menu id="hFotolife-menu-upload" label="アップロード">
+            <menu id="hScreenshot-menu-upload" label="アップロード">
                 <menupopup>
-                    <menuitem label='全部' oncommand='hFotolife.Manager.Upload.all();'/>
-                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Upload.inner();'/>
-                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Upload.rect();'/>
+                    <menuitem label='全部' oncommand='hScreenshot.Manager.Upload.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Upload.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hScreenshot.Manager.Upload.rect();'/>
                 </menupopup>
             </menu>
-            <menu id="hFotolife-menu-copy" label="クリップボードにコピー">
+            <menu id="hScreenshot-menu-copy" label="クリップボードにコピー">
                 <menupopup>
-                    <menuitem label='全部' oncommand='hFotolife.Manager.Copy.all();'/>
-                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Copy.inner();'/>
-                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Copy.rect();'/>
+                    <menuitem label='全部' oncommand='hScreenshot.Manager.Copy.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Copy.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hScreenshot.Manager.Copy.rect();'/>
                 </menupopup>
             </menu>
-            <menu id="hFotolife-menu-save" label="ファイルに保存">
+            <menu id="hScreenshot-menu-save" label="ファイルに保存">
                 <menupopup>
-                    <menuitem label='全部' oncommand='hFotolife.Manager.Save.all();'/>
-                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Save.inner();'/>
-                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Save.rect();'/>
+                    <menuitem label='全部' oncommand='hScreenshot.Manager.Save.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Save.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hScreenshot.Manager.Save.rect();'/>
                 </menupopup>
             </menu>
-            <menu id="hFotolife-menu-base64" label="URLで開く(base64)">
+            <menu id="hScreenshot-menu-base64" label="URLで開く(base64)">
                 <menupopup>
-                    <menuitem label='全部' oncommand='hFotolife.Manager.Base64.all();'/>
-                    <menuitem label='表示部分のみ' oncommand='hFotolife.Manager.Base64.inner();'/>
-                    <menuitem label='一部のみ' oncommand='hFotolife.Manager.Base64.rect();'/>
+                    <menuitem label='全部' oncommand='hScreenshot.Manager.Base64.all();'/>
+                    <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Base64.inner();'/>
+                    <menuitem label='一部のみ' oncommand='hScreenshot.Manager.Base64.rect();'/>
                 </menupopup>
             </menu>
           </menupopup>
@@ -91,13 +91,13 @@
 
 
   <statusbar id="status-bar">
-    <statusbarpanel id="hFotolife-statusBarPanel"
+    <statusbarpanel id="hScreenshot-statusBarPanel"
          collapsed="false"
     >
         <image
-            id="hFotolife-statusIcon"
-            onclick="hFotolife.Manager.showPopup(event);" 
-            ondblclick="hFotolife.Manager.draw();" 
+            id="hScreenshot-statusIcon"
+            onclick="hScreenshot.Manager.showPopup(event);" 
+            ondblclick="hScreenshot.Manager.draw();" 
         />
     </statusbarpanel>
   </statusbar>
@@ -106,8 +106,8 @@
     <script type="text/javascript; version=1.8" charset="utf-8">
     // <![CDATA[
     (function() {
-        with(hFotolife) {
-            if (hFotolife.nowDebug) {
+        with(hScreenshot) {
+            if (hScreenshot.nowDebug) {
                 Application.console.open();
             }
 

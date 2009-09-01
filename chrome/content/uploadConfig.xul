@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/css" href="chrome://global/skin/"?>
-<?xml-stylesheet type="text/css" href="chrome://hatenafotolife/skin/uploadConfig.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenascreenshot/skin/uploadConfig.css"?>
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-        id="hFotolifeUploadConfig"
+        id="hScreenshotUploadConfig"
         title="アップロード"
         buttons="accept,cancel"
         width="250"
         height="250"
         persist="screenX screenY"
-        onload="new hFotolife.UploadConfig(document.documentElement);"
+        onload="new hScreenshot.UploadConfig(document.documentElement);"
         onunload="document.documentElement.manager.destroy();"
         buttonlabelaccept="アップロード"
         ondialogaccept="return document.documentElement.manager.onAccept(event);"
         ondialogcancel="return document.documentElement.manager.onCancel(event);"
         >
     <script type="application/javascript"
-            src="chrome://hatenafotolife/content/autoloader.js"/>
+            src="chrome://hatenascreenshot/content/autoloader.js"/>
 
     <vbox flex="1">
          <label id="username" />

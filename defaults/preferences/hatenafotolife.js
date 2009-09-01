@@ -1,8 +1,8 @@
 
 // for debuge
-pref("extensions.hatenafotolife.debug.log", false);
+pref("extensions.hatenascreenshot.debug.log", false);
 
-pref("extensions.hatenafotolife.uploadConfig", '{}');
-pref("extensions.hatenafotolife.statusbar", true);
-pref("extensions.hatenafotolife.hideMenuMoving", true);
+pref("extensions.hatenascreenshot.uploadConfig", '{}');
+pref("extensions.hatenascreenshot.statusbar", true);
+pref("extensions.hatenascreenshot.hideMenuMoving", true);
 

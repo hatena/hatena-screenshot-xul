@@ -1,8 +1,8 @@
-if (!hFotolife)
-    var hFotolife = {};
+if (!hScreenshot)
+    var hScreenshot = {};
 
-Components.utils.import("resource://hatenafotolife/modules/00-utils.jsm",
-                        hFotolife);
+Components.utils.import("resource://hatenascreenshot/modules/00-utils.jsm",
+                        hScreenshot);
 
 /**
  * 指定されたURIのスクリプトを読み込む。
@@ -10,7 +10,7 @@ Components.utils.import("resource://hatenafotolife/modules/00-utils.jsm",
  * @param {String} uri スクリプトのURI。"/"で終わっていた場合は
  *                     そのディレクトリ直下のすべてのスクリプトを読み込む。
  */
-hFotolife.load = function (uri) {
+hScreenshot.load = function (uri) {
     if (uri.charAt(uri.length - 1) === "/") {
         var load = arguments.callee;
         load.getScriptURIs(uri)
@@ -26,7 +26,7 @@ hFotolife.load = function (uri) {
         env.EXPORT.forEach(function (name) this[name] = env[name], this);
 };
 
-hFotolife.load.getScriptURIs = function (dirURI) {
+hScreenshot.load.getScriptURIs = function (dirURI) {
     const Cc = Components.classes;
     const Ci = Components.interfaces;
     const EXTENSION_ID = "fotolife@hatena.ne.jp";
@@ -34,7 +34,7 @@ hFotolife.load.getScriptURIs = function (dirURI) {
     var dirPath = dirURI.replace(/^[\w-]+:\/\/[\w.:-]+\//, "");
     var em = Cc["@mozilla.org/extensions/manager;1"]
                  .getService(Ci.nsIExtensionManager);
-    var baseURI = 'chrome://hatenafotolife/' + dirPath;
+    var baseURI = 'chrome://hatenascreenshot/' + dirPath;
     // XXX jarファイルに固めるのならnsIZipReaderを使ってごにょごにょする。
     var dir = em.getInstallLocation(EXTENSION_ID)
                 .getItemFile(EXTENSION_ID, "chrome/" + dirPath);
@@ -48,8 +48,8 @@ hFotolife.load.getScriptURIs = function (dirURI) {
     return uris.sort();
 };
 
-if (!("autoload" in hFotolife) || hFotolife.autoload) {
-    hFotolife.loadModules();
-    hFotolife.load("chrome://hatenafotolife/content/common/");
-    hFotolife.load(location.href.replace(/\.\w+$/, "/"));
+if (!("autoload" in hScreenshot) || hFotolife.autoload) {
+    hScreenshot.loadModules();
+    hScreenshot.load("chrome://hatenascreenshot/content/common/");
+    hScreenshot.load(location.href.replace(/\.\w+$/, "/"));
 }

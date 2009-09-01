@@ -1,4 +1,4 @@
-Components.utils.import("resource://hatenafotolife/modules/00-utils.jsm");
+Components.utils.import("resource://hatenascreenshot/modules/00-utils.jsm");
 
 const EXPORTED_SYMBOLS = ["EventService"];
 

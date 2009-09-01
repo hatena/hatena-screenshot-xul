@@ -1,18 +1,18 @@
 
 /* StatusBar */
-#hFotolife-statusBarPanel {
+#hScreenshot-statusBarPanel {
     margin: 0px;
     padding: 0px;
 }
 
-#hFotolife-statusIcon {
-  list-style-image: url("chrome://hatenafotolife/skin/images/FotoIcon.png");
+#hScreenshot-statusIcon {
+  list-style-image: url("chrome://hatenascreenshot/skin/images/FotoIcon.png");
   cursor: pointer;
   -moz-image-region: auto;
 }
 
-#hFotolife-statusIcon[loading="true"] {
-  list-style-image: url("chrome://hatenafotolife/skin/images/comment_loading.png");
+#hScreenshot-statusIcon[loading="true"] {
+  list-style-image: url("chrome://hatenascreenshot/skin/images/comment_loading.png");
   cursor: pointer;
   -moz-image-region: auto;
 }
