@@ -184,13 +184,13 @@ extend(Manager.Upload, {
         document.getElementById('hScreenshot-statusIcon').removeAttribute('loading');
         if (m = res.responseText.match(/:(\d{14})/)) {
             let timestamp = m[1];
-            let permalink = User.user.getPermalink(timestamp);
+            let permalink = User.user.getPermalink(timestamp) + '?ref=hatena-screenshot';
             setTimeout(function() {
                 // タイミングによって fotolife の slave に反映されてないため、ちょっと間をおく
                 // XXX: 1000 ms でも反映されない場合が…
                 p('open link: ' + permalink);
                 openUILinkIn(permalink, 'tab');
-            }, 1000);
+            }, 100);
         }
     },
 
