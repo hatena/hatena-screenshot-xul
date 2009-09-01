@@ -1,17 +1,17 @@
 <?xml version="1.0" ?>
 <?xml-stylesheet type="text/css" href="chrome://hatenascreenshot/skin/browser.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenascreenshot/skin/toolbar.css"?>
-<overlay id="Fotolife-xulOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<overlay id="Screenshot-xulOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/javascript" src="autoloader.js"></script>
   <menupopup id="menu_ToolsPopup">
     <menu 
         insertbefore="devToolsSeparator"
-        id="hScreenshot-menu" label="Fotolife"
+        id="hScreenshot-menu" label="はてなスクリーンショット"
     >
         <menupopup id ="hScreenshot-menu-popup">
-            <menuitem id="hScreenshot-menu-draw" label='絵を描く' oncommand='hFotolife.Manager.draw();'/>
+            <menuitem id="hScreenshot-menu-draw" label='絵を描く' oncommand='hScreenshot.Manager.draw();'/>
             <menuseparator />
-            <menu id="hScreenshot-menu-upload" label="アップロード">
+            <menu id="hScreenshot-menu-upload" label="フォトライフにアップロード">
                 <menupopup>
                     <menuitem label='全部' oncommand='hScreenshot.Manager.Upload.all();'/>
                     <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Upload.inner();'/>
@@ -32,7 +32,7 @@
                     <menuitem label='一部のみ' oncommand='hScreenshot.Manager.Save.rect();'/>
                 </menupopup>
             </menu>
-            <menu id="hScreenshot-menu-base64" label="URLで開く(base64)">
+            <menu id="hScreenshot-menu-base64" label="URLで開く">
                 <menupopup>
                     <menuitem label='全部' oncommand='hScreenshot.Manager.Base64.all();'/>
                     <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Base64.inner();'/>
@@ -47,17 +47,17 @@
 
       <toolbarbutton
           id="hScreenshot-toolbar-button"
-          label="はてなフォトライフ"
-          tooltiptext="はてなフォトライフ"
+          label="はてなスクリーンショット"
+          tooltiptext="はてなスクリーンショット"
           class="chromeclass-toolbar-additional"
           type="menu-button"
           oncommand="hScreenshot.Manager.draw();"
           onclick="hScreenshot.Manager.draw();">
           <menupopup oncommand="event.stopPropagation();"
                      onclick="event.stopPropagation();">
-            <menuitem id="hScreenshot-menu-draw" label='絵を描く' oncommand='hFotolife.Manager.draw();'/>
+            <menuitem id="hScreenshot-menu-draw" label='絵を描く' oncommand='hScreenshot.Manager.draw();'/>
             <menuseparator />
-            <menu id="hScreenshot-menu-upload" label="アップロード">
+            <menu id="hScreenshot-menu-upload" label="フォトライフにアップロード">
                 <menupopup>
                     <menuitem label='全部' oncommand='hScreenshot.Manager.Upload.all();'/>
                     <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Upload.inner();'/>
@@ -78,7 +78,7 @@
                     <menuitem label='一部のみ' oncommand='hScreenshot.Manager.Save.rect();'/>
                 </menupopup>
             </menu>
-            <menu id="hScreenshot-menu-base64" label="URLで開く(base64)">
+            <menu id="hScreenshot-menu-base64" label="URLで開く">
                 <menupopup>
                     <menuitem label='全部' oncommand='hScreenshot.Manager.Base64.all();'/>
                     <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Base64.inner();'/>

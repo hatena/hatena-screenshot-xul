@@ -29,13 +29,12 @@ hScreenshot.load = function (uri) {
 hScreenshot.load.getScriptURIs = function (dirURI) {
     const Cc = Components.classes;
     const Ci = Components.interfaces;
-    const EXTENSION_ID = "fotolife@hatena.ne.jp";
+    const EXTENSION_ID = "screenshot@hatena.ne.jp";
     var uris = [];
     var dirPath = dirURI.replace(/^[\w-]+:\/\/[\w.:-]+\//, "");
     var em = Cc["@mozilla.org/extensions/manager;1"]
                  .getService(Ci.nsIExtensionManager);
     var baseURI = 'chrome://hatenascreenshot/' + dirPath;
-    // XXX jarファイルに固めるのならnsIZipReaderを使ってごにょごにょする。
     var dir = em.getInstallLocation(EXTENSION_ID)
                 .getItemFile(EXTENSION_ID, "chrome/" + dirPath);
     if (!dir.exists() || !dir.isDirectory()) return uris;
@@ -48,7 +47,7 @@ hScreenshot.load.getScriptURIs = function (dirURI) {
     return uris.sort();
 };
 
-if (!("autoload" in hScreenshot) || hFotolife.autoload) {
+if (!("autoload" in hScreenshot) || hScreenshot.autoload) {
     hScreenshot.loadModules();
     hScreenshot.load("chrome://hatenascreenshot/content/common/");
     hScreenshot.load(location.href.replace(/\.\w+$/, "/"));
