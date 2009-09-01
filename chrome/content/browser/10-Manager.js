@@ -2,6 +2,8 @@
 const EXPORT = ['Manager'];
 
 var Manager = {};
+let PS = Cc["@mozilla.org/embedcomp/prompt-service;1"].
+         getService(Ci.nsIPromptService);
 
 Manager.sketch = {
     sketches: [],
@@ -113,7 +115,9 @@ extend(Manager.Upload, {
         // method: all, rect, inner
         // XXX: ログインチェックを挟む
         if (!User.user) {
-            window.config('フォトライフへのログインが必要です。');
+            if (window.confirm('Hatena heno roguin ga Hitu You Desu(FIXME)')) {
+                openUILinkIn("https://www.hatena.ne.jp/login?via=1000018&location=http%3A%2F%2Ff.hatena.ne.jp%2F%3Fhelp", 'tab');
+            }
             finish();
             return;
         }

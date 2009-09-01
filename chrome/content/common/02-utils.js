@@ -257,7 +257,11 @@ net.sync_get = function net__sync_get(url, query, method) {
     return gen.next();
 }
 
-net._http = function net__http (url, callback, errorback, async, query, method) {
+net._http = function net__http (url, callback, errorback, async, query, headers, method) {
+    if (/^https?:\/\/(?:[\w-]+\.)+hatena.ne.jp(?=[:\/]|$)/.test(url) &&
+        User.user && !headers)
+        headers = { Cookie: 'rk=' + User.user.rk };
+
     let xhr = new XMLHttpRequest();
     xhr.mozBackgroundRequest = true;
     if (async) {
@@ -281,24 +285,28 @@ net._http = function net__http (url, callback, errorback, async, query, method) 
     }
     xhr.open(method, url, async);
 
+    for (let [field, value] in Iterator(headers || {}))
+        xhr.setRequestHeader(field, value);
+
     if (method == 'POST') {
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send(this.makeQuery(query));
     } else {
         xhr.send(null);
         if (!async) {
-            if (typeof callback == 'function')
+            if (typeof callback == 'function') {
                 callback(xhr);
+            }
         }
     }
     return xhr;
 }
 
-net.get = function net_get (url, callback, errorback, async, query)
-                this._http(url, callback, errorback, async, query, 'GET');
+net.get = function net_get (url, callback, errorback, async, query, headers)
+    this._http(url, callback, errorback, async, query, headers, 'GET');
 
-net.post = function net_post (url, callback, errorback, async, query)
-                this._http(url, callback, errorback, async, query, 'POST');
+net.post = function net_post (url, callback, errorback, async, query, headers)
+    this._http(url, callback, errorback, async, query, headers, 'POST');
 
 /*
  * parseShortcut function copy from XUL/Migemo
