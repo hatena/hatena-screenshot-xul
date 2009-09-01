@@ -61,7 +61,7 @@ Manager.draw = function() {
         };
         win.addEventListener('unload', unloader, false);
     }
-    sketch.hideMenuMoving = Prefs.fotolife.get('hideMenuMoving');
+    sketch.hideMenuMoving = Prefs.screenshot.get('hideMenuMoving');
     sketch.show();
     // var random = Math.random().toString().slice(2);
 };

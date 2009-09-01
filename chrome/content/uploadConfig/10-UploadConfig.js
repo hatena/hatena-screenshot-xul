@@ -33,7 +33,7 @@ extend(UploadConfig.prototype, {
     restoreOptions: function() {
         let options = {};
         try {
-            options = decodeJSON(Prefs.fotolife.get('uploadConfig'));
+            options = decodeJSON(Prefs.screenshot.get('uploadConfig'));
         } catch(e) {
         }
         this.options = options || {}; 
@@ -78,7 +78,7 @@ extend(UploadConfig.prototype, {
             options.checkCheckbox = false;
         }
         try {
-            Prefs.fotolife.set('uploadConfig', encodeJSON(options));
+            Prefs.screenshot.set('uploadConfig', encodeJSON(options));
         } catch(e) {};
         return true;
     },

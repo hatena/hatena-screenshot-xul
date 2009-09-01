@@ -100,6 +100,6 @@ Prefs.prototype = {
 };
 
 Prefs.global = new Prefs('');
-Prefs.fotolife = new Prefs('extensions.hatenascreenshot.');
+Prefs.screenshot = new Prefs('extensions.hatenascreenshot.');
 
 

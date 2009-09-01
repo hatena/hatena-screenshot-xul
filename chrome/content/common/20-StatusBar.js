@@ -1,6 +1,6 @@
 
 var checkStatusBar = function() {
-    var v = Prefs.fotolife.get('statusbar');
+    var v = Prefs.screenshot.get('statusbar');
     var s = getTopWin().document.getElementById('hScreenshot-statusBarPanel');
     if (v) {
         s.removeAttribute('hidden');
@@ -9,7 +9,7 @@ var checkStatusBar = function() {
     }
 };
 
-Prefs.fotolife.createListener('statusbar', checkStatusBar);
+Prefs.screenshot.createListener('statusbar', checkStatusBar);
 
 EventService.createListener('load', function() {
     checkStatusBar();
