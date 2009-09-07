@@ -9,32 +9,32 @@
         id="hScreenshot-menu" label="はてなスクリーンショット"
     >
         <menupopup id ="hScreenshot-menu-popup">
-            <menuitem id="hScreenshot-menu-draw" label='絵を描く' oncommand='hScreenshot.Manager.draw();'/>
+            <menuitem id="hScreenshot-menu-draw" label='ペンで描く' oncommand='hScreenshot.Manager.draw();'/>
             <menuseparator />
             <menu id="hScreenshot-menu-upload" label="フォトライフにアップロード">
                 <menupopup>
-                    <menuitem label='全部' oncommand='hScreenshot.Manager.Upload.all();'/>
+                    <menuitem label='画面全部' oncommand='hScreenshot.Manager.Upload.all();'/>
                     <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Upload.inner();'/>
                     <menuitem label='一部のみ' oncommand='hScreenshot.Manager.Upload.rect();'/>
                 </menupopup>
             </menu>
             <menu id="hScreenshot-menu-copy" label="クリップボードにコピー">
                 <menupopup>
-                    <menuitem label='全部' oncommand='hScreenshot.Manager.Copy.all();'/>
+                    <menuitem label='画面全部' oncommand='hScreenshot.Manager.Copy.all();'/>
                     <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Copy.inner();'/>
                     <menuitem label='一部のみ' oncommand='hScreenshot.Manager.Copy.rect();'/>
                 </menupopup>
             </menu>
             <menu id="hScreenshot-menu-save" label="ファイルに保存">
                 <menupopup>
-                    <menuitem label='全部' oncommand='hScreenshot.Manager.Save.all();'/>
+                    <menuitem label='画面全部' oncommand='hScreenshot.Manager.Save.all();'/>
                     <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Save.inner();'/>
                     <menuitem label='一部のみ' oncommand='hScreenshot.Manager.Save.rect();'/>
                 </menupopup>
             </menu>
             <menu id="hScreenshot-menu-base64" label="URLで開く">
                 <menupopup>
-                    <menuitem label='全部' oncommand='hScreenshot.Manager.Base64.all();'/>
+                    <menuitem label='画面全部' oncommand='hScreenshot.Manager.Base64.all();'/>
                     <menuitem label='表示部分のみ' oncommand='hScreenshot.Manager.Base64.inner();'/>
                     <menuitem label='一部のみ' oncommand='hScreenshot.Manager.Base64.rect();'/>
                 </menupopup>
@@ -43,8 +43,8 @@
     </menu>
   </menupopup>
 
+    <!--
     <toolbarpalette id="BrowserToolbarPalette">
-
       <toolbarbutton
           id="hScreenshot-toolbar-button"
           label="はてなスクリーンショット"
@@ -55,7 +55,7 @@
           onclick="hScreenshot.Manager.draw();">
           <menupopup oncommand="event.stopPropagation();"
                      onclick="event.stopPropagation();">
-            <menuitem id="hScreenshot-menu-draw" label='絵を描く' oncommand='hScreenshot.Manager.draw();'/>
+            <menuitem id="hScreenshot-menu-draw" label='ペンで書く' oncommand='hScreenshot.Manager.draw();'/>
             <menuseparator />
             <menu id="hScreenshot-menu-upload" label="フォトライフにアップロード">
                 <menupopup>
@@ -88,6 +88,7 @@
           </menupopup>
       </toolbarbutton>
     </toolbarpalette>
+    -->
 
 
   <statusbar id="status-bar">

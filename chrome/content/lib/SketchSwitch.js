@@ -617,7 +617,7 @@ SketchSwitch.Buttons.Clear = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Clear.prototype = SketchSwitch.Utils.extend({
     shortcut: 'c',
     clickOnly: true,
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMA/wD/AP83WBt9AAAACXBIWXMAAABPAAAATwFjiv3XAAAAUElEQVR4nM2QQQoAMQgD7f4x+f9PZg8Lbi8tKBTqKcREEgcQlXlK6ogIAJAkaQYr8jewnRSMZgfbe10KyqW7kcqGCzt0In2U7dwlns+df+sLRcNm1T1PtyAAAAAASUVORK5CYII=',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAABjSURBVHjavFNBDgAgCArX/79sdehQKdlacRRlKQRVTTeQdIm3AgD0SGA3YPGDQD0oPJFWb/xSt1yYm71hV+AE2drPfKrD40mQ5kMyd4QdsA8ydyRiFRNZcsD2Defg62cqAgwApXxDFw6DQGAAAAAASUVORK5CYII=',
     name: 'Clear',
     confirmText: decodeURIComponent(escape('絵をクリアします。よろしいですか? ')),
     select: function() {
