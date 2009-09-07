@@ -53,7 +53,10 @@ Manager.draw = function() {
         p('has sketch!');
         //
     } else {
-        sketch = new SketchSwitch(win);
+        let options = {};
+        options.buttons = ['Close', 'Clear', 'RedPen', 'BlackPen', 'Eraser'];
+        options.noCreatePalette = true;
+        sketch = new SketchSwitch(win, options);
         Manager.sketch.addSketch(sketch);
         win.__sketch_switch_sid__ = sketch.sid;
         var unloader = function(event) {

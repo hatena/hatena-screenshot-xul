@@ -8,7 +8,8 @@
  *
  */
 
-var SketchSwitch = function(win) {
+var SketchSwitch = function(win, options) {
+    this.options = options || {};
     this.sid = SketchSwitch.__sid__++;
     this._win = win || window;
     this.hideMenuMoving = true;
@@ -287,6 +288,7 @@ SketchSwitch.ToolMenu = function(sketch) {
     this.menu = [];
     this.shortcuts = {};
     this.sketch = sketch;
+    this.options = sketch.options;
     this.init();
 }
 
@@ -346,6 +348,7 @@ SketchSwitch.ToolMenu.prototype = {
         this.table.style.borderCollapse = 'collapse';
         with (this.table.style) {
             position = 'fixed';
+            width = '24px';
             top      = '2px';
             left     = '2px';
             border = '3px solid #000000';
@@ -355,17 +358,18 @@ SketchSwitch.ToolMenu.prototype = {
         this.table.style.borderColor = '#000000';
         this.setColor(this.table.style.borderColor);
 
-        var buttons = SketchSwitch.ToolMenu.DEFAULT_BUTTONS;
+        var buttons = this.options.buttons || SketchSwitch.ToolMenu.DEFAULT_BUTTONS;
         for (var i = 0;  i < buttons.length; i++) {
 
             var b = SketchSwitch.Buttons[buttons[i]];
             var button = new b(this.sketch);
             this.appendButton(button);
-            if (i == 3) { // XXX
+            if (i == 2) { // XXX
                 this.current(button);
             }
         }
-        this.createColorPalette();
+        if (!this.options.noCreatePalette)
+            this.createColorPalette();
     },
     createColorPalette: function() {
         var E = SketchSwitch.Utils.createElement;
@@ -423,9 +427,10 @@ SketchSwitch.ToolMenu.prototype = {
                 cursor = 'pointer';
             }
             var td;
-            var tr = E(doc, 'tr', {}, 
+            var tr = E(doc, 'tr', {},
                          td = E(doc, 'td', {}, icon)
             );
+            td.style.width = tr.style.width = 'auto !important';
 
             with (td.style) {
                 padding = '2px 4px 1px 4px';
@@ -474,6 +479,30 @@ SketchSwitch.Buttons.BaseProto = {
     icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAADoSURBVHjalJJNC0VAGIWZhkLKQln5AVZS8//LXjYWlLWNUj7yEdI93bm5wnU5ZWZq3mfmnHeISZIIT0TxaZp2s7ptWyI8FOWTLMuU0u3GPM/jOP4EUB0EwXaDMYbxyOwtsbewAL+78xz4KxFtRZdUVd1ZmqYJY1VVhmE4jiNJ0nmXuCXXdfM8R7XnecMwRFG0D71V13V93y/LYpqmZVloVxiGVwDsoWh11TQN93MOrEkURSmKwvf9uq4BANN1/Rv6+HBQlmVlWSJ0mqZIgjyEkA9w3Up4i+PYtm2cewvY/nyUT/cf7iXAAEwFdZak1p3gAAAAAElFTkSuQmCC',
 };
 
+SketchSwitch.Buttons.RedPen = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.RedPen.prototype = SketchSwitch.Utils.extend({
+    shortcut: null,
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAADlSURBVHjaYvz//z8DJYCFWIW7d++B2+Tq6sIIlwC5gBDetWs3yJ1wDOZD5UjWfI2VFYxhhjDhcvJSOTmws4HOZdi9azdY7DorK4Y6JlyaxebOA2v++PEjg5mZKdwQdMAIiwWQJhhA1gwCMPrmzVsMMt5eDE+2bmN4lZzEGP3oEcIA5NDGphkGoIYwnpOQYAAZwESJZqxhQIpmlISEnFCwaQYnnl+/GDTxxYK6uhpWzaAAw5uUQbaDNCNrggF8muEGuLq5gjmPHj6Ea4al96WEMgk4yWJJ4zC8RFYWb1JnpDQ7AwQYAIHZBx008lC+AAAAAElFTkSuQmCC',
+    name: 'RedPen',
+    select: function() {
+        this.sketch.currentBrush = new SketchSwitch.Brushes.Pen();
+        this.sketch.brushOptions.width = 10;
+        this.sketch.brushOptions.color = 'rgb(217,51,63)';
+    },
+}, SketchSwitch.Buttons.BaseProto, false);
+
+SketchSwitch.Buttons.BlackPen = function(sketch) { this.sketch = sketch };
+SketchSwitch.Buttons.BlackPen.prototype = SketchSwitch.Utils.extend({
+    shortcut: null,
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAADMSURBVHjapJJBDoMgEEXReIy6rVu9Q3HRHqHX6wXYai9id3gCOAHtn3QIJUgx/mRCRnj/j2jlnBNH1JQenOenT5LyUvmNkgmmaXZ93/tCD47YfwYxjEwUm2QNvoccmzBcZMCwMYYKfbFBDGutqdgE66Ntia1T8OeWhbWWel6hrjtjX5xu1/RX2EqOJhCcnpwglQwty0uMo6Tk+7r653WYHpuk4Fg/E+Ad98D+V0Y64BBi5WCowkUMw0DjK6U8nAPDi2/2jLs5wRG9BRgA1gb1RacEYCEAAAAASUVORK5CYII=',
+    name: 'BlackPen',
+    select: function() {
+        this.sketch.currentBrush = new SketchSwitch.Brushes.Pen();
+        this.sketch.brushOptions.width = 10;
+        this.sketch.brushOptions.color = 'rgb(0,0,0)';
+    },
+}, SketchSwitch.Buttons.BaseProto, false);
+
 SketchSwitch.Buttons.Pen1 = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Pen1.prototype = SketchSwitch.Utils.extend({
     shortcut: '1',
@@ -482,6 +511,8 @@ SketchSwitch.Buttons.Pen1.prototype = SketchSwitch.Utils.extend({
     select: function() {
         this.sketch.currentBrush = new SketchSwitch.Brushes.Pen();
         this.sketch.brushOptions.width = 1;
+        if (this.sketch.toolMenu)
+            this.sketch.toolMenu.setColor('rgb(0,0,0)'); // XXX
     },
 }, SketchSwitch.Buttons.BaseProto, false);
 
@@ -521,10 +552,11 @@ SketchSwitch.Buttons.Pen4.prototype = SketchSwitch.Utils.extend({
 SketchSwitch.Buttons.Eraser = function(sketch) { this.sketch = sketch };
 SketchSwitch.Buttons.Eraser.prototype = SketchSwitch.Utils.extend({
     shortcut: 'e',
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABnRSTlMAKgBSAP+n7SVnAAAACXBIWXMAAABPAAAATwFjiv3XAAAAYUlEQVR4nGPUCvrPQApgIkk1ORpYkq374Jzi4mLCGhgYGIqKiuAaLl26hEe1np4e6U56+/YtMl9XVxe/BtJD6fbt26RpINUGFjR+X18fVnXk28AYGhoK56xevZqwhsGX+ACovxXZBusToAAAAABJRU5ErkJggg==',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAClSURBVHjaYvz//z8DJYCJGEW7d+/5D8JYJUEuwId37dr9X1ahA4xBbHR5JkI2J6edhfNdXV0YMFxCjM0gjAyQXUKyZiUJUTCGGcJEyNmP7pfD2cqSYvhjgVjNMxYtA4UHI0oYQJ30H+Z8bM5GdjpKGMA0owUSQc04DYAZQkgzSizgMwSXZoxoxGUIvpSKNQ0QqxmEGbHlRlhyhUcVHsBIaXYGCDAAaFHdv1KTLF8AAAAASUVORK5CYII=',
     name: 'Eraser',
     select: function() {
         this.sketch.currentBrush = new SketchSwitch.Brushes.Eraser();
+        this.sketch.brushOptions.width = 20;
     },
 }, SketchSwitch.Buttons.BaseProto, false);
 
@@ -647,11 +679,11 @@ SketchSwitch.Brushes.BaseProto = {
     start: function() {},
 };
 
-SketchSwitch.Brushes.Pen = function(options) { 
+SketchSwitch.Brushes.Pen = function(options) {
     this.options = SketchSwitch.Utils.extend({
         color: 'rgba(0,0,0,1)',
         width: 5
-    }, options); 
+    }, options);
 };
 
 SketchSwitch.Brushes.Pen.prototype = SketchSwitch.Utils.extend({
@@ -676,7 +708,7 @@ SketchSwitch.Brushes.Pen.prototype = SketchSwitch.Utils.extend({
     setColor: function(ctx) {
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
-        ctx.strokeStyle = this.color;
+        ctx.strokeStyle = this.options.color || this.color;
         ctx.lineWidth = this.options.width;
     },
     mouseUp: function(point) {
@@ -785,10 +817,10 @@ SketchSwitch.Brushes.RectEraser.prototype = SketchSwitch.Utils.extend({
     }
 }, SketchSwitch.Brushes.BaseProto, false);
 
-SketchSwitch.Brushes.Eraser = function(options) { 
+SketchSwitch.Brushes.Eraser = function(options) {
     this.options = SketchSwitch.Utils.extend({
         width: 5
-    }, options); 
+    }, options);
 };
 
 SketchSwitch.Brushes.Eraser.prototype = SketchSwitch.Utils.extend({
