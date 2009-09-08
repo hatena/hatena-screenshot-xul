@@ -118,8 +118,8 @@ extend(Manager.Upload, {
         // method: all, rect, inner
         // XXX: ログインチェックを挟む
         if (!User.user) {
-            if (window.confirm('Hatena heno roguin ga Hitu You Desu(FIXME)')) {
-                openUILinkIn("https://www.hatena.ne.jp/login?via=1000018&location=http%3A%2F%2Ff.hatena.ne.jp%2F%3Fhelp", 'tab');
+            if (window.confirm(convertStringEncoding('フォトライフにアップロードするには、はてなへのログインが必要です。'))) {
+                openUILinkIn("https://www.hatena.ne.jp/login?location=http%3A%2F%2Ff.hatena.ne.jp%2F%3Fhelp", 'tab');
             }
             finish();
             return;
@@ -199,7 +199,7 @@ extend(Manager.Upload, {
 
     errorback: function(res) {
         document.getElementById('hScreenshot-statusIcon').removeAttribute('loading');
-        window.alert('フォトライフへののアップロードに失敗しました');
+        window.alert(convertStringEncoding('フォトライフへののアップロードに失敗しました'));
     },
 });
 

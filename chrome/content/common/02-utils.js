@@ -63,8 +63,11 @@ var getHistoryNodeByURL = function getHistoryNodeByURL(url) {
     return;
 }
 
-// Timer
+var convertStringEncoding = function(str) {
+    return decodeURIComponent(escape(str || ''));
+}
 
+// Timer
 var Timer = function(interval, repeatCount) {
     EventService.implement(this);
     this.currentCount = 0;
