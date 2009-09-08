@@ -54,8 +54,10 @@ Manager.draw = function() {
         //
     } else {
         let options = {};
-        options.buttons = ['Close', 'Clear', 'RedPen', 'BlackPen', 'Eraser'];
-        options.noCreatePalette = true;
+        if (!Prefs.screenshot.drawingHardMode) {
+            options.buttons = ['Close', 'RedPen', 'BlackPen', 'Eraser', 'Clear', 'HidePipet'];
+            options.noCreatePalette = true;
+        }
         sketch = new SketchSwitch(win, options);
         Manager.sketch.addSketch(sketch);
         win.__sketch_switch_sid__ = sketch.sid;
@@ -116,10 +118,9 @@ extend(Manager.Upload, {
     capture: function(method, finish) {
         p('upload capture: ' + method);
         // method: all, rect, inner
-        // XXX: ログインチェックを挟む
         if (!User.user) {
             if (window.confirm(convertStringEncoding('フォトライフにアップロードするには、はてなへのログインが必要です。'))) {
-                openUILinkIn("https://www.hatena.ne.jp/login?location=http%3A%2F%2Ff.hatena.ne.jp%2F%3Fhelp", 'tab');
+                openUILinkIn("https://www.hatena.ne.jp/login?location=http%3A%2F%2Fwww.hatena.ne.jp%2Ftoolbar%2Ffirefo%23screenshot-login&ref=hatena-screenshot", 'tab');
             }
             finish();
             return;
@@ -190,7 +191,6 @@ extend(Manager.Upload, {
             let permalink = User.user.getPermalink(timestamp) + '?ref=hatena-screenshot';
             setTimeout(function() {
                 // タイミングによって fotolife の slave に反映されてないため、ちょっと間をおく
-                // XXX: 1000 ms でも反映されない場合が…
                 p('open link: ' + permalink);
                 openUILinkIn(permalink, 'tab');
             }, 100);

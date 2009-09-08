@@ -4,12 +4,12 @@
 <overlay id="Screenshot-xulOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/javascript" src="autoloader.js"></script>
   <menupopup id="menu_ToolsPopup">
-    <menu 
+    <menu
         insertbefore="devToolsSeparator"
         id="hScreenshot-menu" label="はてなスクリーンショット"
     >
         <menupopup id ="hScreenshot-menu-popup">
-            <menuitem id="hScreenshot-menu-draw" label='ペンで描く' oncommand='hScreenshot.Manager.draw();'/>
+            <menuitem id="hScreenshot-menu-draw" label='ページにメモを書き込む' oncommand='hScreenshot.Manager.draw();'/>
             <menuseparator />
             <menu id="hScreenshot-menu-upload" label="フォトライフにアップロード">
                 <menupopup>

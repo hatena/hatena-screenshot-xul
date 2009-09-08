@@ -32,6 +32,7 @@
                 label="表示する"
                 preference="extensions.hatenascreenshot.statusbar"/>
         </groupbox>
+<!--
 
         <groupbox orient="vertical">
             <caption label="絵を描く" />
@@ -39,6 +40,7 @@
                 label="線を引くときパレットを自動的に隠す"
                 preference="extensions.hatenascreenshot.hideMenuMoving"/>
         </groupbox>
+-->
 
         <spacer height="50px" />
     </vbox>
