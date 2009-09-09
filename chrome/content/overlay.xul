@@ -97,8 +97,8 @@
     >
         <image
             id="hScreenshot-statusIcon"
-            onclick="hScreenshot.Manager.showPopup(event);" 
-            ondblclick="hScreenshot.Manager.draw();" 
+            onclick="hScreenshot.Manager.showPopup(event);"
+            ondblclick="hScreenshot.Manager.showPopup(event);"
         />
     </statusbarpanel>
   </statusbar>

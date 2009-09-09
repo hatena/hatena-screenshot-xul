@@ -55,7 +55,7 @@ Manager.draw = function() {
     } else {
         let options = {};
         if (!Prefs.screenshot.drawingHardMode) {
-            options.buttons = ['Close', 'RedPen', 'BlackPen', 'Eraser', 'Clear', 'HidePipet'];
+            options.buttons = ['Close', 'RedPen', 'BlackPen', 'Eraser', 'Clear'];
             options.noCreatePalette = true;
         }
         sketch = new SketchSwitch(win, options);
@@ -119,8 +119,9 @@ extend(Manager.Upload, {
         p('upload capture: ' + method);
         // method: all, rect, inner
         if (!User.user) {
-            if (window.confirm(convertStringEncoding('フォトライフにアップロードするには、はてなへのログインが必要です。'))) {
-                openUILinkIn("https://www.hatena.ne.jp/login?location=http%3A%2F%2Fwww.hatena.ne.jp%2Ftoolbar%2Ffirefo%23screenshot-login&ref=hatena-screenshot", 'tab');
+            let PS = Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService);
+            if (PS.confirm(window.top, convertStringEncoding('はてなスクリーンショット'), convertStringEncoding('フォトライフにアップロードするには、はてなへのログインが必要です。'))) {
+                openUILinkIn("https://www.hatena.ne.jp/login?location=http%3A%2F%2Fwww.hatena.ne.jp%2Ftoolbar%2Ffirefo%23HatenaScreenshot&ref=hatena-screenshot", 'tab');
             }
             finish();
             return;

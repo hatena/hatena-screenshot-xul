@@ -492,7 +492,7 @@ SketchSwitch.Buttons.RedPen.prototype = SketchSwitch.Utils.extend({
     select: function() {
         this.sketch.currentBrush = new SketchSwitch.Brushes.Pen();
         this.sketch.brushOptions.width = 8;
-        this.sketch.brushOptions.color = 'rgb(217,51,63)';
+        this.sketch.brushOptions.color = 'rgb(217,67,80)';
     },
 }, SketchSwitch.Buttons.BaseProto, false);
 
@@ -624,7 +624,7 @@ SketchSwitch.Buttons.Clear.prototype = SketchSwitch.Utils.extend({
     clickOnly: true,
     icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAABjSURBVHjavFNBDgAgCArX/79sdehQKdlacRRlKQRVTTeQdIm3AgD0SGA3YPGDQD0oPJFWb/xSt1yYm71hV+AE2drPfKrD40mQ5kMyd4QdsA8ydyRiFRNZcsD2Defg62cqAgwApXxDFw6DQGAAAAAASUVORK5CYII=',
     name: SketchSwitch.Utils.convertStringEncoding('メモを消去'),
-    confirmText: decodeURIComponent(escape('書いたメモをクリアします。よろしいですか? ')),
+    confirmText: decodeURIComponent(escape('書いたメモをクリアします。よろしいで~/git/hatena/fotolife-xul/chrome/content/lib/SketchSwitch.js
     select: function() {
         if (this.sketch.win.confirm(this.confirmText)) {
             this.sketch.clear();
