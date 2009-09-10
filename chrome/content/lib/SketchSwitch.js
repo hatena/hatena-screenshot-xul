@@ -624,7 +624,7 @@ SketchSwitch.Buttons.Clear.prototype = SketchSwitch.Utils.extend({
     clickOnly: true,
     icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAABjSURBVHjavFNBDgAgCArX/79sdehQKdlacRRlKQRVTTeQdIm3AgD0SGA3YPGDQD0oPJFWb/xSt1yYm71hV+AE2drPfKrD40mQ5kMyd4QdsA8ydyRiFRNZcsD2Defg62cqAgwApXxDFw6DQGAAAAAASUVORK5CYII=',
     name: SketchSwitch.Utils.convertStringEncoding('メモを消去'),
-    confirmText: decodeURIComponent(escape('書いたメモをクリアします。よろしいで~/git/hatena/fotolife-xul/chrome/content/lib/SketchSwitch.js
+    confirmText: SketchSwitch.Utils.convertStringEncoding('書いたメモをクリアします。よろしいでしょうか？'),
     select: function() {
         if (this.sketch.win.confirm(this.confirmText)) {
             this.sketch.clear();
