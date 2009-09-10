@@ -121,7 +121,7 @@ extend(Manager.Upload, {
         if (!User.user) {
             let PS = Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService);
             if (PS.confirm(window.top, convertStringEncoding('はてなスクリーンショット'), convertStringEncoding('フォトライフにアップロードするには、はてなへのログインが必要です。'))) {
-                openUILinkIn("https://www.hatena.ne.jp/login?location=http%3A%2F%2Fwww.hatena.ne.jp%2Ftoolbar%2Ffirefo%23HatenaScreenshot&ref=hatena-screenshot", 'tab');
+                openUILinkIn("https://www.hatena.ne.jp/login?location=http%3A%2F%2Fwww.hatena.ne.jp%2Ftool%2Ffirefox%23HatenaScreenshot&ref=hatena-screenshot", 'tab');
             }
             finish();
             return;
