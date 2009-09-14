@@ -54,7 +54,7 @@ Manager.draw = function() {
         //
     } else {
         let options = {};
-        if (!Prefs.screenshot.drawingHardMode) {
+        if (!Prefs.screenshot.get('drawingHardMode')) {
             options.buttons = ['Close', 'RedPen', 'BlackPen', 'Eraser', 'Clear'];
             options.noCreatePalette = true;
         }

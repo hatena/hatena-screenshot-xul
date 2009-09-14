@@ -299,7 +299,6 @@ SketchSwitch.ToolMenu = function(sketch) {
 
 SketchSwitch.ToolMenu.DEFAULT_BUTTONS = [
     'Close',
-    'Clear',
     'Pen1',
     'Pen2',
     'Pen3',
@@ -307,10 +306,11 @@ SketchSwitch.ToolMenu.DEFAULT_BUTTONS = [
     'Rect',
     'RectEraser',
     'Eraser',
+    'Clear',
     'Pipet',
     // 'Undo',
     'HidePipet',
-    'Alpha'
+    'Alpha',
 ];
 
 SketchSwitch.ToolMenu.DEFAULT_COLORS = [
