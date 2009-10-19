@@ -168,6 +168,7 @@ if (shared.has('User')) {
     User.LoginChecker.start();
 
     EventService.createListener('firstPreload', function() {
+
         // 初回時はログインチェックする
         User.login();
         let preloadTimer = new Timer(5000, 5);

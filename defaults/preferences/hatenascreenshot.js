@@ -6,4 +6,5 @@ pref("extensions.hatenascreenshot.uploadConfig", '{}');
 pref("extensions.hatenascreenshot.statusbar", true);
 pref("extensions.hatenascreenshot.hideMenuMoving", false);
 pref("extensions.hatenascreenshot.drawingHardMode", false);
+pref("extensions.hatenascreenshot.installComplete", false);
 
