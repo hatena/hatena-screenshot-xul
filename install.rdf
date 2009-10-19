@@ -4,7 +4,7 @@
     <Description about="urn:mozilla:install-manifest">
         <em:id>screenshot@hatena.ne.jp</em:id>
         <em:name>はてなスクリーンショット拡張</em:name>
-        <em:version>1.0.0</em:version>
+        <em:version>1.0.1</em:version>
         <em:type>2</em:type>
         <em:optionsURL>chrome://hatenascreenshot/content/config.xul</em:optionsURL>
         <em:iconURL>chrome://hatenascreenshot/skin/images/MainIcon.png</em:iconURL>

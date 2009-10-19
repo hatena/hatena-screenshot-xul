@@ -81,6 +81,21 @@ if (shared.has('User')) {
             return this._info;
         },
 
+        getAsyncInfo: function(callback) {
+            if (this._info) {
+                callback(this._info);
+            } else {
+                var self = this;
+                var tmp = function(res) {
+                    self._info = decodeJSON(res.responseText);
+                    callback(self._info);
+                }
+                let res = net.get(this.infoAPI, tmp, function() {
+                    callback({});
+                }, true);
+            }
+        },
+
         get infoAPI() this.getPermalink('api/info?mode=detail'),
         get haikuAPI() this.getPermalink('haiku'),
 

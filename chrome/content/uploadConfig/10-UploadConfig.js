@@ -14,19 +14,23 @@ function UploadConfig(dialog) {
 
     document.getElementById('username').value = sprintf(UIEncodeText('現在、%s でログインしています。'), User.user.name);
 
-    let info = User.user.info;
-    if (info.fotosize)
-        this.imageSize.value = info.fotosize;
-
-    if (this.options.fotosize) 
-        this.imageSize.value = this.options.fotosize;
-
-    if (this.options.checkCheckbox)
-        this.checkbox.checked = true;
-
-    this.setFolders(info.folder_list, this.options.defaultFolder);
-    this.checkCheckbox();
     this.config = window.arguments[0] || {};
+    var self = this;
+    User.user.getAsyncInfo(function(info) {
+        p(info);
+        //let info = User.user.info;
+        if (info.fotosize)
+            self.imageSize.value = info.fotosize;
+
+        if (self.options.fotosize) 
+            self.imageSize.value = self.options.fotosize;
+
+        if (self.options.checkCheckbox)
+            self.checkbox.checked = true;
+
+        self.setFolders(info.folder_list, self.options.defaultFolder);
+        self.checkCheckbox();
+    });
 }
 
 extend(UploadConfig.prototype, {
