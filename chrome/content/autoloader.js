@@ -29,14 +29,16 @@ hScreenshot.load = function (uri) {
 hScreenshot.load.getScriptURIs = function (dirURI) {
     const Cc = Components.classes;
     const Ci = Components.interfaces;
-    const EXTENSION_ID = "screenshot@hatena.ne.jp";
     var uris = [];
     var dirPath = dirURI.replace(/^[\w-]+:\/\/[\w.:-]+\//, "");
-    var em = Cc["@mozilla.org/extensions/manager;1"]
-                 .getService(Ci.nsIExtensionManager);
     var baseURI = 'chrome://hatenascreenshot/' + dirPath;
-    var dir = em.getInstallLocation(EXTENSION_ID)
-                .getItemFile(EXTENSION_ID, "chrome/" + dirPath);
+    var ios = Cc["@mozilla.org/network/io-service;1"].
+              getService(Ci.nsIIOService);
+    var baseURIObject = ios.newURI(baseURI, null, null);
+    var registry = Cc["@mozilla.org/chrome/chrome-registry;1"].
+                   getService(Ci.nsIChromeRegistry);
+    var dir = registry.convertChromeURL(baseURIObject)
+                      .QueryInterface(Ci.nsIFileURL).file;
     if (!dir.exists() || !dir.isDirectory()) return uris;
     var files = dir.directoryEntries;
     while (files.hasMoreElements()) {

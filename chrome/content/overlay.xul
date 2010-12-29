@@ -106,7 +106,7 @@
     (function() {
         with(hScreenshot) {
             if (hScreenshot.nowDebug) {
-                Application.console.open();
+                toErrorConsole();
             }
 
             EventService.dispatch('preload', window);

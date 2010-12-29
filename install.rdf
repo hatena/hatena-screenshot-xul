@@ -4,8 +4,9 @@
     <Description about="urn:mozilla:install-manifest">
         <em:id>screenshot@hatena.ne.jp</em:id>
         <em:name>はてなスクリーンショット拡張</em:name>
-        <em:version>1.0.2</em:version>
+        <em:version>1.0.3a1</em:version>
         <em:type>2</em:type>
+        <em:unpack>true</em:unpack>
         <em:optionsURL>chrome://hatenascreenshot/content/config.xul</em:optionsURL>
         <em:iconURL>chrome://hatenascreenshot/skin/images/MainIcon.png</em:iconURL>
         <em:description>ブラウザのスクリーンショットの作成や、はてなフォトライフにスクリーンショットをアップロードできる機能を提供します。</em:description>
@@ -15,7 +16,7 @@
             <Description>
                 <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
                 <em:minVersion>3.0</em:minVersion>
-                <em:maxVersion>3.7a1pre</em:maxVersion>
+                <em:maxVersion>4.0b9</em:maxVersion>
             </Description>
         </em:targetApplication>
     </Description>
