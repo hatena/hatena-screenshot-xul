@@ -56,6 +56,7 @@ var Capture = {
         clear();
 
         let getPoint = function(event) {
+            let win = event.view;
             return { x: event.clientX + win.pageXOffset, y:event.clientY + win.pageYOffset};
         }
 
@@ -93,7 +94,7 @@ var Capture = {
                 canvas = null;
 
                 let ex = new ExCanvas(document);
-                let dataURI = ex.capture(win, pos, dim, 1, 'png');
+                let dataURI = ex.capture(event.view, pos, dim, 1, 'png');
                 if (cutBase64) {
                     dataURI = ex.cutBase64(dataURI);
                 }
