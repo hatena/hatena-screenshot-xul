@@ -3,15 +3,32 @@
     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
     <Description about="urn:mozilla:install-manifest">
         <em:id>screenshot@hatena.ne.jp</em:id>
-        <em:name>はてなスクリーンショット拡張</em:name>
+        <em:name>Hatena Screenshot</em:name>
         <em:version>1.0.3b1</em:version>
         <em:type>2</em:type>
         <em:unpack>true</em:unpack>
         <em:optionsURL>chrome://hatenascreenshot/content/config.xul</em:optionsURL>
         <em:iconURL>chrome://hatenascreenshot/skin/images/MainIcon.png</em:iconURL>
-        <em:description>ブラウザのスクリーンショットの作成や、はてなフォトライフにスクリーンショットをアップロードできる機能を提供します。</em:description>
-        <em:creator>Hatena</em:creator>
-        <em:homepageURL>http://www.hatena.ne.jp/tool/firefox#HatenaScreenshot</em:homepageURL>
+        <em:localized>
+          <Description>
+            <em:name>Hatena Screenshot Extension</em:name>
+            <em:locale>en-US</em:locale>
+            <em:description>You can create screenshots of browser windows and upload them to Hatena Fotolife.</em:description>
+            <em:description>Hatena Bookmark Firefox Add-on</em:description>
+            <em:creator>Hatena</em:creator>
+            <em:homepageURL>http://www.hatena.ne.jp/tool/firefox#HatenaScreenshot</em:homepageURL>
+          </Description>
+        </em:localized>
+        <em:localized>
+          <Description>
+            <em:name>はてなスクリーンショット拡張</em:name>
+            <em:locale>ja</em:locale>
+            <em:description>ブラウザのスクリーンショットの作成や、はてなフォトライフにスクリーンショットをアップロードできる機能を提供します。</em:description>
+            <em:creator>Hatena</em:creator>
+            <em:homepageURL>http://b.hatena.ne.jp/help/firefox_addon</em:homepageURL>
+            <em:homepageURL>http://www.hatena.ne.jp/tool/firefox#HatenaScreenshot</em:homepageURL>
+          </Description>
+        </em:localized>
         <em:targetApplication>
             <Description>
                 <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
