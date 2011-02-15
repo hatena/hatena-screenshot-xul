@@ -11,6 +11,8 @@ function UploadConfig(dialog) {
     this.folderMenuList = document.getElementById('folder-menulist');
     this.checkbox = document.getElementById('image-size-checkbox');
     this.imageSize = document.getElementById('image-size');
+    this.applications = document.getElementById('applications');
+    this.applicationMenuList = document.getElementById('application-menulist');
 
     document.getElementById('username').value = sprintf(UIEncodeText('現在、%s でログインしています。'), User.user.name);
 
@@ -29,6 +31,15 @@ function UploadConfig(dialog) {
             self.checkbox.checked = true;
 
         self.setFolders(info.folder_list, self.options.defaultFolder);
+        let appName = self.options.defaultApplication || 'fotolife';
+        let appItems = self.applications.childNodes;
+        for (var i = 0; i < appItems.length; i++) {
+            let appItem = appItems[i];
+            if (appItem.localName == 'menuitem' && appItem.value == appName) {
+                self.applicationMenuList.selectedItem = appItem;
+                break;
+            }
+        }
         self.checkCheckbox();
     });
 }
@@ -71,8 +82,11 @@ extend(UploadConfig.prototype, {
         let options = {};
         this.config.accept = true;
         this.config.folder = this.folderMenuList.selectedItem.value;
+        this.config.application = this.applicationMenuList.selectedItem.value;
         if (this.config.folder) 
             options.defaultFolder = this.config.folder;
+        if (this.config.application) 
+            options.defaultApplication = this.config.application;
         
         options.fotosize = parseInt(this.imageSize.value);
         if (this.checkbox.checked) {

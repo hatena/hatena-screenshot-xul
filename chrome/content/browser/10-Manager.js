@@ -140,8 +140,14 @@ extend(Manager.Upload, {
             p('capture accept (config):' + uneval(config));
             let user = User.user;
 
+            let callback = this.callback;
+            let params = {
+                application: config.application,
+            };
             let options = {
-                callback: this.callback,
+                callback: function (res) {
+                    return callback(res, params);
+                },
                 errorback: this.errorback,
             };
 
@@ -180,18 +186,30 @@ extend(Manager.Upload, {
         return config;
     },
 
-    callback: function(res) {
+    callback: function(res, params) {
         let m;
         p('upload success: ' + res.responseText);
         document.getElementById('hScreenshot-statusIcon').removeAttribute('loading');
-        if (m = res.responseText.match(/:(\d{14})/)) {
+        let fotolifeNotation = res.responseText;
+        if (m = fotolifeNotation.match(/:(\d{14})/)) {
             let timestamp = m[1];
-            let permalink = User.user.getPermalink(timestamp) + '?ref=hatena-screenshot';
-            setTimeout(function() {
-                // タイミングによって fotolife の slave に反映されてないため、ちょっと間をおく
-                p('open link: ' + permalink);
+            if (params.application == 'haiku') {
+                let permalink = 'http://h.hatena.ne.jp/?_charset_=utf-8&body=' + encodeURIComponent(fotolifeNotation + "\n");
                 openUILinkIn(permalink, 'tab');
-            }, 100);
+            } else if (params.application == 'diary') {
+                let permalink = 'http://d.hatena.ne.jp/refer?appendbody=' + encodeURIComponent(fotolifeNotation + "\n");
+                openUILinkIn(permalink, 'tab');
+            } else if (params.application == 'twitter') {
+                let permalink = 'http://twitter.com/?status=' + encodeURIComponent(User.user.getPermalink(timestamp) + "\n");
+                openUILinkIn(permalink, 'tab');
+            } else { // fotolife
+                let permalink = User.user.getPermalink(timestamp) + '?ref=hatena-screenshot';
+                setTimeout(function() {
+                    // タイミングによって fotolife の slave に反映されてないため、ちょっと間をおく
+                    p('open link: ' + permalink);
+                    openUILinkIn(permalink, 'tab');
+                }, 100);
+            }
         }
     },
 
