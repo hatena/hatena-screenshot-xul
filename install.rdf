@@ -25,7 +25,6 @@
             <em:locale>ja</em:locale>
             <em:description>ブラウザのスクリーンショットの作成や、はてなフォトライフにスクリーンショットをアップロードできる機能を提供します。</em:description>
             <em:creator>Hatena</em:creator>
-            <em:homepageURL>http://b.hatena.ne.jp/help/firefox_addon</em:homepageURL>
             <em:homepageURL>http://www.hatena.ne.jp/tool/firefox#HatenaScreenshot</em:homepageURL>
           </Description>
         </em:localized>
