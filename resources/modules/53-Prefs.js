@@ -1,5 +1,7 @@
+Components.utils.import("resource://hatenascreenshot/modules/00-utils.jsm");
+loadPrecedingModules.call(this);
 
-const EXPORT = ['Prefs'];
+const EXPORTED_SYMBOLS = ['Prefs'];
 
 var Prefs = function (branchName) {
     if (branchName && branchName[branchName.length-1] != '.')
