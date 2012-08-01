@@ -4,7 +4,7 @@
     <Description about="urn:mozilla:install-manifest">
         <em:id>screenshot@hatena.ne.jp</em:id>
         <em:name>Hatena Screenshot</em:name>
-        <em:version>1.0.4</em:version>
+        <em:version>1.0.5</em:version>
         <em:type>2</em:type>
         <em:unpack>true</em:unpack>
         <em:optionsURL>chrome://hatenascreenshot/content/config.xul</em:optionsURL>
