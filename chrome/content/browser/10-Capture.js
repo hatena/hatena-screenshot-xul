@@ -36,13 +36,11 @@ var Capture = {
         canvas.width = width;
         canvas.height = height;
 
-        with (canvas.style) {
-            position = 'absolute';
-            top      = '0';
-            left     = '0';
-            zIndex   = '99995';
-            opacity  = '0.7';
-        };
+        canvas.style.position = 'absolute';
+        canvas.style.top      = '0';
+        canvas.style.left     = '0';
+        canvas.style.zIndex   = '99995';
+        canvas.style.opacity  = '0.7';
 
         let ctx = canvas.getContext('2d');
         let clear = function() {
