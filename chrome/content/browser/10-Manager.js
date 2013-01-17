@@ -261,7 +261,10 @@ extend(Manager.Save, {
 
                 let wbp = Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1']
                   .createInstance(Ci.nsIWebBrowserPersist);
-                wbp.saveURI(uri, null, null, null, null, filePicker.file);
+                // 第 7 引数は関連するウィンドウやドキュメントから引き出されるコンテキスト.
+                // プライベート情報が流出しないようにするために使われる.
+                // 今回は保存するデータにセッション情報を含まないので null でよい.
+                wbp.saveURI(uri, null, null, null, null, filePicker.file, null);
             }
             finish();
         });
