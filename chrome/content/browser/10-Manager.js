@@ -261,10 +261,14 @@ extend(Manager.Save, {
 
                 let wbp = Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1']
                   .createInstance(Ci.nsIWebBrowserPersist);
-                // 第 7 引数は関連するウィンドウやドキュメントから引き出されるコンテキスト.
-                // プライベート情報が流出しないようにするために使われる.
-                // 今回は保存するデータにセッション情報を含まないので null でよい.
-                wbp.saveURI(uri, null, null, null, null, filePicker.file, null);
+
+                // 第 7 引数は関連するウィンドウやドキュメントから引き出されるコンテキスト
+                // プライベート情報が流出しないようにするために使われる
+                var privacyContext =
+                        window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+                              .getInterface(Components.interfaces.nsIWebNavigation)
+                              .QueryInterface(Components.interfaces.nsILoadContext);
+                wbp.saveURI(uri, null, null, null, null, filePicker.file, privacyContext);
             }
             finish();
         });
