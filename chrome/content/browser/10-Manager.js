@@ -73,17 +73,6 @@ Manager.draw = function() {
     // var random = Math.random().toString().slice(2);
 };
 
-Manager.showPopup = function(event) {
-    if (event.ctrlKey) {
-        return Manager.draw();
-    }
-    let icon = document.getElementById('hScreenshot-statusIcon');
-    let menu = document.getElementById('hScreenshot-menu-popup');
-    menu = menu.cloneNode(true);
-    icon.parentNode.appendChild(menu);
-    menu.openPopup(icon, 'before_end', 0, 0, false, true);
-};
-
 Manager.Base = {
     createFinish: function() {
         let sketch;

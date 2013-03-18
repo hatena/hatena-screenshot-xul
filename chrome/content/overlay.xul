@@ -87,19 +87,5 @@
       </toolbarbutton>
     </toolbarpalette>
 
-  <!--
-  <statusbar id="status-bar">
-    <statusbarpanel id="hScreenshot-statusBarPanel"
-         collapsed="false"
-    >
-        <image
-            id="hScreenshot-statusIcon"
-            onclick="hScreenshot.Manager.showPopup(event);"
-            ondblclick="hScreenshot.Manager.showPopup(event);"
-        />
-    </statusbarpanel>
-  </statusbar>
-  -->
-
   <script type="text/javascript; version=1.8" src="overlay.js" charset="utf-8" />
 </overlay>

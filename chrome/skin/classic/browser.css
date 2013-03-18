@@ -1,22 +1,4 @@
 
-/* StatusBar */
-#hScreenshot-statusBarPanel {
-    margin: 0px;
-    padding: 0px;
-}
-
-#hScreenshot-statusIcon {
-  list-style-image: url("chrome://hatenascreenshot/skin/images/FotoIcon.png");
-  cursor: pointer;
-  -moz-image-region: auto;
-}
-
-#hScreenshot-statusIcon[loading="true"] {
-  list-style-image: url("chrome://hatenascreenshot/skin/images/comment_loading.png");
-  cursor: pointer;
-  -moz-image-region: auto;
-}
-
 #hScreenshot-toolbar-button {
   -moz-binding: url("chrome://global/content/bindings/toolbarbutton.xml#menu-vertical");
 }
