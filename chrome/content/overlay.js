@@ -1,5 +1,5 @@
 (function () { "use strict";
-// 初回実行時にアドオンバーにツールバーボタンの配置する
+// 初回実行時にアドオンバーにツールバーボタンを配置する
 
 var Cu = Components.utils;
 
@@ -26,6 +26,7 @@ function installScreenshotToolbarbuttonIfNeeded() {
     installButton("addon-bar", "hScreenshot-toolbar-button");
 }
 
+// 参考: https://developer.mozilla.org/en-US/docs/Code_snippets/Toolbar
 function installButton(toolbarId, id, afterId) {
     var doc = window.document;
     // 既にどこかに配置されている場合はアドオンバーには配置しない
