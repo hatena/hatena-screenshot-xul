@@ -87,7 +87,7 @@
       </toolbarbutton>
     </toolbarpalette>
 
-
+  <!--
   <statusbar id="status-bar">
     <statusbarpanel id="hScreenshot-statusBarPanel"
          collapsed="false"
@@ -99,37 +99,7 @@
         />
     </statusbarpanel>
   </statusbar>
+  -->
 
-
-    <script type="text/javascript; version=1.8" charset="utf-8">
-    // <![CDATA[
-    (function() {
-        with(hScreenshot) {
-            if (hScreenshot.nowDebug) {
-                toErrorConsole();
-            }
-
-            EventService.dispatch('preload', window);
-
-            window.addEventListener('load', function(e) {
-                EventService.dispatch('load', window);
-
-                if (!shared.get('firstPreload')) {
-                    EventService.dispatch('firstPreload', window);
-                    shared.set('firstPreload', true);
-                }
-
-                // window.setTimeout(function() { 
-                //     Manager.draw();
-                // }, 1000);
-            }, false);
-
-            window.addEventListener('unload', function(e) {
-                EventService.dispatch('unload', window);
-            }, false);
-
-        }
-    })();
-    // ]]>
-    </script>
+  <script type="text/javascript; version=1.8" src="overlay.js" charset="utf-8" />
 </overlay>
