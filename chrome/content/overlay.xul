@@ -105,10 +105,6 @@
     // <![CDATA[
     (function() {
         with(hScreenshot) {
-            if (hScreenshot.nowDebug) {
-                toErrorConsole();
-            }
-
             EventService.dispatch('preload', window);
 
             window.addEventListener('load', function(e) {
