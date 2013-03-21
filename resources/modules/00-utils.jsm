@@ -4,7 +4,6 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cr = Components.results;
 const Cu = Components.utils;
-const EXT_ID = 'bookmark@hatena.ne.jp';
 
 let getService = function getService(name, i) {
     let interfaces = Array.concat(i);
@@ -50,17 +49,6 @@ const PromptService =
 const CryptoHash = 
     Cc["@mozilla.org/security/hash;1"].createInstance(Ci.nsICryptoHash);
 
-var XMigemoCore, XMigemoTextUtils;
-try{
-    // XUL migemo
-    XMigemoCore = Cc['@piro.sakura.ne.jp/xmigemo/factory;1']
-                            .getService(Components.interfaces.pIXMigemoFactory)
-                            .getService('ja');
-    XMigemoTextUtils = Cc['@piro.sakura.ne.jp/xmigemo/text-utility;1']
-                            .getService(Ci.pIXMigemoTextUtils);
-}
-catch(ex if ex instanceof TypeError){}
-
 const XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 const XBL_NS = "http://www.mozilla.org/xbl";
 const XHTML_NS = "http://www.w3.org/1999/xhtml";
@@ -103,14 +91,6 @@ p.b = function (func, name) {
 }
 
 var log = {
-    error: function (msg) {
-        if (msg instanceof Error) {
-            // Cu.reportError(msg);
-            Application.console.log('Error: ' + msg.toString() + msg.stack.join("\n"));
-        } else {
-            Application.console.log('Error: ' + msg.toString());
-        }
-    },
     info: function (msg) {
         if (nowDebug) {
             Application.console.log((msg || '').toString());
@@ -145,43 +125,7 @@ var UIEncodeText = function(str) {
     return decodeURIComponent(escape(str));
 }
 
-
-/*
- * elementGetter(this, 'myList', 'my-list-id-name', document);
- * list //=> document.getElementById('my-list-id-name');
- */
-var elementGetter = function(self, name, idName, doc, uncache) {
-    var element;
-    self.__defineGetter__(name, function() {
-        if (uncache)
-            return doc.getElementById(idName);
-        if (!element) {
-            element = doc.getElementById(idName);
-        }
-        return element;
-    });
-}
-
-var entryURL = function(url) {
-    return 'http://b.hatena.ne.jp/entry/' + url.replace('#', '%23');
-}
-
-var isInclude = function(val, ary) {
-    for (var i = 0;  i < ary.length; i++) {
-        if (ary[i] == val) return true;
-    }
-    return false;
-}
-
-var bind = function bind(func, self) function () func.apply(self, Array.slice(arguments));
 var method = function method(self, methodName) function () self[methodName].apply(self, Array.slice(arguments));
-
-// XXX model関数はmodel.jsmに置かないとスコープ的にまずい?
-var model = function(name) {
-    var m = this.Model[name];
-    if (!m) { throw 'model not found' };
-    return m;
-}
 
 /*
  * 共用グローバル変数
@@ -197,36 +141,6 @@ var shared = {
     has: function shared_has (name) {
         return !(typeof _shared[name] == 'undefined');
     }
-};
-
-/*
- * 文字列変換
- */
-function unEscapeURIForUI(charset, string) 
-    Cc['@mozilla.org/intl/texttosuburi;1'].getService(Ci.nsITextToSubURI).unEscapeURIForUI(charset, string);
-
-// これと同じことができる XPCOM コンポーネントはないの?
-function decodeReferences(string)
-    string.replace(/&(?:#([xX]?\d+)|([\w-]+));/g, _referenceReplacement);
-
-function _referenceReplacement(reference, number, name) {
-    return number ? String.fromCharCode("0" + number)
-                  : (_referenceMap[name] || reference);
-}
-
-let _referenceMap = {
-    amp:   "&",
-    lt:    "<",
-    gt:    ">",
-    quot:  '"',
-    apos:  "'",
-    nbsp:  "\u00a0",
-    copy:  "\u00a9",
-    reg:   "\u00ae",
-    trade: "\u2122",
-    laquo: "\u00ab",
-    raquo: "\u00bb",
-    __proto__: null
 };
 
 /*
@@ -253,9 +167,6 @@ function encodeJSON(object) {
         return "";
     }
 }
-
-// 特定のウィンドウに属さない辞書用オブジェクトの作成
-function DictionaryObject() ({ __proto__: null });
 
 const _MODULE_BASE_URI = "resource://hatenascreenshot/modules/"
 
@@ -315,78 +226,6 @@ var extend = function extend(target, source, overwrite){
     return target;
 }
 
-/**
- * メソッドが呼ばれる前に処理を追加する。
- * より詳細なコントロールが必要な場合はaddAroundを使うこと。
- * 
- * @param {Object} target 対象オブジェクト。
- * @param {String} name メソッド名。
- * @param {Function} before 前処理。
- *        対象オブジェクトをthisとして、オリジナルの引数が全て渡されて呼び出される。
- */
-function addBefore(target, name, before) {
-    var original = target[name];
-    target[name] = function() {
-        before.apply(this, arguments);
-        return original.apply(this, arguments);
-    }
-}
-
-/**
- * メソッドへアラウンドアドバイスを追加する。
- * 処理を置きかえ、引数の変形や、返り値の加工をできるようにする。
- * 
- * @param {Object} target 対象オブジェクト。
- * @param {String || Array} methodNames 
- *        メソッド名。複数指定することもできる。
- *        set*のようにワイルドカートを使ってもよい。
- * @param {Function} advice 
- *        アドバイス。proceed、args、target、methodNameの4つの引数が渡される。
- *        proceedは対象オブジェクトにバインド済みのオリジナルのメソッド。
- */
-function addAround(target, methodNames, advice){
-    methodNames = [].concat(methodNames);
-    
-    // ワイルドカードの展開
-    for(var i=0 ; i<methodNames.length ; i++){
-        if(methodNames[i].indexOf('*')==-1) continue;
-        
-        var hint = methodNames.splice(i, 1)[0];
-        hint = new RegExp('^' + hint.replace(/\*/g, '.*'));
-        for(var prop in target) {
-            if(hint.test(prop) && typeof(target[prop]) == 'function')
-                methodNames.push(prop);
-        }
-    }
-    
-    methodNames.forEach(function(methodName){
-        var method = target[methodName];
-        target[methodName] = function() {
-            var self = this;
-            return advice(
-                function(args){
-                    return method.apply(self, args);
-                }, 
-                arguments, self, methodName);
-        };
-        target[methodName].overwrite = (method.overwrite || 0) + 1;
-    });
-}
-
-var update = function (self, obj/*, ... */) {
-    if (self === null) {
-        self = {};
-    }
-    for (var i = 1; i < arguments.length; i++) {
-        var o = arguments[i];
-        if (typeof(o) != 'undefined' && o !== null) {
-            for (var k in o) {
-                self[k] = o[k];
-            }
-        }
-    }
-    return self;
-};
 var EXPORTED_SYMBOLS = [m for (m in new Iterator(this, true))
                           if (m[0] !== "_" && m !== "EXPORTED_SYMBOLS")];
 
