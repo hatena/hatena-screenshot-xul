@@ -18,6 +18,9 @@ const IS_WIN = OS_TARGET.indexOf("WIN") === 0;
 const IS_MAC = OS_TARGET === "Darwin";
 const IS_OSX = IS_MAC;
 
+// ここら辺でサービスの取得などをしているが Services.jsm を使うと良さそう
+// https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Services.jsm
+
 const Application =
     getService("@mozilla.org/fuel/application;1", Ci.fuelIApplication);
 const PrefetchService =
@@ -31,8 +34,6 @@ const StorageService =
     getService("@mozilla.org/storage/service;1", Ci.mozIStorageService);
 const IOService =
     getService("@mozilla.org/network/io-service;1", Ci.nsIIOService);
-const ThreadManager =
-    getService("@mozilla.org/thread-manager;1", Ci.nsIThreadManager);
 const HistoryService =
     getService("@mozilla.org/browser/nav-history-service;1", Ci.nsINavHistoryService);
 const BookmarksService =
@@ -107,19 +108,6 @@ p.observe = function Prefs_observe (aSubject, aTopic, aData) {
 }
 
 PrefService.addObserver('', p, false);
-
-var createElementBindDocument = function(doc, ns) {
-    return function(name, attr) {
-        var children = Array.slice(arguments, 2);
-        var e = ns ? doc.createElementNS(ns, name) : doc.createElement(name);
-        if (ns) {
-        }
-        if (attr) for (let key in attr) e.setAttribute(key, attr[key]);
-        children.map(function(el) el.nodeType > 0 ? el : doc.createTextNode(el)).
-            forEach(function(el) e.appendChild(el));
-        return e;
-    }
-}
 
 var UIEncodeText = function(str) {
     return decodeURIComponent(escape(str));
