@@ -129,15 +129,17 @@ extend(Manager.Upload, {
             p('capture accept (config):' + uneval(config));
             let user = User.user;
 
-            let callback = this.callback;
             let params = {
                 application: config.application,
             };
+            var that = this;
             let options = {
                 callback: function (res) {
-                    return callback(res, params);
+                    return that.callback(res, params);
                 },
-                errorback: this.errorback,
+                errorback: function (res) {
+                    return that.errorback(res);
+                },
             };
 
             if (config.folder) options.folder = config.folder;
@@ -147,7 +149,7 @@ extend(Manager.Upload, {
                 options.fotosize= 100000;
             }
 
-            document.getElementById('hScreenshot-statusIcon').setAttribute('loading', 'true');
+            this._showLoadingStatus();
 
             if (!data) {
                 Capture[method](true, function(data) {
@@ -178,7 +180,8 @@ extend(Manager.Upload, {
     callback: function(res, params) {
         let m;
         p('upload success: ' + res.responseText);
-        document.getElementById('hScreenshot-statusIcon').removeAttribute('loading');
+        this._hideLoadingStatus();
+
         let fotolifeNotation = res.responseText;
         if (m = fotolifeNotation.match(/:(\d{14})/)) {
             let timestamp = m[1];
@@ -203,8 +206,18 @@ extend(Manager.Upload, {
     },
 
     errorback: function(res) {
-        document.getElementById('hScreenshot-statusIcon').removeAttribute('loading');
+        this._hideLoadingStatus();
         window.alert(convertStringEncoding('フォトライフへののアップロードに失敗しました'));
+    },
+
+    // UI 操作
+    _hideLoadingStatus: function () {
+        var e = document.getElementById("hScreenshot-toolbar-button");
+        if (e) e.removeAttribute("loading");
+    },
+    _showLoadingStatus: function () {
+        var e = document.getElementById("hScreenshot-toolbar-button");
+        if (e) e.setAttribute("loading", "true");
     },
 });
 

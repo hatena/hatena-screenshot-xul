@@ -1,10 +1,11 @@
 
-#hScreenshot-toolbar-button {
-  list-style-image: url("chrome://hatenascreenshot/skin/images/FotoIcon.png");
-}
-
+#hScreenshot-toolbar-button,
 toolbar[iconsize="small"] #hScreenshot-toolbar-button {
   list-style-image: url("chrome://hatenascreenshot/skin/images/FotoIcon.png");
+}
+#hScreenshot-toolbar-button[loading="true"],
+toolbar[iconsize="small"] #hScreenshot-toolbar-button[loading="true"] {
+  list-style-image: url("chrome://hatenascreenshot/skin/images/comment_loading.png");
 }
 
 #hfotolife-toolbar-button > .toolbarbutton-menubutton-button > .toolbarbutton-icon {
