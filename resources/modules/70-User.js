@@ -97,10 +97,6 @@ User.prototype = {
         return 'http://f.hatena.ne.jp/' + this.name + '/' + (url || '');
     },
 
-    getProfileIcon: function user_getProfileIcon(isLarge) {
-        return UserUtils.getProfileIcon(this.name, isLarge);
-    },
-
     clear: function user_clear() {
     },
 
