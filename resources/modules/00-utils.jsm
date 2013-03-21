@@ -38,8 +38,6 @@ const HistoryService =
     getService("@mozilla.org/browser/nav-history-service;1", Ci.nsINavHistoryService);
 const BookmarksService =
     getService("@mozilla.org/browser/nav-bookmarks-service;1", Ci.nsINavBookmarksService); 
-const FaviconService = 
-    getService("@mozilla.org/browser/favicon-service;1", Ci.nsIFaviconService);
 const PrefService = 
     getService("@mozilla.org/preferences-service;1", [Ci.nsIPrefService, Ci.nsIPrefBranch, Ci.nsIPrefBranch2]);
 const CookieManager =
@@ -254,25 +252,6 @@ function encodeJSON(object) {
     } catch (ex) {
         return "";
     }
-}
-
-/*
- * favicon 取得
- */
-
-function getFaviconURI (url) {
-    let faviconURI;
-    let iurl = IOService.newURI(url, null, null);
-    try {
-        try {
-            faviconURI = FaviconService.getFaviconImageForPage(iurl);
-        } catch(e) {
-            faviconURI = FaviconService.getFaviconForPage(iurl);
-        }
-    } catch(e) {
-        faviconURI = FaviconService.defaultFavicon;
-    }
-    return faviconURI;
 }
 
 // 特定のウィンドウに属さない辞書用オブジェクトの作成
