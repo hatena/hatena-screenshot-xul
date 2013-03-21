@@ -6,12 +6,6 @@ loadPrecedingModules.call(this);
  * 頭に _ のついてないローカル変数はすべて EXPORT の対象となる
  */
 
-function newURI(uriSpec, originCharset, baseURI) {
-    if (typeof baseURI === "string")
-        baseURI = IOService.newURI(baseURI, null, null);
-    return IOService.newURI(uriSpec, originCharset, baseURI);
-}
-
 /*
  * %s, %d, %f のみサポート
  */
@@ -29,30 +23,6 @@ var sprintf = function (str) {
 /*
  * グローバル関数としてエクスポートはしないけど、あったら便利な関数など
  */
-var keys = function(obj) [key for (key in obj)];
-var values = function(obj) [key for each (key in obj)];
-
-var getHistoryNodeByURL = function getHistoryNodeByURL(url) {
-    let query = HistoryService.getNewQuery();
-    query.uri = IOService.newURI(url, null, null);
-    let options = HistoryService.getNewQueryOptions();
-    options.queryType = options.QUERY_TYPE_HISTORY;
-    // options.resultType = options.RESULTS_AS_VISIT;
-    options.resultType = options.RESULTS_AS_URI;
-    let res = HistoryService.executeQuery(query, options);
-    let root = res.root;
-    try {
-        root.containerOpen = true;
-        for (let i = 0; i < root.childCount; i++) {
-            let node = root.getChild(i);
-            return node;
-        }
-    } finally {
-        root.containerOpen = false;
-    }
-    return;
-}
-
 
 var convertStringEncoding = function(str) {
     return decodeURIComponent(escape(str || ''));
@@ -164,35 +134,6 @@ net.get = function net_get (url, callback, errorback, async, query, headers)
 
 net.post = function net_post (url, callback, errorback, async, query, headers)
     this._http(url, callback, errorback, async, query, headers, 'POST');
-
-
-/*
- * parseShortcut function copy from XUL/Migemo
- */
-var parseShortcut = function parseShortcut(aShortcut) {
-    var accelKey = IS_MAC ? 'meta' : 'ctrl' ;
-    aShortcut = aShortcut.replace(/accel/gi, accelKey);
-
-    var keys = aShortcut.split('+');
-
-    var keyCode = keys[keys.length-1].replace(/ /g, '_').toUpperCase();
-    var key     = keyCode;
-
-    sotredKeyCode = (keyCode.length == 1 || keyCode == 'SPACE' || !keyCode) ? '' : 'VK_'+keyCode ;
-    key = sotredKeyCode ? '' : keyCode ;
-
-    return {
-        key      : key,
-        charCode : (key ? key.charCodeAt(0) : '' ),
-        keyCode  : sotredKeyCode,
-        altKey   : /alt/i.test(aShortcut),
-        ctrlKey  : /ctrl|control/i.test(aShortcut),
-        metaKey  : /meta/i.test(aShortcut),
-        shiftKey : /shift/i.test(aShortcut),
-        string   : aShortcut,
-        modified : false
-    };
-};
 
 
 var EXPORTED_SYMBOLS = [m for (m in new Iterator(this, true))
