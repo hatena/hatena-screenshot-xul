@@ -55,10 +55,15 @@ extend(UploadConfig.prototype, {
     },
     __createFolderMenuitemElem: function (folderName, isPrivateFolder) {
         var XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+        var publicFolderImage = "chrome://hatenascreenshot/skin/images/folder.gif";
+        var privateFolderImage = "chrome://hatenascreenshot/skin/images/folder-private.gif";
+
         let item = document.createElementNS(XUL_NS, "menuitem");
         item.setAttribute("value", folderName);
         item.setAttribute("label", folderName);
-        item.className = (isPrivateFolder ? "item-private" : "item-public");
+        item.setAttribute("image", (isPrivateFolder ? publicFolderImage : privateFolderImage));
+        item.className = "menuitem-iconic";
+
         return item;
     },
     setFolders: function(folderList, defaultFolder) {

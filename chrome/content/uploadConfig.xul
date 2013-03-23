@@ -22,7 +22,13 @@
              <caption label="フォルダ" />
              <menulist id="folder-menulist">
                <menupopup id="folders">
-                 <menuitem label="トップ" value="" class="item-top" />
+                 <menuitem label="トップ" value=""
+                   image="chrome://hatenascreenshot/skin/images/folder-top.gif"
+                   class="menuitem-iconic" />
+                 <!-- トップのプライベート状態の画像があるが, 今は使われていない.
+                      トップがプライベートになることはあるのか?
+                      chrome://hatenascreenshot/skin/images/folder-top-private.gif -->
+                 <!-- 他のフォルダは JS から追加 -->
                </menupopup>
              </menulist>
          </groupbox>
