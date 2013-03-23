@@ -8,14 +8,13 @@
         minwidth="250"
         minheight="250"
         persist="screenX screenY"
-        onload="new hScreenshot.UploadConfig(document.documentElement);"
-        onunload="document.documentElement.manager.destroy();"
         buttonlabelaccept="アップロード"
         ondialogaccept="return document.documentElement.manager.onAccept(event);"
         ondialogcancel="return document.documentElement.manager.onCancel(event);"
         >
     <script type="application/javascript"
             src="chrome://hatenascreenshot/content/autoloader.js"/>
+    <script type="application/javascript" src="uploadConfig.js"/>
 
     <vbox flex="1">
          <label id="username" />
@@ -30,7 +29,7 @@
 
          <groupbox>
              <caption>
-                 <checkbox id="image-size-checkbox" label="画像サイズの指定" value="1000" onmouseup="document.documentElement.manager.checkboxHandler(event);" />
+                 <checkbox id="image-size-checkbox" label="画像サイズの指定" value="1000" />
              </caption>
              <hbox align="center">
                  <textbox id="image-size"
