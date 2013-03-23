@@ -8,14 +8,13 @@
         minwidth="250"
         minheight="250"
         persist="screenX screenY"
-        onload="new hScreenshot.UploadConfig(document.documentElement);"
-        onunload="document.documentElement.manager.destroy();"
         buttonlabelaccept="アップロード"
         ondialogaccept="return document.documentElement.manager.onAccept(event);"
         ondialogcancel="return document.documentElement.manager.onCancel(event);"
         >
     <script type="application/javascript"
             src="chrome://hatenascreenshot/content/autoloader.js"/>
+    <script type="application/javascript" src="uploadConfig.js"/>
 
     <vbox flex="1">
          <label id="username" />
@@ -23,14 +22,20 @@
              <caption label="フォルダ" />
              <menulist id="folder-menulist">
                <menupopup id="folders">
-                 <menuitem label="トップ" value="" class="item-top" />
+                 <menuitem label="トップ" value=""
+                   image="chrome://hatenascreenshot/skin/images/folder-top.gif"
+                   class="menuitem-iconic" />
+                 <!-- トップのプライベート状態の画像があるが, 今は使われていない.
+                      トップがプライベートになることはあるのか?
+                      chrome://hatenascreenshot/skin/images/folder-top-private.gif -->
+                 <!-- 他のフォルダは JS から追加 -->
                </menupopup>
              </menulist>
          </groupbox>
 
          <groupbox>
              <caption>
-                 <checkbox id="image-size-checkbox" label="画像サイズの指定" value="1000" onmouseup="document.documentElement.manager.checkboxHandler(event);" />
+                 <checkbox id="image-size-checkbox" label="画像サイズの指定" value="1000" />
              </caption>
              <hbox align="center">
                  <textbox id="image-size"
@@ -46,10 +51,18 @@
              <caption>完了後に開くページ</caption>
              <menulist id="application-menulist">
                <menupopup id="applications">
-                 <menuitem label="はてなフォトライフ" value="fotolife" class="item-fotolife" />
-                 <menuitem label="はてなハイク" value="haiku" class="item-haiku" />
-                 <menuitem label="はてなダイアリー" value="diary" class="item-diary" />
-                 <menuitem label="Twitter" value="twitter" class="item-twitter" />
+                 <menuitem label="はてなフォトライフ" value="fotolife"
+                   image="chrome://hatenascreenshot/skin/images/fotolife.gif"
+                   class="menuitem-iconic" />
+                 <menuitem label="はてなハイク" value="haiku"
+                   image="chrome://hatenascreenshot/skin/images/haiku.gif"
+                   class="menuitem-iconic" />
+                 <menuitem label="はてなダイアリー" value="diary"
+                   image="chrome://hatenascreenshot/skin/images/diary.gif"
+                   class="menuitem-iconic" />
+                 <menuitem label="Twitter" value="twitter"
+                   image="http://favicon.hatena.ne.jp/?url=http://twitter.com/"
+                   class="menuitem-iconic" />
                </menupopup>
              </menulist>
          </groupbox>
