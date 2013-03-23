@@ -111,12 +111,11 @@ SketchSwitch.prototype = {
         canvas.height = Math.max(this.doc.documentElement.scrollHeight, this.win.innerHeight);
         this.doc.body.style.overflow = origOverflow;
 
-        with (canvas.style) {
-            position = 'absolute';
-            top      = '0';
-            left     = '0';
-            zIndex   = '99990';
-        };
+        canvas.style.position = 'absolute';
+        canvas.style.top      = '0';
+        canvas.style.left     = '0';
+        canvas.style.zIndex   = '99990';
+
         var ctx = canvas.getContext('2d');
         canvas.ctx = ctx;
         return canvas;
@@ -351,15 +350,13 @@ SketchSwitch.ToolMenu.prototype = {
         }, this.tbody = E(doc, 'tbody'));
 
         this.table.style.borderCollapse = 'collapse';
-        with (this.table.style) {
-            position = 'fixed';
-            width = '24px';
-            top      = '2px';
-            left     = '2px';
-            border = '3px solid #000000';
-            zIndex = this.sketch.canvas.style.zIndex + 1;
-            backgroundColor = 'rgba(255,255,255, 0.9)';
-        }
+        this.table.style.position = 'fixed';
+        this.table.style.width = '24px';
+        this.table.style.top      = '2px';
+        this.table.style.left     = '2px';
+        this.table.style.border = '3px solid #000000';
+        this.table.style.zIndex = this.sketch.canvas.style.zIndex + 1;
+        this.table.style.backgroundColor = 'rgba(255,255,255, 0.9)';
         this.table.style.borderColor = '#000000';
         this.setColor(this.table.style.borderColor);
 
@@ -428,19 +425,14 @@ SketchSwitch.ToolMenu.prototype = {
             var icon = E(doc, 'img', {src:button.icon, title: button.name, alt: button.name});
             icon.button = button;
             button.element = icon;
-            with(icon.style) {
-                cursor = 'pointer';
-            }
+            icon.style.cursor = 'pointer';
             var td;
             var tr = E(doc, 'tr', {},
                          td = E(doc, 'td', {}, icon)
             );
             td.style.width = tr.style.width = 'auto !important';
-
-            with (td.style) {
-                padding = '2px 4px 1px 4px';
-                borderBottom = '1px solid #CCC';
-            }
+            td.style.padding = '2px 4px 1px 4px';
+            td.style.borderBottom = '1px solid #CCC';
 
             this.tbody.appendChild(tr);
             var self = this;
