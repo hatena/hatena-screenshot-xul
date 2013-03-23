@@ -31,7 +31,7 @@ extend(EventDispatcher.prototype, {
                                                priority, disposable) {
         var originalHandler = handler;
         if (typeof handler.handleEvent === "function")
-            handler = method(handler, "handleEvent");
+            handler = handler.handleEvent.bind(handler);
         let window = (arguments.length < 5 || disposable)
                      ? getWindowForObject(originalHandler) : null;
         let listener = new Listener(this, type, handler,

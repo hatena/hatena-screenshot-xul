@@ -113,8 +113,6 @@ var UIEncodeText = function(str) {
     return decodeURIComponent(escape(str));
 }
 
-var method = function method(self, methodName) function () self[methodName].apply(self, Array.slice(arguments));
-
 /*
  * 共用グローバル変数
  */
