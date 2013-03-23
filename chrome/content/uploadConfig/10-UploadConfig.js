@@ -53,24 +53,29 @@ extend(UploadConfig.prototype, {
         }
         this.options = options || {}; 
     },
+    __createFolderMenuitemElem: function (folderName, isPrivateFolder) {
+        var XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+        let item = document.createElementNS(XUL_NS, "menuitem");
+        item.setAttribute("value", folderName);
+        item.setAttribute("label", folderName);
+        item.className = (isPrivateFolder ? "item-private" : "item-public");
+        return item;
+    },
     setFolders: function(folderList, defaultFolder) {
-        if (folderList && folderList.length) {
-            for (var i = 0;  i < folderList.length; i++) {
-                let folder = folderList[i];
-                let item = document.createElement('menuitem');
-                item.setAttribute('value', folder.folder);
-                item.setAttribute('label', folder.folder);
-                if (folder.status != 'public') {
-                    item.setAttribute('class', 'item-private');
-                } else {
-                    item.setAttribute('class', 'item-public');
-                }
-                this.folders.appendChild(item);
-                if (defaultFolder && folder.folder == defaultFolder) {
-                    this.folderMenuList.selectedItem = item;
-                }
+        if (!folderList) return;
+        if (!folderList.length) return;
+
+        var that = this;
+        folderList.forEach(function (folder) {
+            var folderName = folder.folder;
+            var isPrivateFolder = (folder.status !== "public");
+
+            var item = that.__createFolderMenuitemElem(folderName, isPrivateFolder);
+            that.folders.appendChild(item);
+            if (defaultFolder && folderName === defaultFolder) {
+                that.folderMenuList.selectedItem = item;
             }
-        }
+        });
     },
 
     destroy: function () {
