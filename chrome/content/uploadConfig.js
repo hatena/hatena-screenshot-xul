@@ -7,9 +7,8 @@ window.addEventListener("load", function el(evt) {
     var manager = new hScreenshot.UploadConfig(document.documentElement);
 
     var elem = document.getElementById("image-size-checkbox");
-    // なんで mouseup なんだろう
-    elem.addEventListener("mouseup", function (evt) {
-        manager.checkboxHandler(evt);
+    elem.addEventListener("command", function (evt) {
+        manager.checkCheckbox();
     }, false);
 }, false);
 window.addEventListener("unload", function el(evt) {

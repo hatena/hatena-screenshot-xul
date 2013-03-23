@@ -101,15 +101,7 @@ extend(UploadConfig.prototype, {
         return true;
     },
 
-    checkboxHandler: function(event) {
-        setTimeout(function(self) {
-            self.checkCheckbox();
-        }, 30, this);
-    },
-
-
     checkCheckbox: function() {
-
         if (this.checkbox.checked) {
             this.imageSize.removeAttribute('disabled');
         } else {
@@ -122,5 +114,3 @@ extend(UploadConfig.prototype, {
         return true;
     },
 });
-
-
