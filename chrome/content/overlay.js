@@ -65,29 +65,27 @@ window.addEventListener("load", function el(evt) {
 
 (function () {
 
-with(hScreenshot) {
-    if (hScreenshot.nowDebug) {
-        toErrorConsole();
+let EventService = hScreenshot.EventService;
+let shared = hScreenshot.shared;
+
+// 必要???
+EventService.dispatch('preload', window);
+
+window.addEventListener('load', function(e) {
+    EventService.dispatch('load', window);
+
+    if (!shared.get('firstPreload')) {
+        EventService.dispatch('firstPreload', window);
+        shared.set('firstPreload', true);
     }
 
-    EventService.dispatch('preload', window);
+    // window.setTimeout(function() {
+    //     Manager.draw();
+    // }, 1000);
+}, false);
 
-    window.addEventListener('load', function(e) {
-        EventService.dispatch('load', window);
-
-        if (!shared.get('firstPreload')) {
-            EventService.dispatch('firstPreload', window);
-            shared.set('firstPreload', true);
-        }
-
-        // window.setTimeout(function() {
-        //     Manager.draw();
-        // }, 1000);
-    }, false);
-
-    window.addEventListener('unload', function(e) {
-        EventService.dispatch('unload', window);
-    }, false);
-}
+window.addEventListener('unload', function(e) {
+    EventService.dispatch('unload', window);
+}, false);
 
 }).call(this);
