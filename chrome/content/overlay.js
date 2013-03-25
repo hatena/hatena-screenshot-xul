@@ -12,7 +12,7 @@ function isScreenshotToolbarbuttonInstallationNeeded() {
     // 元々 statusbar にアイコンを表示する設定にしていない人に対してはアドオンバーにも表示しない
     var isShownOnStatusbar = appPrefs.get("statusbar");
     // 過去の起動時にインストール操作が行われているかどうか
-    var isAlreadyInstalled = appPrefs.get("_installationToAddonBarWasProcessed");
+    var isAlreadyInstalled = appPrefs.get("installationToAddonBarWasProcessed");
     return (isShownOnStatusbar && !isAlreadyInstalled);
 }
 
@@ -20,7 +20,7 @@ function isScreenshotToolbarbuttonInstallationNeeded() {
 function installScreenshotToolbarbuttonIfNeeded() {
     var needed = isScreenshotToolbarbuttonInstallationNeeded();
     // 次回起動時以降は addonbar へのインストールを行わないように
-    appPrefs.set("_installationToAddonBarWasProcessed", true);
+    appPrefs.set("installationToAddonBarWasProcessed", true);
 
     if (!needed) return;
     installButton("addon-bar", "hScreenshot-toolbar-button");
