@@ -1,13 +1,13 @@
 (function () { "use strict";
 // 初回実行時にアドオンバーにツールバーボタンを配置する
 
-var Cu = Components.utils;
+const Cu = Components.utils;
 
 var modules = {};
 Cu.import("resource://hatenascreenshot/modules/53-Prefs.js", modules);
 var appPrefs = modules.Prefs.screenshot;
 
-function checkWhetherScreenshotToolbarbuttonInstallationIsNeeded() {
+function isScreenshotToolbarbuttonInstallationNeeded() {
     // statusbar にアイコンを表示する設定になっているかどうか
     // 元々 statusbar にアイコンを表示する設定にしていない人に対してはアドオンバーにも表示しない
     var isShownOnStatusbar = appPrefs.get("statusbar");
@@ -18,7 +18,7 @@ function checkWhetherScreenshotToolbarbuttonInstallationIsNeeded() {
 
 // window の load イベント以降で呼ばないとおかしくなる
 function installScreenshotToolbarbuttonIfNeeded() {
-    var needed = checkWhetherScreenshotToolbarbuttonInstallationIsNeeded();
+    var needed = isScreenshotToolbarbuttonInstallationNeeded();
     // 次回起動時以降は addonbar へのインストールを行わないように
     appPrefs.set("_installationToAddonBarWasProcessed", true);
 
@@ -30,27 +30,27 @@ function installScreenshotToolbarbuttonIfNeeded() {
 function installButton(toolbarId, id, afterId) {
     var doc = window.document;
     // 既にどこかに配置されている場合はアドオンバーには配置しない
-    if (!doc.getElementById(id)) {
-        var toolbar = doc.getElementById(toolbarId);
+    if (doc.getElementById(id)) return;
 
-        // If no afterId is given, then append the item to the toolbar
-        var before = null;
-        if (afterId) {
-            var elem = doc.getElementById(afterId);
-            if (elem && elem.parentNode == toolbar)
-            before = elem.nextElementSibling;
-        }
+    var toolbar = doc.getElementById(toolbarId);
 
-        // 1 回実行すれば, 次に別のウィンドウを開くときにはこの設定が使われる
-
-        toolbar.insertItem(id, before);
-        toolbar.setAttribute("currentset", toolbar.currentSet);
-        doc.persist(toolbar.id, "currentset"); // 属性値の永続化
-
-        // 追加先のツールバーが非表示なっている可能性があるので, 表示する
-        toolbar.setAttribute("collapsed", "false");
-        doc.persist(toolbar.id, "collapsed"); // 属性値の永続化
+    // If no afterId is given, then append the item to the toolbar
+    var before = null;
+    if (afterId) {
+        var elem = doc.getElementById(afterId);
+        if (elem && elem.parentNode == toolbar)
+        before = elem.nextElementSibling;
     }
+
+    // 1 回実行すれば, 次に別のウィンドウを開くときにはこの設定が使われる
+
+    toolbar.insertItem(id, before);
+    toolbar.setAttribute("currentset", toolbar.currentSet);
+    doc.persist(toolbar.id, "currentset"); // 属性値の永続化
+
+    // 追加先のツールバーが非表示なっている可能性があるので, 表示する
+    toolbar.setAttribute("collapsed", "false");
+    doc.persist(toolbar.id, "collapsed"); // 属性値の永続化
 }
 
 window.addEventListener("load", function el(evt) {

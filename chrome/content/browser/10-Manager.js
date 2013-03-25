@@ -132,7 +132,7 @@ extend(Manager.Upload, {
             let params = {
                 application: config.application,
             };
-            var that = this;
+            let that = this;
             let options = {
                 callback: function (res) {
                     return that.callback(res, params);
@@ -207,7 +207,7 @@ extend(Manager.Upload, {
 
     errorback: function(res) {
         this._hideLoadingStatus();
-        window.alert(convertStringEncoding('フォトライフへののアップロードに失敗しました'));
+        window.alert(convertStringEncoding('フォトライフへのアップロードに失敗しました'));
     },
 
     // UI 操作
@@ -267,9 +267,9 @@ extend(Manager.Save, {
                 // 第 7 引数は関連するウィンドウやドキュメントから引き出されるコンテキスト
                 // プライベート情報が流出しないようにするために使われる
                 var privacyContext =
-                        window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-                              .getInterface(Components.interfaces.nsIWebNavigation)
-                              .QueryInterface(Components.interfaces.nsILoadContext);
+                        window.QueryInterface(Ci.nsIInterfaceRequestor)
+                              .getInterface(Ci.nsIWebNavigation)
+                              .QueryInterface(Ci.nsILoadContext);
                 wbp.saveURI(uri, null, null, null, null, filePicker.file, privacyContext);
             }
             finish();
