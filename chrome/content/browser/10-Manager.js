@@ -73,17 +73,6 @@ Manager.draw = function() {
     // var random = Math.random().toString().slice(2);
 };
 
-Manager.showPopup = function(event) {
-    if (event.ctrlKey) {
-        return Manager.draw();
-    }
-    let icon = document.getElementById('hScreenshot-statusIcon');
-    let menu = document.getElementById('hScreenshot-menu-popup');
-    menu = menu.cloneNode(true);
-    icon.parentNode.appendChild(menu);
-    menu.openPopup(icon, 'before_end', 0, 0, false, true);
-};
-
 Manager.Base = {
     createFinish: function() {
         let sketch;
@@ -140,15 +129,17 @@ extend(Manager.Upload, {
             p('capture accept (config):' + uneval(config));
             let user = User.user;
 
-            let callback = this.callback;
             let params = {
                 application: config.application,
             };
+            let that = this;
             let options = {
                 callback: function (res) {
-                    return callback(res, params);
+                    return that.callback(res, params);
                 },
-                errorback: this.errorback,
+                errorback: function (res) {
+                    return that.errorback(res);
+                },
             };
 
             if (config.folder) options.folder = config.folder;
@@ -158,7 +149,7 @@ extend(Manager.Upload, {
                 options.fotosize= 100000;
             }
 
-            document.getElementById('hScreenshot-statusIcon').setAttribute('loading', 'true');
+            this._showLoadingStatus();
 
             if (!data) {
                 Capture[method](true, function(data) {
@@ -189,7 +180,8 @@ extend(Manager.Upload, {
     callback: function(res, params) {
         let m;
         p('upload success: ' + res.responseText);
-        document.getElementById('hScreenshot-statusIcon').removeAttribute('loading');
+        this._hideLoadingStatus();
+
         let fotolifeNotation = res.responseText;
         if (m = fotolifeNotation.match(/:(\d{14})/)) {
             let timestamp = m[1];
@@ -214,8 +206,18 @@ extend(Manager.Upload, {
     },
 
     errorback: function(res) {
-        document.getElementById('hScreenshot-statusIcon').removeAttribute('loading');
-        window.alert(convertStringEncoding('フォトライフへののアップロードに失敗しました'));
+        this._hideLoadingStatus();
+        window.alert(convertStringEncoding('フォトライフへのアップロードに失敗しました'));
+    },
+
+    // UI 操作
+    _hideLoadingStatus: function () {
+        var e = document.getElementById("hScreenshot-toolbar-button");
+        if (e) e.removeAttribute("loading");
+    },
+    _showLoadingStatus: function () {
+        var e = document.getElementById("hScreenshot-toolbar-button");
+        if (e) e.setAttribute("loading", "true");
     },
 });
 
@@ -265,9 +267,9 @@ extend(Manager.Save, {
                 // 第 7 引数は関連するウィンドウやドキュメントから引き出されるコンテキスト
                 // プライベート情報が流出しないようにするために使われる
                 var privacyContext =
-                        window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-                              .getInterface(Components.interfaces.nsIWebNavigation)
-                              .QueryInterface(Components.interfaces.nsILoadContext);
+                        window.QueryInterface(Ci.nsIInterfaceRequestor)
+                              .getInterface(Ci.nsIWebNavigation)
+                              .QueryInterface(Ci.nsILoadContext);
                 wbp.saveURI(uri, null, null, null, null, filePicker.file, privacyContext);
             }
             finish();
