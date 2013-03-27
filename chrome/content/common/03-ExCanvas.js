@@ -95,6 +95,9 @@ ExCanvas.prototype = {
         };
 
         let dim = {
+            // content.documentElement.clientWidth とか使った方が良さそう
+            // http://www.w3.org/TR/cssom-view/
+            // content.documentElement.clientWidth と content.documentElement.offsetWidth は同じ?
             width: content.innerWidth,
             height: content.innerHeight,
         };
