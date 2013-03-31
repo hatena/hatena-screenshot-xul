@@ -48,7 +48,7 @@
          </groupbox>
 
          <groupbox>
-             <caption>完了後に開くページ</caption>
+             <caption label="完了後に開くページ" />
              <menulist id="application-menulist">
                <menupopup id="applications">
                  <menuitem label="はてなフォトライフ" value="fotolife"
