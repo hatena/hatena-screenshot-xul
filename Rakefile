@@ -45,10 +45,9 @@ task :create_extra_directories => []
   end
 end
 
-desc "create the chrome jar file"
-task :create_chrome_jar => [:create_buildchrome_dir] do
+desc "copy the chrome directory into build directory"
+task :copy_chrome_dir => [:create_buildchrome_dir] do
   cp_r 'chrome', "#{BUILD_DIR}/"
-  #sh "cd chrome && zip -qr -0 ../#{BUILD_DIR}/chrome/#{EXTENSION_NAME}.jar * -x \*.svn\*"
 end
 
 desc "create the xpi file and use the version number in the file name"
@@ -56,48 +55,17 @@ task :create_extension_xpi => [
                                :create_install_rdf,
                                :create_chrome_manifest,
                                :create_extra_directories,
-                               :create_chrome_jar
+                               :copy_chrome_dir
 ] do
   install_rdf_file = File.new('install.rdf','r')
   install_rdf_xmldoc = Document.new(install_rdf_file)
-  version_number = ""
-  install_rdf_xmldoc.elements.each('RDF/Description/em:version') do |element|
-    version_number = element.text
-  end
 
   xpi = Pathname.new 'xpi'
   xpi.mkdir unless xpi.exist? 
   #sh "cd #{BUILD_DIR} && zip -qr -9 ../../xpi/#{EXTENSION_NAME}-#{version_number}-#{Time.now.strftime('%Y%m%d')}-fx.xpi *"
   find = 'find -type f -regex \'.+\.sw[po]$\' -exec rm {} \\;'
-  sh "cd #{BUILD_DIR} && (#{find}) ; zip -qr -9 ../../xpi/#{EXTENSION_NAME}-#{version_number}.xpi *"
+  sh "cd #{BUILD_DIR} && (#{find}) ; zip -qr -9 ../../xpi/#{xpi_filename} *"
   rm_rf "build"
-end
-
-desc "update update.rdf"
-task :update_update_manifest => [:create_extension_xpi] do
-  update_rdf_xmldoc = nil
-
-  File.open('update.rdf','r') do |f|
-    update_rdf_xmldoc = Document.new(f.read)
-
-    update_rdf_xmldoc.elements.each('//RDF:Description') do |element|
-      if element.attributes['em:version']
-        element.attributes['em:version'] = version_number
-      end
-
-      if element.attributes['em:updateHash']
-        element.attributes['em:updateHash'] = 'sha1:' + Digest::SHA1.hexdigest(open(xpi_filename).read)
-      end
-
-      if element.attributes['em:updateLink']
-        element.attributes['em:updateLink'] = UPDATE_LINK
-      end
-    end
-
-    File.open('update.rdf','w') do |f|
-      update_rdf_xmldoc.write(f)
-    end
-  end
 end
 
 desc "install to local profile directory"
@@ -155,6 +123,5 @@ def version_number
 end
 
 def xpi_filename
-  #"#{EXTENSION_NAME}-#{version_number}-fx.xpi"
   "#{EXTENSION_NAME}-#{version_number}.xpi"
 end

@@ -3,50 +3,11 @@
     width: 80px;
 }
 
-.item-top {
-    padding-left: 20px;
-    background: no-repeat url(chrome://hatenascreenshot/skin/images/folder-top.gif);
-    color: #000 !important;
-}
-
-.item-top-private {
-    padding-left: 20px;
-    background: no-repeat url(chrome://hatenascreenshot/skin/images/folder-top-private.gif);
-    color: #000 !important;
-}
-
-.item-public {
-    padding-left: 20px;
-    background: no-repeat url(chrome://hatenascreenshot/skin/images/folder.gif);
-    color: #000 !important;
-}
-
-.item-private {
-    padding-left: 20px;
-    background: no-repeat url(chrome://hatenascreenshot/skin/images/folder-private.gif);
-    color: #000 !important;
-}
-
-.item-fotolife {
-    padding-left: 20px;
-    background: no-repeat url(chrome://hatenascreenshot/skin/images/fotolife.gif);
-    color: #000 !important;
-}
-
-.item-haiku {
-    padding-left: 20px;
-    background: no-repeat url(chrome://hatenascreenshot/skin/images/haiku.gif);
-    color: #000 !important;
-}
-
-.item-diary {
-    padding-left: 20px;
-    background: no-repeat url(chrome://hatenascreenshot/skin/images/diary.gif);
-    color: #000 !important;
-}
-
-.item-twitter {
-    padding-left: 20px;
-    background: no-repeat url(http://favicon.hatena.ne.jp/?url=http://twitter.com/);
-    color: #000 !important;
+/* menulist 内のポップアップに menuitem の画像がデフォルトでは表示されないので
+ * 表示する
+ * http://vividcode.hatenablog.com/entry/firefox-extension/menuitem-image-in-menulist
+ */
+menulist menupopup .menuitem-iconic .menu-iconic-left {
+    display: -moz-box;
+    visibility: visible;
 }

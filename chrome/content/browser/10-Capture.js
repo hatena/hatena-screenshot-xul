@@ -36,13 +36,11 @@ var Capture = {
         canvas.width = width;
         canvas.height = height;
 
-        with (canvas.style) {
-            position = 'absolute';
-            top      = '0';
-            left     = '0';
-            zIndex   = '99995';
-            opacity  = '0.7';
-        };
+        canvas.style.position = 'absolute';
+        canvas.style.top      = '0';
+        canvas.style.left     = '0';
+        canvas.style.zIndex   = '99995';
+        canvas.style.opacity  = '0.7';
 
         let ctx = canvas.getContext('2d');
         let clear = function() {
@@ -55,8 +53,7 @@ var Capture = {
 
         clear();
 
-        let getPoint = function(event) {
-            let win = event.view;
+        let getPoint = function(event, win) {
             return { x: event.clientX + win.pageXOffset, y:event.clientY + win.pageYOffset};
         }
 
@@ -71,11 +68,11 @@ var Capture = {
 
         canvas.addEventListener('mousedown', function(event) {
             event.preventDefault();
-            let point = getPoint(event);
+            let point = getPoint(event, event.view);
 
             canvas.addEventListener('mousemove', function(event) {
                 event.preventDefault();
-                let nowPoint = getPoint(event);
+                let nowPoint = getPoint(event, event.view);
 
                 clear();
                 // ctx.fillStyle = 'rgb(255,255,255)';
@@ -83,8 +80,12 @@ var Capture = {
             }, false);
 
             canvas.addEventListener('mouseup', function(event) {
+                // evt.view を参照すると値が `null` になるバグがあるので先に変数に代入しておく
+                // (Firefox 22 nightly でバグ確認)
+                // see: https://bugzilla.mozilla.org/show_bug.cgi?id=856413
+                let defaultView = event.view;
                 event.preventDefault();
-                let nowPoint = getPoint(event);
+                let nowPoint = getPoint(event, defaultView);
                 let pos = {};
                 let dim = {};
                 [pos.x, pos.y, dim.width, dim.height] = getRectByPoint(nowPoint, point);
@@ -94,7 +95,7 @@ var Capture = {
                 canvas = null;
 
                 let ex = new ExCanvas(document);
-                let dataURI = ex.capture(event.view, pos, dim, 1, 'png');
+                let dataURI = ex.capture(defaultView, pos, dim, 1, 'png');
                 if (cutBase64) {
                     dataURI = ex.cutBase64(dataURI);
                 }
